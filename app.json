@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "MapMobileApp",
+    "name": "EXPLORE Mobile App",
     "slug": "MapMobileApp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,6 +23,7 @@
       }
     },
     "web": {
+      "name": "EXPLORE Mobile App",
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
