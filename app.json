@@ -14,13 +14,15 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.seanhia.MapMobileApp"
+      "bundleIdentifier": "com.seanhia.MapMobileApp",
+      "googleServicesFiles": "GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.seanhia.MapMobileApp"
     },
     "web": {
       "name": "EXPLORE Mobile App",
