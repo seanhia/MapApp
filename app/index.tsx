@@ -1,8 +1,12 @@
+import app, {auth} from "../firebase";
+
 import { useState} from "react";
 import { Text, View, StyleSheet, KeyboardAvoidingView, Button, ActivityIndicator } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import auth from '@react-native-firebase/auth';
+//import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
+
+
 
 export default function Index() {
   const [email, setEmail] = useState('');
