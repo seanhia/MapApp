@@ -1,18 +1,37 @@
 import { useState} from "react";
-import { Text, View, StyleSheet, KeyboardAvoidingView, Button } from "react-native";
+import { Text, View, StyleSheet, KeyboardAvoidingView, Button, ActivityIndicator } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import auth from '@react-native-firebase/auth';
+import { FirebaseError } from 'firebase/app'
 
 export default function Index() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const signUp = () => {
-
-  }
-  const signIn = () => {
-    
-  }
+  const signUp = async () => {
+    setLoading(true);
+    try {
+      await auth().createUserWithEmailAndPassword(email, password);
+      alert('Check your emails!');
+    } catch (e: any) {
+      const err = e as FirebaseError;
+      alert('Registration failed: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const signIn = async () => {
+    setLoading(true);
+    try {
+      await auth().signInWithEmailAndPassword(email, password);
+    } catch (e: any) {
+      const err = e as FirebaseError;
+      alert('Sign in failed: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
 
@@ -38,8 +57,15 @@ export default function Index() {
               placeholder = "Password"
 
             />
-            <Button onPress={signUp} title="Sign Up" />
-            <Button onPress={signIn} title="Sign In" />
+            {
+              loading ? (
+                <ActivityIndicator size={'small'} style ={{ margin: 28}} />
+              ) : (
+                <>
+                  <Button onPress={signUp} title="Sign Up" />
+                  <Button onPress={signIn} title="Sign In" />
+                </>
+              )}
 
 
         </KeyboardAvoidingView>
@@ -62,3 +88,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 });
+// function auth() {
+//   throw new Error("Function not implemented.");
+// }
+
