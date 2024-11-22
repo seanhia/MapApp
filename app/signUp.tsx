@@ -28,20 +28,6 @@ export default function SignUp() {
       setLoading(false);
     }
   };
-  const signIn = async () => {
-    setLoading(true);
-    try {
-      await auth().signInWithEmailAndPassword(email, password);
-    } catch (e: any) {
-      const err = e as FirebaseError;
-      alert('Sign in failed: ' + err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-
 
   return (
     <View
