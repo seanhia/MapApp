@@ -3,15 +3,17 @@ import app, {auth} from "../firebase";
 import { useState} from "react";
 import { Text, View, StyleSheet, KeyboardAvoidingView, Button, ActivityIndicator } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { Link } from 'expo-router';
 //import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
 
 
 
-export default function Index() {
+export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name] = useState('')
+  const [username] = useState('')
+  const [phone] = useState('')
   const [loading, setLoading] = useState(false);
 
   const signUp = async () => {
@@ -48,6 +50,18 @@ export default function Index() {
       <KeyboardAvoidingView behavior="padding">
           <TextInput
             style={styles.input}
+            value={name}
+            autoCapitalize="none"
+            placeholder = "Display Name"
+            />
+            <TextInput
+              style={styles.input}
+              value={username}
+              placeholder = "Username"
+
+            />
+            <TextInput
+            style={styles.input}
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
@@ -62,13 +76,18 @@ export default function Index() {
               placeholder = "Password"
 
             />
+            <TextInput
+              style={styles.input}
+              value={phone}
+              placeholder = "Phone Number"
+
+            />
             {
               loading ? (
                 <ActivityIndicator size={'small'} style ={{ margin: 28}} />
               ) : (
                 <>
-                  <Button onPress={signIn} title="Sign In" />
-                  <Link href="/signUp"> Sign Up </Link>
+                  <Button onPress={signUp} title="Sign Up" />
                 </>
               )}
 
