@@ -6,6 +6,8 @@ import { TextInput } from "react-native-gesture-handler";
 import { Link } from 'expo-router';
 //import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
+import {signUpWithEmail, signInWithEmail} from "../auth";
+
 
 
 
@@ -17,7 +19,7 @@ export default function Index() {
   const signUp = async () => {
     setLoading(true);
     try {
-      await auth().createUserWithEmailAndPassword(email, password);
+      const user = await signUpWithEmail(email, password);
       alert('Check your emails!');
     } catch (e: any) {
       const err = e as FirebaseError;
@@ -29,7 +31,7 @@ export default function Index() {
   const signIn = async () => {
     setLoading(true);
     try {
-      await auth().signInWithEmailAndPassword(email, password);
+      
     } catch (e: any) {
       const err = e as FirebaseError;
       alert('Sign in failed: ' + err.message);
