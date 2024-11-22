@@ -11,9 +11,9 @@ import { FirebaseError } from 'firebase/app'
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name] = useState('')
-  const [username] = useState('')
-  const [phone] = useState('')
+  const [name, setName] = useState('')
+  const [username, setUsername] = useState('')
+  const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false);
 
   const signUp = async () => {
@@ -37,13 +37,18 @@ export default function SignUp() {
           <TextInput
             style={styles.input}
             value={name}
+            onChangeText= {setName}
             autoCapitalize="none"
             placeholder = "Display Name"
+            keyboardType="default"
             />
             <TextInput
               style={styles.input}
               value={username}
+              onChangeText={setUsername}
+              keyboardType="default"
               placeholder = "Username"
+
 
             />
             <TextInput
@@ -65,7 +70,9 @@ export default function SignUp() {
             <TextInput
               style={styles.input}
               value={phone}
+              onChangeText={setPhone}
               placeholder = "Phone Number"
+              keyboardType="phone-pad"
 
             />
             {
