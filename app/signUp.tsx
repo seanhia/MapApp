@@ -24,14 +24,12 @@ export default function SignUp() {
     setLoading(true);
     try {
       const user = await signUpWithEmail(email, password, username);
-      alert('Check your emails!');
       router.replace('/home');
     } catch (e: any) {
       const err = e as FirebaseError;
       alert('Registration failed: ' + err.message);
     } finally {
       setLoading(false);
-        
     }
   };
 
