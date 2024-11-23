@@ -3,8 +3,10 @@ import app, {auth} from "../firebase";
 import { useState} from "react";
 import { Text, View, StyleSheet, KeyboardAvoidingView, Button, ActivityIndicator } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-//import auth from '@react-native-firebase/auth';
+// import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
+import {signUpWithEmail} from "../auth";
+
 
 
 
@@ -19,7 +21,7 @@ export default function SignUp() {
   const signUp = async () => {
     setLoading(true);
     try {
-      await auth().createUserWithEmailAndPassword(email, password);
+      const user = await signUpWithEmail(email, password, username);
       alert('Check your emails!');
     } catch (e: any) {
       const err = e as FirebaseError;

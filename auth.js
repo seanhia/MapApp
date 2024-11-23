@@ -1,11 +1,11 @@
 // auth.js
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword , userCredential} from 'firebase/auth';
 import {auth} from "./firebase"
 
-export const signUpWithEmail = async (email,password) => {
+export const signUpWithEmail = async (email,password, user) => {
   try {
-    const userCrential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+    const userCrential = await createUserWithEmailAndPassword(auth, email, password, user);
+    // const user = userCredential.user;
     console.log("User signed up successfully:", user);
     return user;
   } catch (error) {
