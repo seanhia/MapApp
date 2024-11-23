@@ -7,6 +7,8 @@ import { TextInput } from "react-native-gesture-handler";
 import { FirebaseError } from 'firebase/app'
 import {signUpWithEmail} from "../auth";
 
+import { Redirect, router } from 'expo-router';
+
 
 
 
@@ -28,6 +30,7 @@ export default function SignUp() {
       alert('Registration failed: ' + err.message);
     } finally {
       setLoading(false);
+      router.replace('/home');
     }
   };
 
