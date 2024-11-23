@@ -3,7 +3,7 @@ import app, {auth} from "../firebase";
 import { useState} from "react";
 import { Text, View, StyleSheet, KeyboardAvoidingView, Button, ActivityIndicator } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { Link } from 'expo-router';
+import { Link , router} from 'expo-router';
 //import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
 import {signUpWithEmail, signInWithEmail} from "../auth";
@@ -31,7 +31,8 @@ export default function Index() {
   const signIn = async () => {
     setLoading(true);
     try {
-      
+      const user = await signInWithEmail(email, password)
+      router.replace('/home');
     } catch (e: any) {
       const err = e as FirebaseError;
       alert('Sign in failed: ' + err.message);
