@@ -23,7 +23,7 @@ export default function SignUp() {
   const signUp = async () => {
     setLoading(true);
     try {
-      const user = await signUpWithEmail(email, password, username);
+      const user = await signUpWithEmail(email, password);
       router.replace('/home');
     } catch (e: any) {
       const err = e as FirebaseError;
