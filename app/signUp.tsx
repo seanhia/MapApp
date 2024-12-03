@@ -15,15 +15,16 @@ import { Redirect, router } from 'expo-router';
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('')
-  const [username, setUsername] = useState('')
-  const [phone, setPhone] = useState('')
+  const [firstname, setFName] = useState('');
+  const [lastname, setLName] = useState('');
+  const [username, setUsername] = useState('');
+  const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
 
   const signUp = async () => {
     setLoading(true);
     try {
-      const user = await signUpWithEmail(email, password);
+      const user = await signUpWithEmail(email, password, firstname, lastname, phone, username);
       router.replace('/home');
     } catch (e: any) {
       const err = e as FirebaseError;
@@ -40,10 +41,18 @@ export default function SignUp() {
       <KeyboardAvoidingView behavior="padding">
           <TextInput
             style={styles.input}
-            value={name}
-            onChangeText= {setName}
+            value={firstname}
+            onChangeText= {setFName}
             autoCapitalize="none"
-            placeholder = "Display Name"
+            placeholder = "First Name"
+            keyboardType="default"
+            />
+            <TextInput
+            style={styles.input}
+            value={lastname}
+            onChangeText= {setLName}
+            autoCapitalize="none"
+            placeholder = "Last Name"
             keyboardType="default"
             />
             <TextInput
