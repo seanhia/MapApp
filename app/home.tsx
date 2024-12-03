@@ -20,7 +20,7 @@ export default function Home() {
         <TouchableOpacity style={styles.button} onPress={() => router.push('/friends')}>
           <Text style={styles.buttonText}>Friends</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/profile')}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/userProfile')}>
           <Text style={styles.buttonText}>Profile</Text>
         </TouchableOpacity>
       </View>
