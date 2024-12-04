@@ -1,12 +1,21 @@
 // auth.js
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword , userCredential} from 'firebase/auth';
+import { createUserWithEmailAndPassword, PhoneMultiFactorGenerator, signInWithEmailAndPassword , userCredential} from 'firebase/auth';
 import {auth} from "./firebase"
+import { doc, setDoc } from "firebase/firestore"; 
+import {db} from "./firebase"
 
-export const signUpWithEmail = async (email,password) => {
+export const signUpWithEmail = async (email,password, fname, lname, phone, username) => {
   try {
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
       const user = userCredential.user;
+      setDoc(doc(db, "users", user.uid), {
+        email: email,
+        firstname: fname,
+        lastname: lname,
+        phonenumber: phone,
+        username: username
+      });
       console.log("User signed up successfully");
       })
   } catch (error) {

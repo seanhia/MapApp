@@ -1,6 +1,8 @@
 // firebase.js
 import { initializeApp} from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore } from "firebase/firestore";
+
 
 //import firebase from 'firebase/app';
 //import 'firebase/auth'; // Import additional services as needed (e.g., 'firebase/firestore')
@@ -25,5 +27,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
+export const db = getFirestore(app);
 console.log("Firebase initialized:", app);
 export default app;
