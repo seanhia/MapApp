@@ -1,9 +1,11 @@
 import SettingsHeader from '@/components/SettingsHeader';
 import React, { useState } from 'react';
-import { View, Text, Switch, Image } from 'react-native';
+import { View, Text, Switch, Image, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import { useRouter } from 'expo-router';
 
 const UserSettings = () => {
+    const router = useRouter();
 
     const [is_enable, setIsEnable] = useState(false);
     const toggleSwitch = () => setIsEnable(previousState => !previousState);
@@ -72,8 +74,10 @@ const UserSettings = () => {
             />
             <View style={{ height: 50, margin: 12, borderWidth: 1, padding: 10, backgroundColor: '#FBE8C5' }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text>Tutorial</Text>
-                    <Text style={{ fontSize: 24 }}>></Text>
+                <   Text>Tutorial</Text>
+                    <TouchableOpacity  onPress={() => router.push('/tutorial')}>
+                    <Text>press here</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
 
