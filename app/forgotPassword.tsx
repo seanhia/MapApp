@@ -74,7 +74,7 @@ const ForgotPassword = () => {
       />
 
       {/* Continue Button */}
-      <TouchableOpacity style={styles.button} onPress={handleContinue}>
+      <TouchableOpacity style={sharedStyles.button} onPress={handleContinue}>
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
 
@@ -137,14 +137,14 @@ const styles = StyleSheet.create({
 //     color: '#000000',
 //     marginBottom: 20,
 //   },
-  button: {
-    width: '100%',
-    height: 50,
-    backgroundColor: '#FFE5B4',
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  // button: {
+  //   width: '100%',
+  //   height: 50,
+  //   backgroundColor: '#FFE5B4',
+  //   borderRadius: 25,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
   buttonText: {
     fontSize: 16,
     fontWeight: 'bold',

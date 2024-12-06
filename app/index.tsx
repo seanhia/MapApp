@@ -7,6 +7,8 @@ import { Link , router} from 'expo-router';
 //import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
 import {signUpWithEmail, signInWithEmail} from "../auth";
+import sharedStyles from '../constants/sharedStyles'; 
+
 
 
 
@@ -39,7 +41,7 @@ export default function Index() {
     >
       <KeyboardAvoidingView behavior="padding">
           <TextInput
-            style={styles.input}
+            style={sharedStyles.input}
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
@@ -47,7 +49,7 @@ export default function Index() {
             placeholder = "Email"
             />
             <TextInput
-              style={styles.input}
+              style={sharedStyles.input}
               value={password}
               onChangeText={setPassword}
               secureTextEntry

@@ -6,6 +6,7 @@ import { TextInput } from "react-native-gesture-handler";
 // import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
 import {signUpWithEmail} from "../auth";
+import sharedStyles from '../constants/sharedStyles'; 
 
 import { Redirect, router } from 'expo-router';
 
@@ -40,7 +41,7 @@ export default function SignUp() {
     >
       <KeyboardAvoidingView behavior="padding">
           <TextInput
-            style={styles.input}
+            style={sharedStyles.input}
             value={firstname}
             onChangeText= {setFName}
             autoCapitalize="none"
@@ -48,7 +49,7 @@ export default function SignUp() {
             keyboardType="default"
             />
             <TextInput
-            style={styles.input}
+            style={sharedStyles.input}
             value={lastname}
             onChangeText= {setLName}
             autoCapitalize="none"
@@ -56,7 +57,7 @@ export default function SignUp() {
             keyboardType="default"
             />
             <TextInput
-              style={styles.input}
+              style={sharedStyles.input}
               value={username}
               onChangeText={setUsername}
               keyboardType="default"
@@ -65,7 +66,7 @@ export default function SignUp() {
 
             />
             <TextInput
-            style={styles.input}
+            style={sharedStyles.input}
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
@@ -73,7 +74,7 @@ export default function SignUp() {
             placeholder = "Email"
             />
             <TextInput
-              style={styles.input}
+              style={sharedStyles.input}
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -81,7 +82,7 @@ export default function SignUp() {
 
             />
             <TextInput
-              style={styles.input}
+              style={sharedStyles.input}
               value={phone}
               onChangeText={setPhone}
               placeholder = "Phone Number"
