@@ -8,53 +8,35 @@ Returning users can skip the tutorial and jump straight to the main interface.
 
 import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
-import { Image, StyleSheet, View, Text } from 'react-native';
+import { Image, StyleSheet, View, Text, FlatList } from 'react-native';
+import { Dimensions } from 'react-native';
 
-// Define the props type
-type TutorialProps = {
-  setShowTutorial: (show: boolean) => void;
-};
+import slides from '../components/TutorialSlides' // page info for each onboarding swipe 
 
-const Tutorial: React.FC<TutorialProps> = ({ setShowTutorial }) => {
+const Tutorial = ({ onComplete }: { onComplete: () => void }) => {
+  const pages = slides.map((slide) => ({
+    backgroundColor: '#fff', // Customize for each slide if needed
+    image: <Image source={slide.image} style={styles.image} />,
+    title: slide.title,
+    subtitle: slide.subtitle,
+  }));
+
   return (
     <Onboarding
-      pages={[
-        {
-          backgroundColor: '#3e3e3e',
-          image: <Image style={styles.image} source={require('../assets/images/cloud.png')} />,
-          title: 'Welcome to Explore App',
-          subtitle: 'Track your travels and explore new destinations effortlessly.',
-        },
-        {
-          backgroundColor: '#a6e4d0',
-          image: <Image style={styles.image} source={require('../assets/images/location.png')} />,
-          title: 'View Your Travel Map',
-          subtitle: 'See your travel history plotted on a personalized map.',
-        },
-        {
-          backgroundColor: '#fdd835',
-          image: <Image style={styles.image} source={require('../assets/images/icon.png')} />,
-          title: 'Log Your Journeys',
-          subtitle: 'Easily add and categorize your trips.',
-        },
-        {
-          backgroundColor: '#ff6f61',
-          image: <Image style={styles.image} source={require('../assets/images/icon.png')} />,
-          title: 'Share Your Adventures',
-          subtitle: 'Show your travel achievements with friends!',
-        },
-      ]}
-      onSkip={() => setShowTutorial(false)} // Skip to the main app
-      onDone={() => setShowTutorial(false)} // Complete tutorial
+      pages={pages}
+      onSkip={onComplete}
+      onDone={onComplete}
     />
   );
 };
 
 const styles = StyleSheet.create({
   image: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
+    paddingTop: 700,
+    width: 600,
+    height: 500,
+    resizeMode: 'center',
+    position: 'absolute'
   },
 });
 
