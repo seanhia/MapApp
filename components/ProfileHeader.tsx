@@ -20,6 +20,7 @@ const ProfileHeader = () => {
                     
                 </View>
             </View>
+
         </View>
     );
 };

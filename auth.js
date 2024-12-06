@@ -1,7 +1,7 @@
 // auth.js
 import { createUserWithEmailAndPassword, PhoneMultiFactorGenerator, signInWithEmailAndPassword , userCredential} from 'firebase/auth';
 import {auth} from "./firebase"
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc, serverTimestamp } from "firebase/firestore"; 
 import {db} from "./firebase"
 
 export const signUpWithEmail = async (email,password, fname, lname, phone, username) => {
@@ -10,11 +10,12 @@ export const signUpWithEmail = async (email,password, fname, lname, phone, usern
       .then((userCredential) => {
       const user = userCredential.user;
       setDoc(doc(db, "users", user.uid), {
-        email: email,
-        firstname: fname,
-        lastname: lname,
-        phonenumber: phone,
-        username: username
+        eMail: email,
+        firstName: fname,
+        lastName: lname,
+        phoneNumber: phone,
+        username: username,
+        createdAt: serverTimestamp(),
       });
       console.log("User signed up successfully");
       })
