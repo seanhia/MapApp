@@ -9,7 +9,6 @@ Returning users can skip the tutorial and jump straight to the main interface.
 import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
 import { Image, StyleSheet, View, Text, FlatList } from 'react-native';
-import { Dimensions } from 'react-native';
 
 import slides from '../components/TutorialSlides' // page info for each onboarding swipe 
 

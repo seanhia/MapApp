@@ -60,10 +60,13 @@ export default function Index() {
               ) : (
                 <>
                   <Button onPress={signIn} title="Sign In" />
-                  <Link href="/signUp"> Sign Up </Link>
+                  <Link href="/signUp">Sign Up</Link>
+                  <Link href="/forgotPassword">
+                    <Text style={{ color: 'blue', marginTop: 10 }}>Forgot Password?</Text>
+                  </Link>
                   <Link href="/home">
                     <Text style={{ color: 'blue', marginTop: 10 }}>Go to Home (Temporary)</Text>
-        </Link>
+                  </Link>
         </>
               )}
 
