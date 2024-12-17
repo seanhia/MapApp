@@ -2,47 +2,76 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import db  from '../firestore'; // Import Firestore instance
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 
 
 
 const Friends = () => {
 
     const [friendsList, setFriendsList] = useState<{ id: string; friendId: string }[]>([]);
-    const currentUserId = 'currentUserId'; // Replace with logged-in user ID
 
     useEffect(() => {
-        const fetchFriends = async () => {
-          try {
-            const friendshipsRef = collection(db, 'friendships');
 
-            // Queries for approved friendships involving the current user
-            const q1 = query(friendshipsRef, where('status', '==', 'approved'), where('user1', '==', currentUserId));
-            const q2 = query(friendshipsRef, where('status', '==', 'approved'), where('user2', '==', currentUserId));
+        const auth = getAuth();
 
-            const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+        // Listen for user authentication state changes
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            console.log('User signed in:', user.uid);
+          
+            try {
+              const friendshipsRef = collection(db, 'friendships');
+    
+              // Queries to find approved friendships involving the current user
+              const q1 = query(friendshipsRef, where('status', '==', 'approved'), where('user1', '==', user.uid));
+              const q2 = query(friendshipsRef, where('status', '==', 'approved'), where('user2', '==', user.uid));
+    
+              // Fetch data from both queries
+              const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+    
+              const friendUids: string[] = [];
 
-            const friends: { id: string; friendId: string }[] = [];
+              // Collect all friend UIDs
+              querySnapshot1.forEach((doc) => {
+              const data = doc.data();
+              if (data.user2) friendUids.push(data.user2);
+              });
 
-            // Process results where the current user is 'user1'
-            querySnapshot1.forEach((doc) => {
+              querySnapshot2.forEach((doc) => {
                 const data = doc.data();
-                friends.push({ id: doc.id, friendId: data.user2 }); // Friend is user2
-            });
+                if (data.user1) friendUids.push(data.user1);
+              });
 
-            // Process results where the current user is 'user2'
-            querySnapshot2.forEach((doc) => {
+              console.log('Friend UIDs:', friendUids);
+    
+              const friends: { id: string; friendId: string }[] = [];
+    
+              // Process friends where the current user is 'user1'
+              querySnapshot1.forEach((doc) => {
                 const data = doc.data();
-                friends.push({ id: doc.id, friendId: data.user1 }); // Friend is user1
-            });
-
-            setFriendsList(friends);
+                friends.push({ id: doc.id, friendId: data.user2 });
+              });
+    
+              // Process friends where the current user is 'user2'
+              querySnapshot2.forEach((doc) => {
+                const data = doc.data();
+                friends.push({ id: doc.id, friendId: data.user1 });
+              });
+    
+              console.log('Final Friends List:', friends);
+              setFriendsList(friends);
             } catch (error) {
               console.error('Error fetching friends:', error);
-         }
-    };
+            }
+          } else {
+            console.error('No user is logged in!');
+          }
+        });
+       
 
-    fetchFriends();
-}, []);  
+        return () => unsubscribe(); // Cleanup subscription
+      }, []);
     
     return (
         <View style={styles.container}>
