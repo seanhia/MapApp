@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
+//import firestore from '@react-native-firebase/firestore';
+import {getFirestore} from 'firebase/firestore';
+import app from './firebase'
 
-const db = firebase.firestore();
-// const db = getFirestore();
+//const db = firebase.firestore();
+const db = getFirestore(app);
 
 // // Create a new document in the "users" collection
 // db.collection("users").add({
@@ -42,4 +44,4 @@ return (
 );
 };
 
-export default App;
+export default db;
