@@ -49,9 +49,6 @@ export default function Home() {
         <TouchableOpacity style={styles.button} onPress={() => router.push('/userProfile')}>
           <Text style={styles.buttonText}>Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/tutorial')}>
-          <Text style={styles.buttonText}>Tutorial</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
