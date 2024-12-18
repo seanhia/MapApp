@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import db  from '../firestore'; 
+import db  from '@/firestore'; 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 

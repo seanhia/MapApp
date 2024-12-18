@@ -66,13 +66,13 @@ export default function Home() {
       </LoadScript>
       {/* Footer Bar */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/leaderboard')}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/screens/leaderboard')}>
           <Text style={styles.buttonText}>Leaderboard</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/friends')}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/screens/friends')}>
           <Text style={styles.buttonText}>Friends</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/userProfile')}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/screens/user_profile')}>
           <Text style={styles.buttonText}>Profile</Text>
         </TouchableOpacity>
       </View>

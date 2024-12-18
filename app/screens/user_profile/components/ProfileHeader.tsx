@@ -11,10 +11,10 @@ const ProfileHeader = () => {
             <View style={{flexDirection:'row', justifyContent: 'space-between', alignItems:'center'}} >
                 <Text style={{fontSize: 24, fontWeight: '500', color: 'black'}}>Profile Page</Text>
                 <View style={{flexDirection: 'row', alignItems:'center'}}>
-                    <TouchableOpacity onPress={() => router.push('/User Settings')}>
+                    <TouchableOpacity onPress={() => router.push('/screens/settings')}>
                         <Image 
                             style={{height: 30, width: 30, tintColor: 'black'}} 
-                            source={require('../assets/images/setting-icon.png')}
+                            source={require('@/assets/images/setting-icon.png')}
                         />
                     </TouchableOpacity>
                     

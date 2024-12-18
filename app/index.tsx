@@ -23,7 +23,7 @@ export default function Index() {
     setLoading(true);
     try {
       const user = await signInWithEmail(email, password)
-      router.replace('/home');
+      router.replace('/screens/home');
     } catch (e: any) {
       const err = e as FirebaseError;
       alert('Sign in failed: ' + err.message);
@@ -62,11 +62,11 @@ export default function Index() {
               ) : (
                 <>
                   <Button onPress={signIn} title="Sign In" />
-                  <Link href="/signUp">Sign Up</Link>
-                  <Link href="/forgotPassword">
+                  <Link href="/screens/sign_up">Sign Up</Link>
+                  <Link href="/screens/forgot_password">
                     <Text style={{ color: 'blue', marginTop: 10 }}>Forgot Password?</Text>
                   </Link>
-                  <Link href="/home">
+                  <Link href="/screens/home">
                     <Text style={{ color: 'blue', marginTop: 10 }}>Go to Home (Temporary)</Text>
                   </Link>
         </>

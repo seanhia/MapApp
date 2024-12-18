@@ -10,7 +10,7 @@ import {
   Pressable,
 } from 'react-native';
 import { getAuth, fetchSignInMethodsForEmail, sendPasswordResetEmail } from 'firebase/auth';
-import sharedStyles from '../constants/sharedStyles'; // Import the shared styles 
+import sharedStyles from '../../../constants/sharedStyles'; // Import the shared styles 
 
 
 const ForgotPassword = () => {
@@ -51,7 +51,7 @@ const ForgotPassword = () => {
       {/* Cloud Image */}
       <Image
         style={styles.cloudImage}
-        source={require('../assets/images/cloud.png')} 
+        source={require('../../../assets/images/cloud.png')} 
       />
 
       {/* Title */}

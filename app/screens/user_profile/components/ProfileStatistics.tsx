@@ -6,9 +6,9 @@ const ProfileStatistics = () => {
         <View style={{ paddingHorizontal: 15 }}>
             <Text>Statistics</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingTop: 15 }}>
-                <Image style={{ height: 50, width: 50 }} source={require('../assets/images/distance.jpg')} />
-                <Image style={{ height: 50, width: 50 }} source={require('../assets/images/city.jpg')} />
-                <Image style={{ height: 50, width: 50 }} source={require('../assets/images/globe.jpg')} />
+                <Image style={{ height: 50, width: 50 }} source={require('@/assets/images/distance.jpg')} />
+                <Image style={{ height: 50, width: 50 }} source={require('@/assets/images/city.jpg')} />
+                <Image style={{ height: 50, width: 50 }} source={require('@/assets/images/globe.jpg')} />
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingTop: 15 }}>
                 <Text>Distance Traveled</Text>

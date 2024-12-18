@@ -1,12 +1,12 @@
-import app, {auth} from "../firebase";
+import app, {auth} from "../../../firebase";
 
 import { useState} from "react";
 import { Text, View, StyleSheet, KeyboardAvoidingView, Button, ActivityIndicator } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 // import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
-import {signUpWithEmail} from "../auth";
-import sharedStyles from '../constants/sharedStyles'; 
+import {signUpWithEmail} from "@/auth";
+import sharedStyles from '../../../constants/sharedStyles'; 
 
 import { Redirect, router } from 'expo-router';
 
@@ -26,7 +26,7 @@ export default function SignUp() {
     setLoading(true);
     try {
       const user = await signUpWithEmail(email, password, firstname, lastname, phone, username);
-      router.replace('/home');
+      router.replace('/screens/home');
     } catch (e: any) {
       const err = e as FirebaseError;
       alert('Registration failed: ' + err.message);

@@ -1,8 +1,8 @@
-import SettingsHeader from '@/components/SettingsHeader';
+import SettingsHeader from './SettingsHeader';
 import React, { useState } from 'react';
 import { View, Text, Switch, Image, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import sharedStyles from '../constants/sharedStyles';
+import sharedStyles from '@/constants/sharedStyles';
 import { useRouter } from 'expo-router';
 
 const UserSettings = () => {
@@ -76,7 +76,7 @@ const UserSettings = () => {
             <View style={sharedStyles.input}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <   Text>Tutorial</Text>
-                    <TouchableOpacity  onPress={() => router.push('/tutorial')}>
+                    <TouchableOpacity  onPress={() => router.push('/screens/tutorial')}>
                     <Text>press here</Text>
                     </TouchableOpacity>
                 </View>

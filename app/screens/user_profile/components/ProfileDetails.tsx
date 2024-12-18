@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';  //install this
-import { useRouter } from 'expo-router';
+// import { useRouter } from 'expo-router';
 
 const ProfileDetails = () => {
     const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -61,7 +61,7 @@ const ProfileDetails = () => {
                         source={
                             profileImage
                                 ? { uri: profileImage } 
-                                : require('../assets/images/profile-pic.jpg') 
+                                : require('@/assets/images/profile-pic.jpg') 
                         }
                     />
                 </TouchableOpacity>
