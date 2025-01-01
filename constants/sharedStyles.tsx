@@ -20,6 +20,15 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  text: {
+    fontSize: 16,
+    color: '#333333',
+  }
 });
 
 export default sharedStyles;
