@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { useRouter } from 'expo-router';
+// import { useRouter } from 'expo-router';
 import sharedStyles from '@/constants/sharedStyles';
 import FooterBar from '@/components/FooterBar';
 
 export default function Home() {
-  const router = useRouter();
+  // const router = useRouter();
   const [mapCenter, setMapCenter] = useState({
     lat: 33.7838, // Replace with your desired latitude
     lng: -118.1141, // Replace with your desired longitude
@@ -67,18 +67,7 @@ export default function Home() {
         )}
       </LoadScript>
       {/* Footer Bar */}
-      <FooterBar router={router}/>
-      {/* <View style={sharedStyles.footer}>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/screens/leaderboard')}>
-          <Text style={styles.buttonText}>Leaderboard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/screens/friends')}>
-          <Text style={styles.buttonText}>Friends</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/screens/user_profile')}>
-          <Text style={styles.buttonText}>Profile</Text>
-        </TouchableOpacity>
-      </View> */}
+      <FooterBar />
     </View>
   );
 }

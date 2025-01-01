@@ -2,13 +2,17 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import sharedStyles from '@/constants/sharedStyles';
+import { useRouter } from 'expo-router';
 
 interface FooterBarProps {
-  router: any; // Replace `any` with the type of your router if applicable
+  // Replace `any` with the type of your router if applicable
 }
 
-const FooterBar: React.FC<FooterBarProps> = ({ router }) => {
+const FooterBar: React.FC<FooterBarProps> = ( ) => {
+  const router = useRouter();
+  
   return (
+    
     <View style={sharedStyles.footer}>
       <TouchableOpacity
         style={sharedStyles.footerButton}

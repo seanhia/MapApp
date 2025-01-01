@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import db from '@/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -7,6 +7,9 @@ import SearchBar from './components/SearchBar';
 import UserList from './components/UserList';
 import FriendList from './components/FriendList';
 import PendingList from './components/PendingList';
+import sharedStyles from '@/constants/sharedStyles';
+import FooterBar from '@/components/FooterBar';
+import createFriendship from '@/assets/data/CreateFriendship';
 
 const Friends = () => {
   const [friendsList, setFriendsList] = useState<{ id: string; friendId: string, friendUsername: string }[]>([]);
@@ -71,12 +74,20 @@ const Friends = () => {
     setFilteredUsers(allUsers.filter((user) => user.username.toLowerCase().includes(query.toLowerCase())));
   };
 
+  const handleAddFriend = (userId: string) => {
+    // Implement your add friend logic here
+    console.log('Adding friend:', userId);
+  };
+
   return (
     <View style={styles.container}>
       <SearchBar value={searchQuery} onChange={handleSearch} />
       <UserList users={filteredUsers} visible={!!searchQuery} />
+      <Text style={sharedStyles.header}>Friends:</Text>
       <FriendList friends={friendsList} />
+      <Text style={sharedStyles.header}>Pending Requests:</Text>
       <PendingList pending={pendingRequests} />
+      <FooterBar />
     </View>
   );
 };

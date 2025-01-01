@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
+import FooterBar from '@/components/FooterBar';
 
 const Leaderboard = () => {
     const data = [
@@ -23,7 +24,9 @@ const Leaderboard = () => {
                         </View>
                     )}
                 />
+
             </View>
+            <FooterBar />
         </View>
     );
 };
