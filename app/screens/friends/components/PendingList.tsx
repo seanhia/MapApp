@@ -20,7 +20,7 @@ const PendingList: React.FC<PendingListProps> = ({ pending }) => {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
                 <View style={styles.pendingItem}>
-                    <Text style={sharedStyles.text}>Pending: {item.friendUsername}</Text>
+                    <Text style={sharedStyles.text}>{item.friendUsername}</Text>
                 </View>
             )}
         />
@@ -30,7 +30,7 @@ const PendingList: React.FC<PendingListProps> = ({ pending }) => {
 const styles = StyleSheet.create({
     pendingItem: {
         padding: 10,
-        backgroundColor: '#ffe6cc',
+        backgroundColor: '#fff',
         borderRadius: 8,
         marginBottom: 10,
     },

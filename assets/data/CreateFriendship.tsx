@@ -28,6 +28,11 @@ const createFriendship = async (userId: string , username: string) => {
     console.log('Friendship already exists:', existingFriendshipSnapshot.docs[0].id);
     return;
   }
+  if (currentUser.uid === userId) {
+    console.error('You cannot add yourself as a friend!');
+    return;
+  }
+  
 
   // Data for new frienship document 
   const data = {
@@ -50,5 +55,5 @@ const createFriendship = async (userId: string , username: string) => {
   }
 }; 
 
-// Create a new friendship document 
-createFriendship('714l7o66FJeOY834hRPe8hZIqIJ2', 'jade_mp'); 
+
+export default createFriendship;

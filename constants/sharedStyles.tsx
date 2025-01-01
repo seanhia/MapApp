@@ -27,7 +27,7 @@ const sharedStyles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: '#333333',
+    color: Colors.light.text,
   },
   footer: {
     position: 'absolute',
@@ -48,10 +48,12 @@ const sharedStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: Colors.light.background,
+    padding: 25,
+    backgroundColor: Colors.light.tint,
     fontWeight: 'bold',
     color: Colors.light.text,
+    fontSize: 20,
+    borderRadius: 25,
   },
   image: {
     width: 100,

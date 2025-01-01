@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, FlatList, Text, StyleSheet } from 'react-native';
+import { View, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import sharedStyles from '@/constants/sharedStyles';
 
 interface Friend {
   id: string;
@@ -18,7 +19,7 @@ const FriendList: React.FC<FriendListProps> = ({ friends }) => {
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <View style={styles.friendItem}>
-          <Text style={styles.friendText}>Friend: {item.friendUsername}</Text>
+          <Text style={styles.friendText}>{item.friendUsername}</Text>
         </View>
       )}
     />
