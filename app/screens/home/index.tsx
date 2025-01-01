@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { useRouter } from 'expo-router';
+import sharedStyles from '@/constants/sharedStyles';
+import FooterBar from '@/components/FooterBar';
 
 export default function Home() {
   const router = useRouter();
@@ -65,7 +67,8 @@ export default function Home() {
         )}
       </LoadScript>
       {/* Footer Bar */}
-      <View style={styles.footer}>
+      <FooterBar router={router}/>
+      {/* <View style={sharedStyles.footer}>
         <TouchableOpacity style={styles.button} onPress={() => router.push('/screens/leaderboard')}>
           <Text style={styles.buttonText}>Leaderboard</Text>
         </TouchableOpacity>
@@ -75,7 +78,7 @@ export default function Home() {
         <TouchableOpacity style={styles.button} onPress={() => router.push('/screens/user_profile')}>
           <Text style={styles.buttonText}>Profile</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -114,16 +117,6 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 4,
     backgroundColor: '#fff',
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#87CEEB',
-    paddingVertical: 10,
   },
   button: {
     padding: 10,
