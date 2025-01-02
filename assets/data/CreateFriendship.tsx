@@ -49,7 +49,7 @@ const createFriendship = async (userId: string , username: string) => {
     // Write the data into Firestore
     await setDoc(newFriendshipRef, data);
 
-    console.log('Friendship successfully created!');
+    console.log('Friendship successfully initiated!');
   } catch (error) {
     console.error('Error creating friendship:', error);
   }

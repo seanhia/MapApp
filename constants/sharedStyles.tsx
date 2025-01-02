@@ -12,6 +12,11 @@ const sharedStyles = StyleSheet.create({
     color: '#000000',
     marginBottom: 20,
   },
+  buttonContainter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
   button: {
     width: '100%',
     height: 50,
@@ -19,6 +24,7 @@ const sharedStyles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1, 
   },
   heading: {
     fontSize: 24,
@@ -61,6 +67,12 @@ const sharedStyles = StyleSheet.create({
     marginBottom: 20,
     alignSelf: 'center',
   },
+   item: {
+        padding: 10,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        marginBottom: 10,
+    },
 });
 
 export default sharedStyles;

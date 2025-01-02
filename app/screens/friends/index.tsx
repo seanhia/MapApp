@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import db from '@/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -7,9 +7,10 @@ import SearchBar from './components/SearchBar';
 import UserList from './components/UserList';
 import FriendList from './components/FriendList';
 import PendingList from './components/PendingList';
+import PendingQuery from '@/assets/data/PendingQuery';
+import AcceptFriendship from '@/assets/data/AcceptFriendship';
 import sharedStyles from '@/constants/sharedStyles';
 import FooterBar from '@/components/FooterBar';
-import createFriendship from '@/assets/data/CreateFriendship';
 
 const Friends = () => {
   const [friendsList, setFriendsList] = useState<{ id: string; friendId: string, friendUsername: string }[]>([]);
@@ -42,14 +43,8 @@ const Friends = () => {
           console.log('Friends:', friends);
 
           // Query for pending friendships for the current user
-          const pendingQ1 = query(friendshipsRef, where('status', '==', 'pending'), where('user1', '==', user.uid));
-          const pendingQ2 = query(friendshipsRef, where('status', '==', 'pending'), where('user2', '==', user.uid));
-          const [pendingSnapshot1, pendingSnapshot2] = await Promise.all([getDocs(pendingQ1), getDocs(pendingQ2)]);
-          const pending: { id: string; friendId: string, friendUsername: string}[] = [];
-          pendingSnapshot1.forEach((doc) => pending.push({ id: doc.id, friendId: doc.data().user2, friendUsername: doc.data().username2 }));
-          pendingSnapshot2.forEach((doc) => pending.push({ id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1 }));
+          const pending = await PendingQuery();
           setPendingRequests(pending);
-          console.log('Pending:', pending);
 
           // Fetch all users from the database for the search functionality
           const usersRef = collection(db, 'users');
@@ -74,10 +69,25 @@ const Friends = () => {
     setFilteredUsers(allUsers.filter((user) => user.username.toLowerCase().includes(query.toLowerCase())));
   };
 
-  const handleAddFriend = (userId: string) => {
-    // Implement your add friend logic here
-    console.log('Adding friend:', userId);
-  };
+  const handleAccept = async (friendshipId: string) => {
+      console.log('Accepted friend request from friendshipId:', friendshipId);
+      try {
+        await AcceptFriendship(friendshipId); // Update friendship status in Firestore
+        // Optionally, refresh the pending requests after accepting
+        // Update state to remove the accepted request from the UI
+      } catch (error) {
+        console.error('Error handling friend acceptance:', error);
+      }
+    };
+    
+    const handleDeny = async (friendshipId: string) => {
+      console.log('Denied friend request from friendshipId:', friendshipId);
+      try {
+        // Handle deny logic (e.g., remove the friendship request or change the status)
+      } catch (error) {
+        console.error('Error handling friend denial:', error);
+      }
+    };
 
   return (
     <View style={styles.container}>
@@ -86,7 +96,10 @@ const Friends = () => {
       <Text style={sharedStyles.header}>Friends:</Text>
       <FriendList friends={friendsList} />
       <Text style={sharedStyles.header}>Pending Requests:</Text>
-      <PendingList pending={pendingRequests} />
+      <PendingList 
+        pending={pendingRequests}
+        onAccept={handleAccept}
+        onDeny={handleDeny} />
       <FooterBar />
     </View>
   );
