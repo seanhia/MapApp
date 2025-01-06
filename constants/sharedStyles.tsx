@@ -26,6 +26,25 @@ const sharedStyles = StyleSheet.create({
     alignItems: 'center',
     flex: 1, 
   },
+  yellowButton: {
+    width: '100%',
+    height: 50,
+    backgroundColor: Colors.light.background,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1, 
+  },
+  sideButton: {
+    width: '50%',
+    height: 50,
+    backgroundColor: Colors.light.tint,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: .5,
+    paddingHorizontal: 10
+  },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -34,6 +53,14 @@ const sharedStyles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: Colors.light.text,
+  },
+  boldText: {
+    fontSize: 16,
+    color: Colors.light.text,
+    flex: 1.5, 
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    padding: 10, 
   },
   footer: {
     position: 'absolute',
@@ -67,6 +94,11 @@ const sharedStyles = StyleSheet.create({
     marginBottom: 20,
     alignSelf: 'center',
   },
+  profilePicture: { // Testing this style
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    },
    item: {
         padding: 10,
         backgroundColor: '#fff',

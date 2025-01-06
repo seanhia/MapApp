@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, FlatList, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import sharedStyles from '@/constants/sharedStyles';
 
 interface Friend {
@@ -10,32 +10,38 @@ interface Friend {
 
 interface FriendListProps {
   friends: Friend[];
+  onViewProfile: (id: string) => void;
+  onUnfriend: (id: string) => void;
 }
 
-const FriendList: React.FC<FriendListProps> = ({ friends }) => {
+const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfriend }) => {
   return (
     <FlatList
       data={friends}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <View style={styles.friendItem}>
-          <Text style={styles.friendText}>{item.friendUsername}</Text>
+        <View style={sharedStyles.buttonContainter}>
+          <Image source={require('@/assets/images/cloud.png')} 
+            style={sharedStyles.profilePicture} />
+          <Text style={sharedStyles.boldText}>@{item.friendUsername}</Text>
+          {/* <View style={sharedStyles.buttonContainter}> */}
+            <TouchableOpacity 
+              style={sharedStyles.sideButton}
+              onPress={() => onViewProfile(item.friendId)}
+              >
+                <Text style={sharedStyles.text}>View Profile</Text>
+              </TouchableOpacity>
+            <TouchableOpacity 
+              style={sharedStyles.sideButton}
+              onPress={() => onUnfriend(item.id)}
+              >
+                <Text style={sharedStyles.text}>Unfriend</Text>
+              </TouchableOpacity>
+          {/* </View> */}
         </View>
       )}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  friendItem: {
-    padding: 10,
-    backgroundColor: '#e6f7ff',
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  friendText: {
-    fontSize: 16,
-  },
-});
 
 export default FriendList;

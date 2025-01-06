@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where } from 'firebase/firestore';
-import db from '@/firestore'; // Adjust the path to your Firestore instance
+import db from '@/firestore'; 
 import { getAuth } from 'firebase/auth';
 
 export type User = {

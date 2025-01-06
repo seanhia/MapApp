@@ -1,7 +1,8 @@
 import React from "react";
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import sharedStyles from "@/constants/sharedStyles";
-import AcceptFriendship from "@/assets/data/AcceptFriendship";
+// import AcceptFriendship from "@/assets/data/AcceptFriendship";
+
 
 interface Pending {
     id: string; 
@@ -15,29 +16,30 @@ interface PendingListProps {
     onDeny: (id: string) => void;
 }
 
-// pending list component of users who have sent friend requests
-const PendingList: React.FC<PendingListProps> = ({ pending, onAccept, onDeny}) => {
+/* 
+    Component for the Pending List of friend requests used in the Friends screen 
+*/const PendingList: React.FC<PendingListProps> = ({ pending, onAccept, onDeny}) => {
     return (
         <FlatList
             data={pending}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-                <View style={sharedStyles.item}>
-                    <Text style={sharedStyles.text}>{item.friendUsername}</Text>
-                    <View style={sharedStyles.buttonContainter}> 
+                <View style={sharedStyles.buttonContainter}>
+                    <Image source={require('@/assets/images/cloud.png')}
+                    style={sharedStyles.profilePicture} />
+                    <Text style={sharedStyles.boldText}>@{item.friendUsername}</Text>
                         <TouchableOpacity
-                            style={sharedStyles.button}
+                            style={sharedStyles.sideButton}
                             onPress={() => onAccept(item.id)}
                             >
                                 <Text style={sharedStyles.text}>Accept</Text>
                             </TouchableOpacity>
                         <TouchableOpacity
-                            style={sharedStyles.button}
+                            style={sharedStyles.sideButton}
                             onPress={() => onDeny(item.id)}
                             >
                                 <Text style={sharedStyles.text}>Deny</Text>
                             </TouchableOpacity>
-                    </View>
                 </View>
             )}
         />

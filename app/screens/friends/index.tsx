@@ -3,12 +3,14 @@ import { View, StyleSheet, Text } from 'react-native';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import db from '@/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 import SearchBar from './components/SearchBar';
 import UserList from './components/UserList';
 import FriendList from './components/FriendList';
 import PendingList from './components/PendingList';
 import PendingQuery from '@/assets/data/PendingQuery';
-import AcceptFriendship from '@/assets/data/AcceptFriendship';
+import { handleAccept, handleDeny } from '@/assets/data/Friendship';
+
 import sharedStyles from '@/constants/sharedStyles';
 import FooterBar from '@/components/FooterBar';
 
@@ -67,34 +69,17 @@ const Friends = () => {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     setFilteredUsers(allUsers.filter((user) => user.username.toLowerCase().includes(query.toLowerCase())));
-  };
-
-  const handleAccept = async (friendshipId: string) => {
-      console.log('Accepted friend request from friendshipId:', friendshipId);
-      try {
-        await AcceptFriendship(friendshipId); // Update friendship status in Firestore
-        // Optionally, refresh the pending requests after accepting
-        // Update state to remove the accepted request from the UI
-      } catch (error) {
-        console.error('Error handling friend acceptance:', error);
-      }
-    };
-    
-    const handleDeny = async (friendshipId: string) => {
-      console.log('Denied friend request from friendshipId:', friendshipId);
-      try {
-        // Handle deny logic (e.g., remove the friendship request or change the status)
-      } catch (error) {
-        console.error('Error handling friend denial:', error);
-      }
-    };
-
+  };    
+   
   return (
     <View style={styles.container}>
       <SearchBar value={searchQuery} onChange={handleSearch} />
       <UserList users={filteredUsers} visible={!!searchQuery} />
       <Text style={sharedStyles.header}>Friends:</Text>
-      <FriendList friends={friendsList} />
+      <FriendList 
+        friends={friendsList} 
+        onViewProfile={handleAccept}
+        onUnfriend={handleDeny} />
       <Text style={sharedStyles.header}>Pending Requests:</Text>
       <PendingList 
         pending={pendingRequests}

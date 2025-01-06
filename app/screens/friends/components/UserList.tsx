@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, FlatList, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import sharedStyles from '@/constants/sharedStyles';
-import createFriendship from '@/assets/data/CreateFriendship';
+import { createFriendship } from '@/assets/data/Friendship';
 
 interface User {
   id: string;
@@ -22,10 +22,10 @@ const UserList: React.FC<UserListProps> = ({ users, visible }) => {
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <TouchableOpacity
-        style={sharedStyles.button}
+        style={sharedStyles.yellowButton}
         onPress={() => createFriendship(item.id, item.username)} // Use dynamic user ID and username
       >
-        <Text style={{ color: 'black', fontWeight: 'bold' }}>Add Friend</Text>
+        <Text style={sharedStyles.boldText}>Add Friend</Text>
         <Text>{item.username}</Text> {/* Display the username */}
       </TouchableOpacity>
       
