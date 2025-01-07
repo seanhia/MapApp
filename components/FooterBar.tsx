@@ -1,4 +1,3 @@
-// FooterBar.tsx
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import sharedStyles from '@/constants/sharedStyles';
