@@ -58,7 +58,7 @@ const Friends = () => {
   };    
    
   return (
-    <View style={styles.container}>
+    <View style={sharedStyles.fullContainer}>
 
       <SearchBar value={searchQuery} onChange={handleSearch} />
       <UserList users={filteredUsers} visible={!!searchQuery} />
@@ -85,12 +85,5 @@ const Friends = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-evenly',
-    backgroundColor: '#f8f8f8',
-  },
-});
 
 export default Friends;

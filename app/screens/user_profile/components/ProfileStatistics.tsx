@@ -1,22 +1,23 @@
+import sharedStyles from '@/constants/sharedStyles';
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 
 const ProfileStatistics = () => {
     return (
-        <View style={{ paddingHorizontal: 15 }}>
-            <Text>Statistics</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingTop: 15 }}>
-                <Image style={{ height: 50, width: 50 }} source={require('@/assets/images/distance.jpg')} />
-                <Image style={{ height: 50, width: 50 }} source={require('@/assets/images/city.jpg')} />
-                <Image style={{ height: 50, width: 50 }} source={require('@/assets/images/globe.jpg')} />
+        <View style={sharedStyles.fullContainer}>
+            <Text style={sharedStyles.header}>Statistics</Text>
+            <View style={sharedStyles.profileContainer}>
+                <Image style={styles.statsImage} source={require('@/assets/images/distance.jpg')} />
+                <Image style={styles.statsImage} source={require('@/assets/images/city.jpg')} />
+                <Image style={styles.statsImage} source={require('@/assets/images/globe.jpg')} />
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingTop: 15 }}>
+            <View style={sharedStyles.profileContainer}>
                 <Text>Distance Traveled</Text>
                 <Text>Cities Visited</Text>
                 <Text>Countries Visited</Text>
 
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingTop: 15 }}>
+            <View style={sharedStyles.profileContainer}>
                 <Text>2462 m</Text>
                 <Text>3</Text>
                 <Text>1</Text>
@@ -28,3 +29,11 @@ const ProfileStatistics = () => {
 };
 
 export default ProfileStatistics;
+
+const styles = StyleSheet.create({
+    statsImage: {
+        height: 100, width: 100
+    },
+    
+})
+

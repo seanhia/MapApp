@@ -36,7 +36,7 @@ export default function Index() {
   return (
     
     <View
-      style={sharedStyles.container}
+      style={sharedStyles.centerContainer}
     >
       <Link style={{alignSelf: 'center'}} href="/screens/home">
         <Text style={{ color: Colors.light.tabIconDefault}}>Homepage (Temporary)</Text>
@@ -79,10 +79,10 @@ export default function Index() {
                     <Text style={sharedStyles.text}>Sign In</Text> 
                     </TouchableOpacity>
                   <>
-                    <Text style = {{marginBottom: 90}}>
+                    <Text style = {{marginBottom: 80}}>
               
                     </Text>
-                    <Link style={{fontSize: 20, alignSelf: 'center', margin: 30, color: Colors.light.tabIconDefault}} href="/screens/sign_up">Don't have an account? Sign Up ⇨ </Link>
+                    <Link style={{fontSize: 20, alignSelf: 'center', marginBottom: 85, color: Colors.light.tabIconDefault}} href="/screens/sign_up">Don't have an account? Sign Up ⇨ </Link>
                     <View style={sharedStyles.lowerContainer}>
                       <Image style={sharedStyles.profilePicture} source={require('../assets/images/cloud.png')} />
                       <Link style={sharedStyles.tutorial} href="/screens/tutorial">Tutorial?</Link>

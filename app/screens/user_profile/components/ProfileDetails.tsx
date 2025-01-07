@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet,  Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';  //install this
-// import { useRouter } from 'expo-router';
 
-const ProfileDetails = () => {
+import { fetchFriendCount } from '@/data/FriendshipQuery';
+import { fetchCurrentUser } from '@/data/UserDataService';
+import { User } from '@/data/types'
+import sharedStyles from '@/constants/sharedStyles';
+
+
+
+const ProfileDetails : React.FC = ({  }) => {
+    
+
+    const [friendCount, setFriendCount] = useState<string | null>(null);
     const [profileImage, setProfileImage] = useState<string | null>(null);
 
+    
+
     const handleImagePicker = async () => {
+        
         try {
             // Request permissions for Android
             if (Platform.OS === 'android') {
@@ -53,11 +65,12 @@ const ProfileDetails = () => {
 
     return (
         <View style={{ paddingHorizontal: 15 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={sharedStyles.buttonContainer}>
                 {}
+    
                 <TouchableOpacity onPress={handleImagePicker}>
                     <Image
-                        style={{ height: 80, width: 80, borderRadius: 40 }} 
+                        style={sharedStyles.profilePicture} 
                         source={
                             profileImage
                                 ? { uri: profileImage } 
@@ -66,40 +79,35 @@ const ProfileDetails = () => {
                     />
                 </TouchableOpacity>
 
-                {}
+                
                 <View style={{ width: 75, alignItems: 'center' }}>
-                    <Text style={{ fontSize: 24, fontWeight: '400', color: 'black' }}>Friends</Text>
-                    <Text style={{ fontSize: 24, fontWeight: '400', color: 'black' }}>25</Text>
+                    <Text style={style.text}>Friends</Text>
+                    <Text>{friendCount}</Text>
                 </View>
 
                 {}
                 <View style={{ width: 75, alignItems: 'center' }}>
-                    <Text style={{ fontSize: 24, fontWeight: '400', color: 'black' }}>Points</Text>
-                    <Text style={{ fontSize: 24, fontWeight: '400', color: 'black' }}>1679</Text>
+                    <Text style={style.text}>Points</Text>
+                    <Text style={style.text}>1679</Text>
                 </View>
             </View>
 
-            {}
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 15 }}>
-                <View style={{ width: 75, alignItems: 'center' }}>
-                    <Text style={{ fontSize: 16, color: 'black' }}>DisplayName</Text>
-                </View>
+        
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 15 }}>
                 <View>
-                    <Text style={{ fontSize: 24, fontWeight: '400', color: 'black' }}>Bio</Text>
-                    <Text style={{ fontSize: 24, fontWeight: '400', color: 'black' }}>~~~~~~~~~~~~~~~~~~~~~</Text>
+                    <Text style={style.text}>Bio</Text>
+                    <Text style={style.text}>~~~~~~~~~~~~~~~~~~~~~</Text>
                 </View>
             </View>
 
-            {}
+            
             <View>
-                <Text style={{ fontSize: 16, color: 'black' }}>@Username</Text>
+                <Text style={sharedStyles.text}>@Username</Text>
             </View>
 
-            {}
-            <View>
+            
+            <View style={sharedStyles.fullContainer}>
                 <Text style={{ fontWeight: '100' }}>Account Created</Text>
-            </View>
-            <View>
                 <Text style={{ fontWeight: '100' }}>11/30/24</Text>
             </View>
         </View>
@@ -107,3 +115,11 @@ const ProfileDetails = () => {
 };
 
 export default ProfileDetails;
+
+const style = StyleSheet.create({
+    text: {
+    fontSize: 24,
+    fontWeight: '400',
+    color: 'black',
+    }
+});

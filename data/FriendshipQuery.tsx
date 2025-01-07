@@ -1,6 +1,7 @@
  import { getDocs, query, where, collection } from 'firebase/firestore';
  import db from '@/firestore';
  import { fetchCurrentUser } from './UserDataService';
+ import { User } from '@/data/types'
 
 export const FriendQuery = async () => {
     try {
@@ -37,14 +38,12 @@ export const PendingQuery = async () => {
 
     const friendshipsRef = collection(db, 'friendships');
 
-    const pendingQ1 = query(friendshipsRef, where('status', '==', 'pending'), where('user2', '==', currentUser.id));
-    // const pendingQ2 = query(friendshipsRef, where('status', '==', 'pending'), where('user2', '==', currentUser.id));
+    const pendingQ1 = query(friendshipsRef, where('status', '==', 'pending'), where('user2', '==', currentUser.id)); // The user that has been requested 
 
     const [pendingSnapshot1] = await Promise.all([getDocs(pendingQ1)]);
 
     const pending: { id: string; friendId: string, friendUsername: string}[] = [];
     pendingSnapshot1.forEach((doc) => pending.push({ id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1 }));
-    // pendingSnapshot2.forEach((doc) => pending.push({ id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1 }));
     
     return pending; 
     
@@ -53,6 +52,26 @@ export const PendingQuery = async () => {
         return [];
     }
 };
+
+export const fetchFriendCount = async (user: User): Promise<string | null> => {
+
+    try {
+        const currentUser = await fetchCurrentUser();
+        if (!currentUser) {
+            throw new Error('No user is currently signed in!');
+        }  
+       
+        const friendRef = collection(db, 'friendships');
+        const countQ = query(friendRef, where('status', '==', 'approved'), where('user1', '==', user.id));
+        const [countSnapshot] = await Promise.all([getDocs(countQ)]);
+        const friendCount = countSnapshot.size;
+        return friendCount.toString();
+
+    } catch (error) {
+        console.error('Error fetching friends:', error);
+        return null;
+    }
+}   
 
 // const BoilerPlate = async () => {
 //     // Output all friendship documents in the Console

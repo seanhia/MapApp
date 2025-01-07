@@ -15,7 +15,7 @@ export function ImageHeader( {
 
     return (
         // <View style={style === 'half' ? styles.half : styles.full}>
-        <View style={sharedStyles.container}>
+        <View style={sharedStyles.fullContainer}>
             <Text style={sharedStyles.title}>
                 {text}
             </Text>

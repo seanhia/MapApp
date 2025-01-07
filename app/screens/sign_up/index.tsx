@@ -1,14 +1,15 @@
 import app, {auth} from "../../../firebase";
 
 import { useState} from "react";
-import { Text, View, StyleSheet, KeyboardAvoidingView, TouchableOpacity , ActivityIndicator, Touchable } from "react-native";
+import { Text, View, StyleSheet, KeyboardAvoidingView, TouchableOpacity , ActivityIndicator } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 // import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
 import {signUpWithEmail} from "@/auth";
 import sharedStyles from '../../../constants/sharedStyles'; 
 
-import { Redirect, router } from 'expo-router';
+import { Redirect, router, Link } from 'expo-router';
+import {Colors} from '@/constants/Colors'
 
 import { ImageHeader} from '@/components/ImageHeader'
 
@@ -38,7 +39,7 @@ export default function SignUp() {
 
   return (
     <View
-      style={sharedStyles.container}
+      style={sharedStyles.centerContainer}
     >
       <ImageHeader
       image={require("@/assets/images/cloud.png")}
@@ -102,6 +103,10 @@ export default function SignUp() {
                   <TouchableOpacity style={sharedStyles.lightButton} onPress={signUp} >
                     <Text style={sharedStyles.text}>Sign Up </Text>
                   </TouchableOpacity>
+                  <Text style = {{marginBottom: 90}}>
+                                
+                  </Text>
+                  <Link style={{fontSize: 20, alignSelf: 'center', marginBottom: 85, padding: 20, color: Colors.light.tabIconDefault}} href="/screens/sign_up">Have an existing account? Sign In ⇨ </Link>
                 </>
               )}
 

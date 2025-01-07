@@ -7,11 +7,14 @@ import { useRouter } from 'expo-router';
 import ProfileStatistics from './components/ProfileStatistics';
 import sharedStyles from '@/constants/sharedStyles';
 import FooterBar from '@/components/FooterBar';
+import { User } from '@/data/types'
+import { fetchCurrentUser } from '@/data/UserDataService';
 
 const userProfile = () => {
   const router = useRouter();
+  
   return (
-      <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <View style={sharedStyles.fullContainer}>
         <ScrollView>
 
           <ProfileHeader />
@@ -24,7 +27,7 @@ const userProfile = () => {
 
         </ScrollView>
 
-        <View style={sharedStyles.footer}>
+        <View >
           <FooterBar />
         </View>
       </View>

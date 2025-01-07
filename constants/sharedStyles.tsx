@@ -2,13 +2,42 @@ import { StyleSheet } from 'react-native';
 import { Colors } from '../constants/Colors';
 
 const sharedStyles = StyleSheet.create({
+  /** Text */
   title: {
     fontSize: 60,
     fontWeight: 'normal',
     marginBottom: 10,
     color: Colors.light.text,
     alignSelf: 'center',
-  
+  },
+  header: {
+    width: '95%',
+    flexDirection: 'row',
+    alignSelf: 'center',
+    padding: 20,
+    backgroundColor: Colors.light.tint,
+    fontWeight: 'bold',
+    color: Colors.light.text,
+    fontSize: 20,
+    borderRadius: 25,
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  text: {
+    fontSize: 16,
+    color: Colors.light.text,
+    padding: 10,
+  },
+  boldText: {
+    fontSize: 16,
+    color: Colors.light.text,
+    flex: 1.5, 
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    padding: 10, 
   },
   input: {
     width: '100%',
@@ -20,12 +49,25 @@ const sharedStyles = StyleSheet.create({
     color: '#000000',
     marginBottom: 20,
   },
-  container: {
+  item: {
+    padding: 10,
+    backgroundColor: Colors.light.tint,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+
+  /** Containers  */
+  centerContainer: { //Centered Page with margin 
     marginHorizontal: 40,
-    flex: .9,
+    flex: 1,
     justifyContent: 'space-evenly',
   },
-  halfContainer: {
+  fullContainer: { //Horizonatal Full Page 
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+  },
+  halfContainer: { //Vertical Half Page 
     marginHorizontal: 40, 
     flex: .6, 
     justifyContent: 'space-around'
@@ -43,6 +85,13 @@ const sharedStyles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
   },
+  profileContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    paddingTop: 30,
+},
+
+  /** Buttons  */
   button: {
     width: '100%',
     height: 50,
@@ -70,24 +119,27 @@ const sharedStyles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  heading: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  text: {
-    fontSize: 16,
-    color: Colors.light.text,
+  footerButton: {
     padding: 10,
+    alignItems: 'center',
+    color: Colors.light.background,
   },
-  boldText: {
-    fontSize: 16,
-    color: Colors.light.text,
-    flex: 1.5, 
-    fontWeight: 'bold',
+  
+  
+  /** Images  */
+  image: {
+    width: 220,
+    height: 200,
+    marginBottom: 20,
     alignSelf: 'center',
-    padding: 10, 
   },
+  profilePicture: { 
+    width: 90,
+    height: 80,
+    borderRadius: 40,
+    },
+
+  /** Components  */
   footer: {
     position: 'absolute',
     bottom: 0,
@@ -98,46 +150,15 @@ const sharedStyles = StyleSheet.create({
     backgroundColor: Colors.light.tint,
     paddingVertical: 10,
   },
-  footerButton: {
-    padding: 10,
-    alignItems: 'center',
-    color: Colors.light.background,
-  },
-  header: {
-    width: '95%',
-    flexDirection: 'row',
-    // justifyContent: 'center',
-    alignSelf: 'center',
-    padding: 20,
-    backgroundColor: Colors.light.tint,
-    fontWeight: 'bold',
-    color: Colors.light.text,
-    fontSize: 20,
-    borderRadius: 25,
-  },
-  image: {
-    width: 220,
-    height: 200,
-    marginBottom: 20,
-    alignSelf: 'center',
-  },
-  profilePicture: { // Testing this style
-    width: 90,
-    height: 80,
-    borderRadius: 40,
-    },
-   item: {
-      padding: 10,
-      backgroundColor: '#fff',
-      borderRadius: 8,
-      marginBottom: 10,
-    },
+
+
+    /** Links  */
     rightLink: {
       color: Colors.light.tabIconDefault,
       fontSize: 16,
       alignSelf: 'flex-end',
       marginBottom: 30,
-    },
+    }, 
     tutorial: {
       color: Colors.light.tabIconDefault,
       fontSize: 30,
