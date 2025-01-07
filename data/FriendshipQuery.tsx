@@ -37,14 +37,14 @@ export const PendingQuery = async () => {
 
     const friendshipsRef = collection(db, 'friendships');
 
-    const pendingQ1 = query(friendshipsRef, where('status', '==', 'pending'), where('user1', '==', currentUser.id));
-    const pendingQ2 = query(friendshipsRef, where('status', '==', 'pending'), where('user2', '==', currentUser.id));
+    const pendingQ1 = query(friendshipsRef, where('status', '==', 'pending'), where('user2', '==', currentUser.id));
+    // const pendingQ2 = query(friendshipsRef, where('status', '==', 'pending'), where('user2', '==', currentUser.id));
 
-    const [pendingSnapshot1, pendingSnapshot2] = await Promise.all([getDocs(pendingQ1), getDocs(pendingQ2)]);
+    const [pendingSnapshot1] = await Promise.all([getDocs(pendingQ1)]);
 
     const pending: { id: string; friendId: string, friendUsername: string}[] = [];
-    pendingSnapshot1.forEach((doc) => pending.push({ id: doc.id, friendId: doc.data().user2, friendUsername: doc.data().username2 }));
-    pendingSnapshot2.forEach((doc) => pending.push({ id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1 }));
+    pendingSnapshot1.forEach((doc) => pending.push({ id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1 }));
+    // pendingSnapshot2.forEach((doc) => pending.push({ id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1 }));
     
     return pending; 
     

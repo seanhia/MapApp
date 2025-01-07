@@ -13,15 +13,19 @@ const userProfile = () => {
   return (
       <View style={{ flex: 1, backgroundColor: 'white' }}>
         <ScrollView>
-        <ProfileHeader />
-        <ProfileDetails />
-        <ProfilePost />
-        <ProfileStatistics />
+
+          <ProfileHeader />
+
+          <ProfileDetails />
+
+          <ProfilePost />
+
+          <ProfileStatistics />
 
         </ScrollView>
 
         <View style={sharedStyles.footer}>
-          <FooterBar router={router} />
+          <FooterBar />
         </View>
       </View>
   );

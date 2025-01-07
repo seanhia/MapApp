@@ -31,9 +31,11 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   buttonContainer: {
+    width: '85%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
+    alignSelf: 'center',
+    marginTop: 20,
   },
   lowerContainer: {
     flexDirection: 'row',
@@ -63,10 +65,10 @@ const sharedStyles = StyleSheet.create({
     height: 50,
     backgroundColor: Colors.light.tint,
     borderRadius: 25,
+    margin: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: .5,
-    paddingHorizontal: 10
+    flex: 1,
   },
   heading: {
     fontSize: 24,
@@ -102,10 +104,11 @@ const sharedStyles = StyleSheet.create({
     color: Colors.light.background,
   },
   header: {
+    width: '95%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 25,
+    // justifyContent: 'center',
+    alignSelf: 'center',
+    padding: 20,
     backgroundColor: Colors.light.tint,
     fontWeight: 'bold',
     color: Colors.light.text,

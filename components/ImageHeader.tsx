@@ -4,16 +4,17 @@ import sharedStyles from '@/constants/sharedStyles'
 export type ImageHeaderProps =  {
     image: string; 
     text: string; 
-    style: "wide" | "narrow"
+    // style: "half" | "full"
 }
 
 export function ImageHeader( {
     image, 
     text,
-    style
+    // style
 }:  ImageHeaderProps)  {
 
     return (
+        // <View style={style === 'half' ? styles.half : styles.full}>
         <View style={sharedStyles.container}>
             <Text style={sharedStyles.title}>
                 {text}
@@ -26,10 +27,13 @@ export function ImageHeader( {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        marginHorizontal: 40,
-        flex: .5,
-        justifyContent: 'space-evenly',
-  },
-})
+// const styles = StyleSheet.create({
+//     half: {
+//         marginHorizontal: 40,
+//         flex: .5,
+//         justifyContent: 'space-evenly',
+//     },
+//     full: {
+
+//     }
+// })

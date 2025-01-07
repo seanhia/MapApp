@@ -54,32 +54,41 @@ const Friends = () => {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    setFilteredUsers(allUsers.filter((user) => user.id.toLowerCase().includes(query.toLowerCase())));
+    setFilteredUsers(allUsers.filter((user) => user.username.toLowerCase().includes(query.toLowerCase())));
   };    
    
   return (
     <View style={styles.container}>
+
       <SearchBar value={searchQuery} onChange={handleSearch} />
       <UserList users={filteredUsers} visible={!!searchQuery} />
+
       <Text style={sharedStyles.header}>Friends:</Text>
       <FriendList 
         friends={friendsList} 
         onViewProfile={handleAccept}
         onUnfriend={handleDeny} />
+
       <Text style={sharedStyles.header}>Pending Requests:</Text>
       <PendingList 
         pending={pendingRequests}
         onAccept={handleAccept}
         onDeny={handleDeny} />
-      <FooterBar />
+
+      <View>
+        <FooterBar/>
+      </View>
+      
+
     </View>
+  
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    justifyContent: 'space-evenly',
     backgroundColor: '#f8f8f8',
   },
 });

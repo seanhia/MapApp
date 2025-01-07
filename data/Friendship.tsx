@@ -2,6 +2,7 @@ import { doc, getDoc, collection, setDoc, getDocs, query, where, updateDoc, dele
 // import PendingQuery from '@/assets/data/PendingQuery';
 import db from '@/firestore';
 import { getAuth } from 'firebase/auth';
+import { fetchUserByUID } from '@/data/UserDataService'
 
 export const handleAccept = async (friendshipId: string) => {
     console.log('Accepted friend request from friendshipId:', friendshipId);
@@ -32,8 +33,11 @@ export const createFriendship = async (userId: string , username: string) => {
         const currentUser = auth.currentUser;
         if (!currentUser) {
             throw new Error('No user is currently signed in!');
-        }
-        
+        } 
+        const user = await fetchUserByUID(currentUser.uid)
+        if (!user) throw new Error('Unable to fetch the current user details.');
+
+
         const friendshipsRef = collection(db, 'friendships');
 
         // Check if a friendship already exists between the two users
@@ -59,7 +63,7 @@ export const createFriendship = async (userId: string , username: string) => {
             user1: currentUser.uid, //currentUser.uid,
             user2: userId,
             status: 'pending', // pending, approved, rejected
-            username1: currentUser.displayName || 'Display Name Unavailable', 
+            username1: user.username || null, 
             username2: username, 
             created_at: new Date()
         }
