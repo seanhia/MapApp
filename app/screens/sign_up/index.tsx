@@ -1,7 +1,7 @@
 import app, {auth} from "../../../firebase";
 
 import { useState} from "react";
-import { Text, View, StyleSheet, KeyboardAvoidingView, Button, ActivityIndicator } from "react-native";
+import { Text, View, StyleSheet, KeyboardAvoidingView, TouchableOpacity , ActivityIndicator, Touchable } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 // import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
@@ -10,6 +10,7 @@ import sharedStyles from '../../../constants/sharedStyles';
 
 import { Redirect, router } from 'expo-router';
 
+import { ImageHeader} from '@/components/ImageHeader'
 
 
 
@@ -37,8 +38,12 @@ export default function SignUp() {
 
   return (
     <View
-      style={styles.container}
+      style={sharedStyles.container}
     >
+      <ImageHeader
+      image={require("@/assets/images/cloud.png")}
+      text ="Sign Up"
+      />
       <KeyboardAvoidingView behavior="padding">
           <TextInput
             style={sharedStyles.input}
@@ -91,10 +96,12 @@ export default function SignUp() {
             />
             {
               loading ? (
-                <ActivityIndicator size={'small'} style ={{ margin: 28}} />
+                <ActivityIndicator size={'small'} style ={{ margin: 100}} />
               ) : (
                 <>
-                  <Button onPress={signUp} title="Sign Up" />
+                  <TouchableOpacity style={sharedStyles.lightButton} onPress={signUp} >
+                    <Text style={sharedStyles.text}>Sign Up </Text>
+                  </TouchableOpacity>
                 </>
               )}
 

@@ -24,7 +24,7 @@ interface PendingListProps {
             data={pending}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-                <View style={sharedStyles.buttonContainter}>
+                <View style={sharedStyles.buttonContainer}>
                     <Image source={require('@/assets/images/cloud.png')}
                     style={sharedStyles.profilePicture} />
                     <Text style={sharedStyles.boldText}>@{item.friendUsername}</Text>

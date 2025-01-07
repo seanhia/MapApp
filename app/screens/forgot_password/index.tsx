@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { getAuth, fetchSignInMethodsForEmail, sendPasswordResetEmail } from 'firebase/auth';
 import sharedStyles from '../../../constants/sharedStyles'; // Import the shared styles 
+import { ImageHeader } from '@/components/ImageHeader';
 
 
 const ForgotPassword = () => {
@@ -47,15 +48,11 @@ const ForgotPassword = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Cloud Image */}
-      <Image
-        style={styles.cloudImage}
-        source={require('../../../assets/images/cloud.png')} 
-      />
-
-      {/* Title */}
-      <Text style={styles.title}>EXPLORE</Text>
+    <View style={sharedStyles.halfContainer}>
+      <ImageHeader
+        image={require('@/assets/images/cloud.png')}
+        text='EXPLORE'
+      />      
 
       {/* Instructions */}
       <Text style={styles.instructions}>
@@ -74,8 +71,8 @@ const ForgotPassword = () => {
       />
 
       {/* Continue Button */}
-      <TouchableOpacity style={sharedStyles.button} onPress={handleContinue}>
-        <Text style={styles.buttonText}>Continue</Text>
+      <TouchableOpacity style={sharedStyles.lightButton} onPress={handleContinue}>
+        <Text style={sharedStyles.boldText}>Continue</Text>
       </TouchableOpacity>
 
       {/* Modal for Feedback */}
@@ -90,10 +87,10 @@ const ForgotPassword = () => {
             <Text style={styles.modalTitle}>Notification</Text>
             <Text style={styles.modalMessage}>{modalMessage}</Text>
             <Pressable
-              style={styles.modalButton}
+              style={sharedStyles.lightButton}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.modalButtonText}>OK</Text>
+              <Text style={sharedStyles.boldText}>OK</Text>
             </Pressable>
           </View>
         </View>
@@ -103,52 +100,11 @@ const ForgotPassword = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  cloudImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#000000',
-    marginBottom: 20,
-  },
   instructions: {
     fontSize: 14,
     color: '#6B6B6B',
     textAlign: 'center',
     marginBottom: 30,
-  },
-//   input: {
-//     width: '100%',
-//     height: 50,
-//     backgroundColor: '#FFF5E1',
-//     borderRadius: 25,
-//     paddingHorizontal: 20,
-//     fontSize: 16,
-//     color: '#000000',
-//     marginBottom: 20,
-//   },
-  // button: {
-  //   width: '100%',
-  //   height: 50,
-  //   backgroundColor: '#FFE5B4',
-  //   borderRadius: 25,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000000',
   },
   modalOverlay: {
     flex: 1,
@@ -173,19 +129,6 @@ const styles = StyleSheet.create({
     color: '#6B6B6B',
     textAlign: 'center',
     marginBottom: 20,
-  },
-  modalButton: {
-    width: '100%',
-    height: 40,
-    backgroundColor: '#FFE5B4',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000000',
   },
 });
 

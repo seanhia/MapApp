@@ -1,0 +1,73 @@
+export interface User {
+    id: string;
+    username: string;
+    email: string;
+    createdAt?: Date;
+  };
+
+
+/** ALL INTERFACES BELOW ARE NOT INMPLEMENTED YETs */
+export interface Post {
+    id: string,
+    title: string,
+    content: string,
+    published: boolean, 
+
+};
+
+export interface Friendship {
+    id: string,
+    user1: string,
+    user2: string,
+    status: string,
+    username1: string,
+    username2: string,
+    created_at: Date,
+};
+
+export interface Comment { 
+    id: string,
+    postId: string,
+    content: string,
+    authorId: string,
+    authorUsername: string,
+    created_at: Date,
+};
+
+export interface Like { 
+    id: string,
+    postId: string,
+    userId: string,
+    username: string,
+    created_at: Date,
+};
+
+export interface Notification {
+    id: string,
+    recipient: string,
+    sender: string,
+    type: string,
+    read: boolean,
+    created_at: Date,
+};
+
+export interface Location {
+    id: string,
+    name: string,
+    address: string,
+    city: string,
+    state: string,
+    zip: string,
+    phone: string,
+    website: string,
+    created_at: Date,
+}
+
+export interface Leaderboard {
+    id: string,
+    rank: number,
+    userId: string,
+    username: string,
+    score: number,
+    created_at: Date,
+}

@@ -1,13 +1,7 @@
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import db from '@/firestore'; 
 import { getAuth } from 'firebase/auth';
-
-export type User = {
-  uid: string;
-  displayName: string | null;
-  email: string | null;
-  createdAt?: Date;
-};
+import { User } from './types';
 
 /**
  * Fetch the current user's data.
@@ -30,25 +24,25 @@ export const fetchCurrentUser = async (): Promise<User | null> => {
     return null;
   }
 
-  return { uid: currentUser.uid, ...userDocSnap.data() } as User;
+  return { id: currentUser.uid, ...userDocSnap.data() } as User;
 };
 
 /**
  * Fetch a user's data by their UID.
- * @param {string} uid - The UID of the user to fetch.
+ * @param {string} id - The UID of the user to fetch.
  * @returns {Promise<User | null>} User data or null if the user doesn't exist.
  */
-export const fetchUserByUID = async (uid: string): Promise<User | null> => {
+export const fetchUserByUID = async (id: string): Promise<User | null> => {
   try {
-    const userDocRef = doc(db, 'users', uid);
+    const userDocRef = doc(db, 'users', id);
     const userDocSnap = await getDoc(userDocRef);
 
     if (!userDocSnap.exists()) {
-      console.error(`No user found with UID: ${uid}`);
+      console.error(`No user found with UID: ${id}`);
       return null;
     }
 
-    return { uid, ...userDocSnap.data() } as User;
+    return { id, ...userDocSnap.data() } as User;
   } catch (error) {
     console.error('Error fetching user:', error);
     return null;
@@ -62,7 +56,7 @@ export const fetchUserByUID = async (uid: string): Promise<User | null> => {
  */
 export const writeUserData = async (user: User): Promise<void> => {
   try {
-    const userDocRef = doc(db, 'users', user.uid);
+    const userDocRef = doc(db, 'users', user.id);
     await setDoc(userDocRef, user, { merge: true });
     console.log('User data successfully written/updated!');
   } catch (error) {
@@ -82,9 +76,33 @@ export const queryUsers = async (field: string, value: string | number | boolean
     const userQuery = query(usersCollectionRef, where(field, '==', value));
     const querySnapshot = await getDocs(userQuery);
 
-    return querySnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as User));
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as User));
   } catch (error) {
     console.error('Error querying users:', error);
     return [];
   }
 };
+
+/**
+ * Query all users in Firestore.
+ */
+export const fetchAllUsers = async (): Promise<User[]> => {
+  try {
+    const usersCollectionRef = collection(db, 'users');
+    const usersSnapshot = await getDocs(usersCollectionRef);
+
+    const users = usersSnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        username: data.username,
+        email: data.email,
+        createdAt: data.createdAt?.toDate(),
+      } as User;
+    });
+    return users; 
+  } catch (error) {
+    console.error('Error fetching all users:', error);
+    return [];
+  }
+}

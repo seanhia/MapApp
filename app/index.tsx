@@ -4,11 +4,11 @@ import { useState} from "react";
 import { Text, View, StyleSheet, KeyboardAvoidingView, Button, ActivityIndicator, TouchableOpacity, Image } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { Link , router} from 'expo-router';
-//import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
 import {signUpWithEmail, signInWithEmail} from "../auth";
 import sharedStyles from '../constants/sharedStyles'; 
 import { Colors } from '../constants/Colors';
+import { ImageHeader } from '@/components/ImageHeader'
 
 
 
@@ -33,19 +33,27 @@ export default function Index() {
     }
   };
 
-
-
-
   return (
     
     <View
-      style={styles.container}
+      style={sharedStyles.container}
     >
+      <Link style={{alignSelf: 'center'}} href="/screens/home">
+        <Text style={{ color: Colors.light.tabIconDefault}}>Homepage (Temporary)</Text>
+      </Link>
+
+      {/* <Text style={sharedStyles.title}>
+        EXPLORE
+      </Text>
       <Image
         style={sharedStyles.image}
         source={require('../assets/images/cloud.png')} 
-      />
-      <KeyboardAvoidingView behavior="padding">
+      /> */}
+      <ImageHeader 
+        image={require('@/assets/images/cloud.png')}
+        text='EXPLORE'
+        />
+      <KeyboardAvoidingView behavior="padding" >
           <TextInput
             style={sharedStyles.input}
             value={email}
@@ -60,45 +68,32 @@ export default function Index() {
               onChangeText={setPassword}
               secureTextEntry
               placeholder = "Password"
-
             />
             {
               loading ? (
                 <ActivityIndicator size={'small'} style ={{ margin: 28}} />
               ) : (
                 <>
-                  <TouchableOpacity style={sharedStyles.button} onPress={signIn}> 
-                    <Text style={{ color: 'black', fontWeight: 'bold' }}>Sign In</Text> 
+                  <Link style={sharedStyles.rightLink} href="/screens/forgot_password">Forgot Password?</Link>
+                  <TouchableOpacity style={sharedStyles.lightButton} onPress={signIn}> 
+                    <Text style={sharedStyles.text}>Sign In</Text> 
                     </TouchableOpacity>
-                  <Link href="/screens/sign_up">Don't have an account? Sign Up</Link>
-                  <Link href="/screens/forgot_password">
-                    <Text style={{ color: Colors.light.text, marginTop: 10 }}>Forgot Password?</Text>
-                  </Link>
-                  <Link href="/screens/home">
-                    <Text style={{ color: Colors.light.text, marginTop: 10 }}>Go to Home (Temporary)</Text>
-                  </Link>
-        </>
+                  <>
+                    <Text style = {{marginBottom: 90}}>
+              
+                    </Text>
+                    <Link style={{fontSize: 20, alignSelf: 'center', margin: 30, color: Colors.light.tabIconDefault}} href="/screens/sign_up">Don't have an account? Sign Up ⇨ </Link>
+                    <View style={sharedStyles.lowerContainer}>
+                      <Image style={sharedStyles.profilePicture} source={require('../assets/images/cloud.png')} />
+                      <Link style={sharedStyles.tutorial} href="/screens/tutorial">Tutorial?</Link>
+                    </View>
+                  </>
+                </>
               )}
-
-
         </KeyboardAvoidingView>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: 20,
-    flex: 1,
-    justifyContent: 'center',
-  },
-  input: {
-    marginVertical: 4,
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 4,
-    padding: 10,
-    backgroundColor: "#fff",
-  },
-});
+
 

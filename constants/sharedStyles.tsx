@@ -2,6 +2,14 @@ import { StyleSheet } from 'react-native';
 import { Colors } from '../constants/Colors';
 
 const sharedStyles = StyleSheet.create({
+  title: {
+    fontSize: 60,
+    fontWeight: 'normal',
+    marginBottom: 10,
+    color: Colors.light.text,
+    alignSelf: 'center',
+  
+  },
   input: {
     width: '100%',
     height: 50,
@@ -12,10 +20,26 @@ const sharedStyles = StyleSheet.create({
     color: '#000000',
     marginBottom: 20,
   },
-  buttonContainter: {
+  container: {
+    marginHorizontal: 40,
+    flex: .9,
+    justifyContent: 'space-evenly',
+  },
+  halfContainer: {
+    marginHorizontal: 40, 
+    flex: .6, 
+    justifyContent: 'space-around'
+  },
+  buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
+  },
+  lowerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: 10,
+    marginBottom: 20,
   },
   button: {
     width: '100%',
@@ -24,16 +48,15 @@ const sharedStyles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1, 
   },
-  yellowButton: {
+  lightButton: {
     width: '100%',
     height: 50,
     backgroundColor: Colors.light.background,
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1, 
+    marginBottom: 0,
   },
   sideButton: {
     width: '50%',
@@ -53,6 +76,7 @@ const sharedStyles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: Colors.light.text,
+    padding: 10,
   },
   boldText: {
     fontSize: 16,
@@ -89,21 +113,33 @@ const sharedStyles = StyleSheet.create({
     borderRadius: 25,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 220,
+    height: 200,
     marginBottom: 20,
     alignSelf: 'center',
   },
   profilePicture: { // Testing this style
-    width: 80,
+    width: 90,
     height: 80,
     borderRadius: 40,
     },
    item: {
-        padding: 10,
-        backgroundColor: '#fff',
-        borderRadius: 8,
-        marginBottom: 10,
+      padding: 10,
+      backgroundColor: '#fff',
+      borderRadius: 8,
+      marginBottom: 10,
+    },
+    rightLink: {
+      color: Colors.light.tabIconDefault,
+      fontSize: 16,
+      alignSelf: 'flex-end',
+      marginBottom: 30,
+    },
+    tutorial: {
+      color: Colors.light.tabIconDefault,
+      fontSize: 30,
+      marginTop: 15,
+      marginHorizontal: 10,
     },
 });
 

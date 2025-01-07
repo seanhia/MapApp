@@ -1,12 +1,8 @@
 import React from 'react';
 import { View, FlatList, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import sharedStyles from '@/constants/sharedStyles';
-import { createFriendship } from '@/assets/data/Friendship';
-
-interface User {
-  id: string;
-  username: string;
-}
+import { createFriendship } from '@/data/Friendship';
+import { User } from '@/data/types';
 
 interface UserListProps {
   users: User[];

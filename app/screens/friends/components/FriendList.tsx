@@ -20,11 +20,10 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfri
       data={friends}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <View style={sharedStyles.buttonContainter}>
+        <View style={sharedStyles.buttonContainer}>
           <Image source={require('@/assets/images/cloud.png')} 
             style={sharedStyles.profilePicture} />
           <Text style={sharedStyles.boldText}>@{item.friendUsername}</Text>
-          {/* <View style={sharedStyles.buttonContainter}> */}
             <TouchableOpacity 
               style={sharedStyles.sideButton}
               onPress={() => onViewProfile(item.friendId)}
@@ -37,7 +36,6 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfri
               >
                 <Text style={sharedStyles.text}>Unfriend</Text>
               </TouchableOpacity>
-          {/* </View> */}
         </View>
       )}
     />
