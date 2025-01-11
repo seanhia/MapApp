@@ -42,17 +42,10 @@ export default function Index() {
         <Text style={{ color: Colors.light.tabIconDefault}}>Homepage (Temporary)</Text>
       </Link>
 
-      {/* <Text style={sharedStyles.title}>
-        EXPLORE
-      </Text>
-      <Image
-        style={sharedStyles.image}
-        source={require('../assets/images/cloud.png')} 
-      /> */}
       <ImageHeader 
         image={require('@/assets/images/cloud.png')}
         text='EXPLORE'
-        />
+      />
       <KeyboardAvoidingView behavior="padding" >
           <TextInput
             style={sharedStyles.input}
@@ -91,7 +84,9 @@ export default function Index() {
                 </>
               )}
         </KeyboardAvoidingView>
+        
     </View>
+    
   );
 }
 

@@ -103,10 +103,11 @@ export default function SignUp() {
                   <TouchableOpacity style={sharedStyles.lightButton} onPress={signUp} >
                     <Text style={sharedStyles.text}>Sign Up </Text>
                   </TouchableOpacity>
-                  <Text style = {{marginBottom: 90}}>
-                                
-                  </Text>
-                  <Link style={{fontSize: 20, alignSelf: 'center', marginBottom: 85, padding: 20, color: Colors.light.tabIconDefault}} href="/screens/sign_up">Have an existing account? Sign In ⇨ </Link>
+                  <Text style = {{marginBottom: 90}}> </Text>
+                    <Link 
+                      style={{fontSize: 20, alignSelf: 'center', marginBottom: 85, padding: 20, color: Colors.light.tabIconDefault}} 
+                      href="/">Already have an existing account? Sign In ⇨ 
+                    </Link>
                 </>
               )}
 
