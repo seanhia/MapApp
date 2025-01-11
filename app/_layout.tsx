@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import app from "../firebase";
 import { ActivityIndicator, View } from "react-native";
 import {getAuth, onAuthStateChanged, User} from 'firebase/auth'
+import { ThemeProvider } from "@react-navigation/native";
+import {Colors} from "@/constants/Colors"
 
 export default function RootLayout() {
 
@@ -35,9 +37,30 @@ export default function RootLayout() {
     );
 
   return (
-    <Stack>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="sign_up" />
-    </Stack>
+    // Used to later on implement themes on the App 
+    // <ThemeProvider value={colorScheme === 'light' ? LightTheme} : DefaultTheme>
+      <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors.light.background,
+        },
+        headerTintColor: '#000',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}>
+        <Stack.Screen name="index" options={{ title: 'Home',
+          headerShown: false}}
+        />
+        <Stack.Screen name="screens/sign_up/index" options={{ title: ''}}/>
+        <Stack.Screen name="screens/tutorial/index" options={{ title: ''}}/>
+        <Stack.Screen name="screens/forgot_password/index" options={{ title: ''}}/>
+        <Stack.Screen name="screens/home/index" options={{ title: ''}}/>
+        <Stack.Screen name="screens/friends/index" options={{ title: ''}}/>
+        <Stack.Screen name="screens/user_profile/index" options={{ title: ''}}/>
+        <Stack.Screen name="screens/settings/index" options={{ title: ''}}/>
+        <Stack.Screen name="screens/leaderboard/index" options={{ title: ''}}/>
+      </Stack>
+    // </ThemeProvider>
   );
 }
