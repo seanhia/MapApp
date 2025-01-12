@@ -5,6 +5,15 @@ export interface User {
     createdAt?: Date;
   };
 
+export interface PlaceDetails {
+    geometry: {
+        location: {
+            lat: number;
+            lng: number;
+        };
+    };  
+};
+
 
 /** ALL INTERFACES BELOW ARE NOT INMPLEMENTED YETs */
 export interface Post {

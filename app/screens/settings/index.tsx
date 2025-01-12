@@ -114,11 +114,11 @@ export default UserSettings;
 const styles = StyleSheet.create({
     scrollContainer: {
         padding: 16,
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
     },
-    container: {
-        flex: 1,
-    },
+    // container: {
+    //     flex: 1,
+    // },
     header: {
         fontSize: 24,
         fontWeight: 'bold',
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     card: {
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         borderRadius: 8,
         padding: 30,
         marginBottom: 30,
@@ -145,19 +145,19 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
     },
-    sectionHeader: {
-        fontSize: 18,
-        fontWeight: '600',
-        marginBottom: 8,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 8,
-        padding: 12,
-        marginBottom: 12,
-        backgroundColor: '#f9f9f9',
-    },
+    // sectionHeader: {
+    //     fontSize: 18,
+    //     fontWeight: '600',
+    //     marginBottom: 8,
+    // },
+    // input: {
+    //     borderWidth: 1,
+    //     borderColor: '#ddd',
+    //     borderRadius: 8,
+    //     padding: 12,
+    //     marginBottom: 12,
+    //     backgroundColor: '#f9f9f9',
+    // },
     tutorialButton: {
         backgroundColor: Colors.light.background,
         borderRadius: 8,
