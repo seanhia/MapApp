@@ -12,38 +12,37 @@ import { Image, StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react
 import { useRouter } from 'expo-router';
 
 import slides from './TutorialSlides' // page info for each onboarding swipe 
+import sharedStyles from '@/constants/sharedStyles';
+
 
 const Tutorial = ({ onComplete }: { onComplete: () => void }) => {
-    const router = useRouter();
+  const router = useRouter();
+  
   
   const pages = slides.map((slide) => ({
-    backgroundColor: '#fff', // Customize for each slide if needed
-    image: <Image source={slide.image} style={styles.image} />,
+    backgroundColor: 'fff', // Customize for each slide if needed
     title: slide.title,
     subtitle: slide.subtitle,
+    image: <Image source={slide.image} 
+        style={{height: 200, width: 220, marginBottom: 500, justifyContent: 'space-evenly',  marginVertical: 200}}/>,
   }));
 
   return (
-    <View>
-            <TouchableOpacity style={styles.button} onPress={() => router.push('./app-example/(tabs)/_layout.tsx')}>
-              <Text style={styles.buttonText}>Leaderboard</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => router.push('/screens/friends')}>
-              <Text style={styles.buttonText}>Friends</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => router.push('/screens/user_profile')}>
-              <Text style={styles.buttonText}>Profile</Text>
-            </TouchableOpacity>
-            <Onboarding
+    <View style={sharedStyles.fullContainer}>
+            <Onboarding 
+        
       pages={pages}
-      onSkip={onComplete}
-      onDone={onComplete}
-      
+      onSkip={() => {
+        console.log('Tutorial skipped');
+        router.replace('/screens/sign_up')}}
+      onDone={() => {
+          console.log('Tutorial Completed');
+          onComplete();
+      }}
+      showNext={true} // Ensures Next button is enabled
+      showDone={true} // Ensures Done button is displayed
     />
-          </View>
-
-    
-    
+    </View> 
   );
 };
 

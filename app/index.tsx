@@ -11,9 +11,6 @@ import { Colors } from '../constants/Colors';
 import { ImageHeader } from '@/components/ImageHeader'
 
 
-
-
-
 export default function Index() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
