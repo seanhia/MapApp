@@ -1,16 +1,77 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
 import MapComponent from '@/components/MapComponent';
 import FooterBar from '@/components/FooterBar';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { PlaceDetails } from '@/data/types';
 import { SearchBar } from '@/components/MapSearchBar';
+import Geolocation from 'react-native-geolocation-service';
 
 export default function Home() {
   const [mapCenter, setMapCenter] = useState({
     lat: 33.7838, // Replace with your desired latitude
     lng: -118.1141, // Replace with your desired longitude
   });
+
+  const [loadingLocation, setLoadingLocation] = useState(true);
+
+  useEffect(() => {
+    const getUserLocation = async () => {
+      if (Platform.OS === "web") {
+        // Web: Use browser's native geolocation API
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            position => {
+              const { latitude, longitude } = position.coords;
+              console.log("Web User Location:", latitude, longitude);
+              setMapCenter({
+                lat: latitude,
+                lng: longitude,
+              });
+            },
+            error => {
+              console.error("Error fetching location on web:", error);
+              alert("Unable to fetch location. Please enable location access in your browser.");
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+          );
+        } else {
+          alert("Geolocation is not supported by your browser.");
+          setMapCenter({ lat: 33.7838, lng: -118.1141 }); // Default location
+        }
+      } else {
+        // Mobile: Use react-native-geolocation-service
+        const hasPermission = await requestLocationPermission();
+        if (!hasPermission) return;
+  
+        Geolocation.getCurrentPosition(
+          position => {
+            const { latitude, longitude } = position.coords;
+            console.log("Mobile User Location:", latitude, longitude);
+            setMapCenter({ lat: latitude, lng: longitude });
+          },
+          error => {
+            console.error("Error fetching location on mobile:", error);
+            alert("Unable to fetch location.");
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+      }
+    };
+  
+    getUserLocation();
+  }, []);
+  
+
+  const requestLocationPermission = async () => {
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    }
+    return true; // iOS handles permissions separately
+  };
 
   const handlePlaceChanged = (
     data:any, 

@@ -81,5 +81,9 @@
     <string>Automatic</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to show you on the map.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to show you on the map even when you're not using the app.</string>
   </dict>
 </plist>
