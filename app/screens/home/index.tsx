@@ -8,9 +8,9 @@ import { SearchBar } from '@/components/MapSearchBar';
 import Geolocation from 'react-native-geolocation-service';
 
 export default function Home() {
-  const [mapCenter, setMapCenter] = useState({
-    lat: 33.7838, // Replace with your desired latitude
-    lng: -118.1141, // Replace with your desired longitude
+  const [mapCenter, setMapCenter] = useState({ //default location
+    lat: 33.7838, 
+    lng: -118.1141, 
   });
 
   const [loadingLocation, setLoadingLocation] = useState(true);

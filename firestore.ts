@@ -1,5 +1,5 @@
 //import firestore from '@react-native-firebase/firestore';
-import {getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc} from 'firebase/firestore';
+import {getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, serverTimestamp} from 'firebase/firestore';
 import app from './firebase'
 
 //const db = firebase.firestore();
@@ -48,6 +48,52 @@ export const deleteDocument = async (collectionName: string, docId: string) => {
     throw error;
   }
 };
-  
 
+// Save location
+
+interface Location {
+  latitude: number;
+  longitude: number;
+  description: string;
+}
+
+export async function saveLocation(
+  userId: string,
+  latitude: number,
+  longitude: number,
+  description: string
+): Promise<void> {
+  try {
+    const locationId = `${latitude}_${longitude}`; // Unique ID based on coordinates
+    const locationRef = doc(db, "users", userId, "locations", locationId);
+
+    await setDoc(locationRef, {
+      latitude,
+      longitude,
+      description,
+      timestamp: serverTimestamp(),
+    });
+
+    console.log("Location saved successfully!");
+  } catch (error) {
+    console.error("Error saving location:", error);
+    throw error;
+  }
+};
+
+export async function fetchLocations(userId: string): Promise<Location[]> {
+  try {
+    const locationRef = collection(db, "users", userId, "locations");
+    const snapshot = await getDocs(locationRef);
+
+    return snapshot.docs.map((doc) => ({
+      latitude: doc.data().latitude,
+      longitude: doc.data().longitude,
+      description: doc.data().description,
+    }));
+  } catch (error) {
+    console.error("Error fetching locations:", error);
+    throw error;
+  }
+};
 export default db;
