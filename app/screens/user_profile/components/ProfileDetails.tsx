@@ -8,7 +8,7 @@ import { User } from '@/data/types'
 import sharedStyles from '@/constants/sharedStyles';
 
 
-
+ 
 const ProfileDetails : React.FC = ({  }) => {
     
 

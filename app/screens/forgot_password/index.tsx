@@ -29,16 +29,18 @@ const ForgotPassword = () => {
     }
     
     try {
-        const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+        // const signInMethods = await fetchSignInMethodsForEmail(auth, email);
 
-        if (signInMethods.length == 0) {
-            // No user found for this email
-            setModalMessage('This email is not registered. Please check and try again.');
-        } else {
-            // Email exists in Firebase, send reset email
-            await sendPasswordResetEmail(auth, email);
-            setModalMessage('A password reset link has been sent to ${email}.');
-        }
+        // if (signInMethods.length == 0) {
+        //     // No user found for this email
+        //     setModalMessage('This email is not registered. Please check and try again.');
+        // } else {
+        //     // Email exists in Firebase, send reset email
+        //     await sendPasswordResetEmail(auth, email);
+        //     setModalMessage('A password reset link has been sent to ${email}.');
+        // }
+        await sendPasswordResetEmail(auth, email);
+        setModalMessage("Password reset email sent!")
     } catch (error) {
         console.error(error); 
         setModalMessage('An error occured. Please try again later.');
