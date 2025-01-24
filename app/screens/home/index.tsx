@@ -2,10 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
 import MapComponent from '@/components/MapComponent';
 import FooterBar from '@/components/FooterBar';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+//import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { PlaceDetails } from '@/data/types';
 import { SearchBar } from '@/components/MapSearchBar';
 import Geolocation from 'react-native-geolocation-service';
+import { saveLocation } from '../../../firestore';
 
 export default function Home() {
   const [mapCenter, setMapCenter] = useState({ //default location
@@ -18,18 +19,21 @@ export default function Home() {
   useEffect(() => {
     const getUserLocation = async () => {
       if (Platform.OS === "web") {
-        // Web: Use browser's native geolocation API
         if ("geolocation" in navigator) {
           navigator.geolocation.getCurrentPosition(
-            position => {
+            async (position) => {
               const { latitude, longitude } = position.coords;
               console.log("Web User Location:", latitude, longitude);
-              setMapCenter({
-                lat: latitude,
-                lng: longitude,
-              });
+              setMapCenter({ lat: latitude, lng: longitude });
+    
+              try {
+                await saveLocation("exampleUserId", latitude, longitude, "Current location");
+                console.log("Location saved to Firestore!");
+              } catch (error) {
+                console.error("Failed to save location:", error);
+              }
             },
-            error => {
+            (error) => {
               console.error("Error fetching location on web:", error);
               alert("Unable to fetch location. Please enable location access in your browser.");
             },
@@ -37,20 +41,26 @@ export default function Home() {
           );
         } else {
           alert("Geolocation is not supported by your browser.");
-          setMapCenter({ lat: 33.7838, lng: -118.1141 }); // Default location
+          setMapCenter({ lat: 33.7838, lng: -118.1141 });
         }
       } else {
-        // Mobile: Use react-native-geolocation-service
         const hasPermission = await requestLocationPermission();
         if (!hasPermission) return;
-  
+    
         Geolocation.getCurrentPosition(
-          position => {
+          async (position) => {
             const { latitude, longitude } = position.coords;
             console.log("Mobile User Location:", latitude, longitude);
             setMapCenter({ lat: latitude, lng: longitude });
+    
+            try {
+              await saveLocation("exampleUserId", latitude, longitude, "Current location");
+              console.log("Location saved to Firestore!");
+            } catch (error) {
+              console.error("Failed to save location:", error);
+            }
           },
-          error => {
+          (error) => {
             console.error("Error fetching location on mobile:", error);
             alert("Unable to fetch location.");
           },
@@ -58,6 +68,7 @@ export default function Home() {
         );
       }
     };
+    
   
     getUserLocation();
   }, []);

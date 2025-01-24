@@ -64,8 +64,9 @@ export async function saveLocation(
   description: string
 ): Promise<void> {
   try {
-    const locationId = `${latitude}_${longitude}`; // Unique ID based on coordinates
-    const locationRef = doc(db, "users", userId, "locations", locationId);
+    const locationId = `${latitude}_${longitude}_${Date.now()}`;
+    const locationRef = doc(db, `users/${userId}/locations/${locationId}`);
+
 
     await setDoc(locationRef, {
       latitude,
