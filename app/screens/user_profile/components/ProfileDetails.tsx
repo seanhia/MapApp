@@ -10,13 +10,34 @@ import sharedStyles from '@/constants/sharedStyles';
 
 
 const ProfileDetails : React.FC = ({  }) => {
-    
-
     const [friendCount, setFriendCount] = useState<string | null>(null);
     const [profileImage, setProfileImage] = useState<string | null>(null);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
 
+    useEffect(() => {
+       
+
+        const loadCurrentUser = async () => {
+            try {
+                const user = await fetchCurrentUser();
+                setCurrentUser(user)
+            } catch (error) {
+                console.error('Error fetching user')
+            }
+        };
+       
+        const loadFriendCount = async () => {
+            try {
+                const count = await fetchFriendCount();
+                setFriendCount(count);
+            } catch (error) {
+                console.error('Error fetching friends or users:', error);
+            }
+        };
+        loadFriendCount();
+        loadCurrentUser(); 
+    }, []);
     
-
     const handleImagePicker = async () => {
         
         try {
@@ -82,7 +103,7 @@ const ProfileDetails : React.FC = ({  }) => {
                 
                 <View style={{ width: 75, alignItems: 'center' }}>
                     <Text style={style.text}>Friends</Text>
-                    <Text>{friendCount}</Text>
+                    <Text style={style.text}>{friendCount}</Text>
                 </View>
 
                 {}
@@ -95,14 +116,14 @@ const ProfileDetails : React.FC = ({  }) => {
         
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 15 }}>
                 <View>
-                    <Text style={style.text}>Bio</Text>
-                    <Text style={style.text}>~~~~~~~~~~~~~~~~~~~~~</Text>
+                    <Text style={style.bioText}>   Bio:</Text>
+                    <Text style={style.bioText}>~{currentUser?.bio}~</Text>
                 </View>
             </View>
 
             
             <View>
-                <Text style={sharedStyles.text}>@Username</Text>
+                <Text style={sharedStyles.text}>@{currentUser?.username}</Text>
             </View>
 
             
@@ -121,5 +142,10 @@ const style = StyleSheet.create({
     fontSize: 24,
     fontWeight: '400',
     color: 'black',
-    }
+    },
+    bioText: {
+        fontSize: 16,
+        fontWeight: '400',
+        color: 'black',
+        }
 });
