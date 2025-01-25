@@ -1,17 +1,13 @@
 import React from 'react';
 import { View, FlatList, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import sharedStyles from '@/constants/sharedStyles';
+import { Friend } from "@/data/types"
 
-interface Friend {
-  id: string;
-  friendId: string;
-  friendUsername: string;
-}
 
 interface FriendListProps {
   friends: Friend[];
-  onViewProfile: (id: string) => void;
-  onUnfriend: (id: string) => void;
+  onViewProfile: (id: Friend) => void;
+  onUnfriend: (id: Friend) => void;
 }
 
 const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfriend }) => {
@@ -26,13 +22,13 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfri
           <Text style={sharedStyles.boldText}>@{item.friendUsername}</Text>
             <TouchableOpacity 
               style={sharedStyles.sideButton}
-              onPress={() => onViewProfile(item.friendId)}
+              onPress={() => onViewProfile(item)}
               >
                 <Text style={sharedStyles.text}>View Profile</Text>
               </TouchableOpacity>
             <TouchableOpacity 
               style={sharedStyles.sideButton}
-              onPress={() => onUnfriend(item.id)}
+              onPress={() => onUnfriend(item)}
               >
                 <Text style={sharedStyles.text}>Unfriend</Text>
               </TouchableOpacity>

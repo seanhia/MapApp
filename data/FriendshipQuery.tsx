@@ -2,6 +2,7 @@
  import db from '@/firestore';
  import { fetchCurrentUser } from './UserDataService';
  import { User } from '@/data/types'
+ import { Friend } from '@/data/types'
 
 export const FriendQuery = async () => {
     try {
@@ -17,7 +18,7 @@ export const FriendQuery = async () => {
 
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(approvedQ1), getDocs(approvedQ2)]);
 
-        const friends: { id: string; friendId: string, friendUsername: string}[] = [];
+        const friends: Friend[] = [];
         querySnapshot1.forEach((doc) => friends.push({ id: doc.id, friendId: doc.data().user2, friendUsername: doc.data().username2 }));
         querySnapshot2.forEach((doc) => friends.push({ id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1 }));
 
@@ -42,7 +43,7 @@ export const PendingQuery = async () => {
 
     const [pendingSnapshot1] = await Promise.all([getDocs(pendingQ1)]);
 
-    const pending: { id: string; friendId: string, friendUsername: string}[] = [];
+    const pending: Friend[] = [];
     pendingSnapshot1.forEach((doc) => pending.push({ id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1 }));
     
     return pending; 
@@ -72,22 +73,3 @@ export const fetchFriendCount = async (user: User): Promise<string | null> => {
         return null;
     }
 }   
-
-// const BoilerPlate = async () => {
-//     // Output all friendship documents in the Console
-
-//     try {
-//         const currentUser = await fetchCurrentUser();
-//         if (!currentUser) {
-//             throw new Error('No user is currently signed in!');
-//         }
-//         const friendshipsRef = collection(db, 'friendships');
-//         const user = fetchCurrentUser();
-//         console.log('Fetching friends for user:', user.id);
-//         const FetchDocs = await getDocs(friendshipsRef);
-//         console.log('Friends Collection', FetchDocs.docs)
-//         FetchDocs.docs.forEach(doc => { console.log(doc.id, '=>', doc.data()) });
-//     } catch (error) {
-//         console.error('Error fetching friends:', error);    
-//     }    
-// }

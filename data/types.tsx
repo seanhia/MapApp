@@ -5,6 +5,13 @@ export interface User {
     createdAt?: Date;
   };
 
+export interface Friend {
+    id: string,
+    friendId: string,
+    friendUsername: string,
+};
+
+
 export interface PlaceDetails {
     geometry: {
         location: {
@@ -24,12 +31,13 @@ export interface Post {
 
 };
 
+
 export interface Friendship {
     id: string,
     user1: string,
     user2: string,
     status: string,
-    username1: string,
+    username: string,
     username2: string,
     created_at: Date,
 };

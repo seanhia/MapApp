@@ -1,19 +1,16 @@
 import React from "react";
 import { View, FlatList, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import sharedStyles from "@/constants/sharedStyles";
+import { Friend } from "@/data/types"
 // import AcceptFriendship from "@/assets/data/AcceptFriendship";
 
 
-interface Pending {
-    id: string; 
-    friendId: string; 
-    friendUsername: string; 
-}
+
 
 interface PendingListProps {
-    pending: Pending[];
-    onAccept: (id: string) => void;
-    onDeny: (id: string) => void;
+    pending: Friend[];
+    onAccept: (id: Friend) => void;
+    onDeny: (id: Friend) => void;
 }
 
 /* 
@@ -30,13 +27,13 @@ interface PendingListProps {
                     <Text style={sharedStyles.boldText}>@{item.friendUsername}</Text>
                         <TouchableOpacity
                             style={sharedStyles.sideButton}
-                            onPress={() => onAccept(item.id)}
+                            onPress={() => onAccept(item)}
                             >
                                 <Text style={sharedStyles.text}>Accept</Text>
                             </TouchableOpacity>
                         <TouchableOpacity
                             style={sharedStyles.sideButton}
-                            onPress={() => onDeny(item.id)}
+                            onPress={() => onDeny(item)}
                             >
                                 <Text style={sharedStyles.text}>Deny</Text>
                             </TouchableOpacity>
