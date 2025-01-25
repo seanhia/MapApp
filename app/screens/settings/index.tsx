@@ -1,28 +1,79 @@
-import SettingsHeader from './SettingsHeader';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Switch, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import sharedStyles from '@/constants/sharedStyles';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors'
 
+import { fetchCurrentUser, writeUserData } from '@/data/UserDataService';
+import { User } from '@/data/types'
+
 const UserSettings = () => {
     const router = useRouter();
 
     const [isPrivateAccount, setIsPrivateAccount] = useState(false);
-    const [displayName, setDisplayName] = useState('');
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
-    const [email, setEmail] = useState('');
+    const [eMail, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
 
-    const toggleSwitch = () => setIsPrivateAccount(prevState => !prevState);
+
+    useEffect(() => {
+        const loadCurrentUser = async () => {
+            try {
+                const user = await fetchCurrentUser();
+                setCurrentUser(user);
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+        loadCurrentUser();
+    }, []);
+
+    useEffect(() => {
+        if (currentUser) {
+            setUsername(currentUser.username || '');
+            setBio(currentUser.bio || '');
+            setEmail(currentUser.eMail || '');
+            setPhoneNumber(currentUser.phoneNumber || '');
+            setIsPrivateAccount(currentUser.isPrivate || false);
+        }
+    }, [currentUser]);
+
+    const toggleSwitch = () => setIsPrivateAccount((prev) => !prev);
+
+    const handleSubmit = async () => {
+        if (!currentUser) {
+            alert('No user data found.');
+            return;
+        }
+        const updatedUser: User = {
+            ...currentUser,
+            username,
+            bio,
+            eMail,
+            phoneNumber,
+            'isPrivate': isPrivateAccount,
+        };
+        try {
+            await writeUserData(updatedUser);
+            alert('Settings updated successfully!');
+            console.log(updatedUser)
+            console.log(currentUser)
+        } catch (error) {
+            console.error('Failed to update settings:', error);
+            alert('Error updating settings. Please try again.');
+        }
+    }
+       
+
 
 
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <View style={styles.container}>
+            <View style={sharedStyles.fullContainer}>
                 <Text style={styles.header}>Settings</Text>
 
                 <View style={styles.card}>
@@ -39,15 +90,6 @@ const UserSettings = () => {
                 </View>
                 
                 <View style={styles.card}> 
-                    {/* <Text style={styles.sectionHeader}>Profile Information</Text> */}
-
-                    <TextInput
-                        style={sharedStyles.input}
-                        onChangeText={setDisplayName}
-                        value={displayName}
-                        placeholder="Display Name"
-                        placeholderTextColor="#aaa"
-                    />
 
                     <TextInput
                         style={sharedStyles.input}
@@ -64,16 +106,12 @@ const UserSettings = () => {
                         placeholder="Bio"
                         placeholderTextColor="#aaa"
                     />
-                {/* </View> */}
-
-                {/* <View style={styles.card}> */}
-                    {/* <Text style={styles.sectionHeader}>Contact Information</Text> */}
-
+             
                     <TextInput
                         style={sharedStyles.input}
                         onChangeText={setEmail}
-                        value={email}
-                        placeholder="Email"
+                        value={eMail}
+                        placeholder={"Email"}
                         placeholderTextColor="#aaa"
                         keyboardType="email-address"
                     />
@@ -86,11 +124,7 @@ const UserSettings = () => {
                         placeholderTextColor="#aaa"
                         keyboardType="phone-pad"
                     />
-                {/* </View> */}
-
-                {/* <View style={styles.card}> */}
-                    {/* <Text style={styles.sectionHeader}>Security</Text> */}
-
+      
                     <TextInput
                         style={sharedStyles.input}
                         onChangeText={setPassword}
@@ -101,24 +135,32 @@ const UserSettings = () => {
                     />
                 </View>
 
-                <TouchableOpacity style={styles.tutorialButton} onPress={() => router.push('/screens/tutorial')}>
+
+                <TouchableOpacity style={sharedStyles.lightButton} onPress={handleSubmit}>
+                    <Text>
+                        Submit Chanages
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={sharedStyles.lightButton} onPress={() => router.push('/screens/tutorial')}>
                     <Text style={styles.tutorialText}>View Tutorial</Text>
                 </TouchableOpacity>
+
+
             </View>
         </ScrollView>
     );
 };
 
+
 export default UserSettings;
 
 const styles = StyleSheet.create({
     scrollContainer: {
-        padding: 16,
-        // backgroundColor: '#fff',
+        padding: 12,
     },
-    // container: {
-    //     flex: 1,
-    // },
+    container: {
+        flex: 1,
+    },
     header: {
         fontSize: 24,
         fontWeight: 'bold',
@@ -126,9 +168,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     card: {
-        // backgroundColor: '#fff',
         borderRadius: 8,
-        padding: 30,
+        padding: 20,
         marginBottom: 30,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -145,19 +186,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
     },
-    // sectionHeader: {
-    //     fontSize: 18,
-    //     fontWeight: '600',
-    //     marginBottom: 8,
-    // },
-    // input: {
-    //     borderWidth: 1,
-    //     borderColor: '#ddd',
-    //     borderRadius: 8,
-    //     padding: 12,
-    //     marginBottom: 12,
-    //     backgroundColor: '#f9f9f9',
-    // },
     tutorialButton: {
         backgroundColor: Colors.light.background,
         borderRadius: 8,
