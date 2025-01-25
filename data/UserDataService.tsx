@@ -97,7 +97,7 @@ export const fetchAllUsers = async (): Promise<User[]> => {
         id: doc.id,
         username: data.username,
         email: data.email,
-        createdAt: data.createdAt?.toDate(),
+        created_at: data.createdAt?.toDate(),
       } as User;
     });
     return users; 

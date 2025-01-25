@@ -2,13 +2,14 @@ export interface User {
     id: string;
     username: string;
     email: string;
-    createdAt?: Date;
+    created_at: Date;
+    bio?: string; 
   };
 
 export interface Friend {
     id: string,
-    friendId: string,
-    friendUsername: string,
+    friend_id: string,
+    friend_username: string,
 };
 
 
@@ -53,8 +54,8 @@ export interface Comment {
 
 export interface Like { 
     id: string,
-    postId: string,
-    userId: string,
+    post_id: string,
+    user_id: string,
     username: string,
     created_at: Date,
 };
