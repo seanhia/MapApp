@@ -1,9 +1,11 @@
 export interface User {
     id: string;
     username: string;
-    email: string;
-    created_at: Date;
+    eMail: string;
+    createdAt: Date;
     bio?: string; 
+    phoneNumber?: string; 
+    isPrivate?: boolean; 
   };
 
 export interface Friend {
@@ -40,7 +42,7 @@ export interface Friendship {
     status: string,
     username: string,
     username2: string,
-    created_at: Date,
+    createdAt: Date,
 };
 
 export interface Comment { 
@@ -49,7 +51,7 @@ export interface Comment {
     content: string,
     authorId: string,
     authorUsername: string,
-    created_at: Date,
+    createdAt: Date,
 };
 
 export interface Like { 
@@ -57,7 +59,7 @@ export interface Like {
     post_id: string,
     user_id: string,
     username: string,
-    created_at: Date,
+    createdAt: Date,
 };
 
 export interface Notification {
@@ -66,7 +68,7 @@ export interface Notification {
     sender: string,
     type: string,
     read: boolean,
-    created_at: Date,
+    createdAt: Date,
 };
 
 export interface Location {
@@ -78,7 +80,7 @@ export interface Location {
     zip: string,
     phone: string,
     website: string,
-    created_at: Date,
+    createdAt: Date,
 }
 
 export interface Leaderboard {
@@ -87,5 +89,5 @@ export interface Leaderboard {
     userId: string,
     username: string,
     score: number,
-    created_at: Date,
+    createdAt: Date,
 }
