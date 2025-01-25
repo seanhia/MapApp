@@ -7,71 +7,35 @@ import { PlaceDetails } from '@/data/types';
 import { SearchBar } from '@/components/MapSearchBar';
 import Geolocation from 'react-native-geolocation-service';
 import { saveLocation } from '../../../firestore';
+import useRealTimeTracking from "../../hooks/useRealTimeTracking"; // Adjust the path as needed
+import { getAuth } from "firebase/auth"; // For getting the userId
+
 
 export default function Home() {
-  const [mapCenter, setMapCenter] = useState({ //default location
-    lat: 33.7838, 
-    lng: -118.1141, 
-  });
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid; // Get the current user's ID
 
-  const [loadingLocation, setLoadingLocation] = useState(true);
+  if (!userId) {
+    console.error("User is not logged in!");
+    Alert.alert("Error", "You are not logged in. Please log in to use the app.");
+    return null;
+  }
 
+  // Use the real-time tracking hook
+  const [location, error] = useRealTimeTracking(userId, 100); // Radius of 100 meters
+  const [mapCenter, setMapCenter] = useState({ lat: 33.7838, lng: -118.1141 }); // Default location
+
+  // Update map center whenever the user's location changes
   useEffect(() => {
-    const getUserLocation = async () => {
-      if (Platform.OS === "web") {
-        if ("geolocation" in navigator) {
-          navigator.geolocation.getCurrentPosition(
-            async (position) => {
-              const { latitude, longitude } = position.coords;
-              console.log("Web User Location:", latitude, longitude);
-              setMapCenter({ lat: latitude, lng: longitude });
-    
-              try {
-                await saveLocation("exampleUserId", latitude, longitude, "Current location");
-                console.log("Location saved to Firestore!");
-              } catch (error) {
-                console.error("Failed to save location:", error);
-              }
-            },
-            (error) => {
-              console.error("Error fetching location on web:", error);
-              alert("Unable to fetch location. Please enable location access in your browser.");
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-          );
-        } else {
-          alert("Geolocation is not supported by your browser.");
-          setMapCenter({ lat: 33.7838, lng: -118.1141 });
-        }
-      } else {
-        const hasPermission = await requestLocationPermission();
-        if (!hasPermission) return;
-    
-        Geolocation.getCurrentPosition(
-          async (position) => {
-            const { latitude, longitude } = position.coords;
-            console.log("Mobile User Location:", latitude, longitude);
-            setMapCenter({ lat: latitude, lng: longitude });
-    
-            try {
-              await saveLocation("exampleUserId", latitude, longitude, "Current location");
-              console.log("Location saved to Firestore!");
-            } catch (error) {
-              console.error("Failed to save location:", error);
-            }
-          },
-          (error) => {
-            console.error("Error fetching location on mobile:", error);
-            alert("Unable to fetch location.");
-          },
-          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-        );
-      }
-    };
-    
-  
-    getUserLocation();
-  }, []);
+    if (location) {
+      console.log("Real-time location:", location.coords.latitude, location.coords.longitude);
+      setMapCenter({ lat: location.coords.latitude, lng: location.coords.longitude });
+    }
+    if (error) {
+      console.error("Error with real-time tracking:", error);
+      Alert.alert("Error", error);
+    }
+  }, [location, error]);
   
 
   const requestLocationPermission = async () => {

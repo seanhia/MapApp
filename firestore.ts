@@ -49,45 +49,78 @@ export const deleteDocument = async (collectionName: string, docId: string) => {
   }
 };
 
+/**
+ * Save a location to the user's subcollection in Firestore
+ * @param userId - The ID of the user
+ * @param latitude - Latitude of the location
+ * @param longitude - Longitude of the location
+ * @param description - Description of the location
+ */
+
 // Save location
-
-interface Location {
-  latitude: number;
-  longitude: number;
-  description: string;
-}
-
-export async function saveLocation(
+export const saveLocation = async (
   userId: string,
   latitude: number,
   longitude: number,
   description: string
-): Promise<void> {
+): Promise<void> => {
+  if (!userId) {
+    throw new Error("User ID is required to save location.");
+  }
   try {
-    const locationId = `${latitude}_${longitude}_${Date.now()}`;
-    const locationRef = doc(db, `users/${userId}/locations/${locationId}`);
+    const userDocRef = doc(db, "users", userId); // Reference to the user's document
+    const locationsRef = collection(userDocRef, "locations"); // Subcollection under the user document
+    console.log("Saving to Firestore path:", locationsRef.path);
 
-
-    await setDoc(locationRef, {
+    await addDoc(locationsRef, {
       latitude,
       longitude,
       description,
-      timestamp: serverTimestamp(),
+      timestamp: Date.now(),
     });
-
-    console.log("Location saved successfully!");
+    console.log("Location saved successfully.");
   } catch (error) {
     console.error("Error saving location:", error);
     throw error;
   }
 };
 
-export async function fetchLocations(userId: string): Promise<Location[]> {
-  try {
-    const locationRef = collection(db, "users", userId, "locations");
-    const snapshot = await getDocs(locationRef);
 
-    return snapshot.docs.map((doc) => ({
+// export const getLocationData = async (userId: string) => {
+//   try {
+//       // Reference the user's locations subcollection
+//       const locationsRef = collection(doc(db, "users", userId), "locations");
+
+//       // Get all documents in the subcollection
+//       const querySnapshot = await getDocs(locationsRef);
+//       const locations = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+//       console.log("User's locations:", locations);
+//       return locations;
+//   } catch (error) {
+//       console.error("Error retrieving location data:", error);
+//   }
+// };
+
+
+/**
+ * Fetch all locations from the user's subcollection in Firestore
+ * @param userId - The ID of the user
+ * @returns An array of location data
+ */
+export const fetchLocations = async (
+  userId: string
+): Promise<{ latitude: number; longitude: number; description: string }[]> => {
+  if (!userId) {
+    throw new Error("User ID is required to fetch locations.");
+  }
+
+  try {
+    const userDocRef = doc(db, "users", userId); // Reference to the user's document
+    const locationsRef = collection(userDocRef, "locations"); // Subcollection under the user document
+    const querySnapshot = await getDocs(locationsRef);
+    console.log("Fetching from Firestore path:", locationsRef.path);
+
+    return querySnapshot.docs.map((doc) => ({
       latitude: doc.data().latitude,
       longitude: doc.data().longitude,
       description: doc.data().description,
