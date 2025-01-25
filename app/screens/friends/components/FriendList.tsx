@@ -24,13 +24,13 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfri
               style={sharedStyles.sideButton}
               onPress={() => onViewProfile(item)}
               >
-                <Text style={sharedStyles.text}>View Profile</Text>
+                <Text style={sharedStyles.tinyText}>View Profile</Text>
               </TouchableOpacity>
             <TouchableOpacity 
               style={sharedStyles.sideButton}
               onPress={() => onUnfriend(item)}
               >
-                <Text style={sharedStyles.text}>Unfriend</Text>
+                <Text style={sharedStyles.tinyText}>Unfriend</Text>
               </TouchableOpacity>
         </View>
       )}

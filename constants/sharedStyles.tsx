@@ -2,6 +2,11 @@ import { StyleSheet } from 'react-native';
 import { Colors } from '../constants/Colors';
 
 const sharedStyles = StyleSheet.create({
+
+  /** Spacing */
+  topMargin: {
+    padding: 10
+  },
   /** Text */
   title: {
     fontSize: 60,
@@ -28,6 +33,11 @@ const sharedStyles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
+    color: Colors.light.text,
+    padding: 10,
+  },
+  tinyText: {
+    fontSize: 12,
     color: Colors.light.text,
     padding: 10,
   },
@@ -107,7 +117,7 @@ const sharedStyles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 0,
+    marginBottom: 10,
   },
   sideButton: {
     width: '50%',
@@ -134,8 +144,8 @@ const sharedStyles = StyleSheet.create({
     alignSelf: 'center',
   },
   profilePicture: { 
-    width: 90,
-    height: 80,
+    width: 70,
+    height: 64,
     borderRadius: 40,
     },
 

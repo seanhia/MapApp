@@ -98,8 +98,8 @@ const handleDeny = async (friendship: Friend) => {
       <Text style={sharedStyles.header}>Friends:</Text>
       <FriendList 
         friends={friendsList} 
-        onViewProfile={handleDeny}
-        onUnfriend={handleDeny} 
+        onViewProfile={handleAccept} // Placeholder 
+        onUnfriend={handleDeny} // Delete Friendship 
         />
       <Text style={sharedStyles.header}>Pending Requests:</Text>
       <PendingList 

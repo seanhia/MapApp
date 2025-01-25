@@ -43,7 +43,7 @@ export const createFriendship = async (userId: string , username: string) => {
             status: 'pending', // pending, approved, rejected
             username1: user.username || null, 
             username2: username, 
-            created_at: new Date()
+            createdAt: new Date()
         }
         const newFriendshipRef = doc(collection(db, 'friendships'));
         
