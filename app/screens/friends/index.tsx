@@ -85,6 +85,10 @@ const handleDeny = async (friendship: Friend) => {
     }
   };
 
+  const handleProfile = async (friendship: Friend) => {
+    console.log('Attempting to view the following users profile', friendship.friend_id) 
+  }
+
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -98,7 +102,7 @@ const handleDeny = async (friendship: Friend) => {
       <Text style={sharedStyles.header}>Friends:</Text>
       <FriendList 
         friends={friendsList} 
-        onViewProfile={handleAccept} // Placeholder 
+        onViewProfile={handleProfile} // Placeholder 
         onUnfriend={handleDeny} // Delete Friendship 
         />
       <Text style={sharedStyles.header}>Pending Requests:</Text>

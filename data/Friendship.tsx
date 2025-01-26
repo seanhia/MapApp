@@ -33,6 +33,7 @@ export const createFriendship = async (userId: string , username: string) => {
             return;
         }
         if (currentUser.uid === userId) {
+            alert('You cannot add yourself as a friend!');
             console.error('You cannot add yourself as a friend!');
             return;
         }
