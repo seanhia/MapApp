@@ -1,9 +1,19 @@
 export interface User {
     id: string;
     username: string;
-    email: string;
-    createdAt?: Date;
+    eMail: string;
+    createdAt: Date;
+    bio?: string; 
+    phoneNumber?: string; 
+    isPrivate?: boolean; 
   };
+
+export interface Friend {
+    id: string,
+    friend_id: string,
+    friend_username: string,
+};
+
 
 export interface PlaceDetails {
     geometry: {
@@ -24,14 +34,15 @@ export interface Post {
 
 };
 
+
 export interface Friendship {
     id: string,
     user1: string,
     user2: string,
     status: string,
-    username1: string,
+    username: string,
     username2: string,
-    created_at: Date,
+    createdAt: Date,
 };
 
 export interface Comment { 
@@ -40,15 +51,15 @@ export interface Comment {
     content: string,
     authorId: string,
     authorUsername: string,
-    created_at: Date,
+    createdAt: Date,
 };
 
 export interface Like { 
     id: string,
-    postId: string,
-    userId: string,
+    post_id: string,
+    user_id: string,
     username: string,
-    created_at: Date,
+    createdAt: Date,
 };
 
 export interface Notification {
@@ -57,7 +68,7 @@ export interface Notification {
     sender: string,
     type: string,
     read: boolean,
-    created_at: Date,
+    createdAt: Date,
 };
 
 export interface Location {
@@ -69,7 +80,7 @@ export interface Location {
     zip: string,
     phone: string,
     website: string,
-    created_at: Date,
+    createdAt: Date,
 }
 
 export interface Leaderboard {
@@ -78,5 +89,5 @@ export interface Leaderboard {
     userId: string,
     username: string,
     score: number,
-    created_at: Date,
+    createdAt: Date,
 }

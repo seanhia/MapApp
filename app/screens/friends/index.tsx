@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 import SearchBar from './components/SearchBar';
@@ -8,20 +8,21 @@ import FriendList from './components/FriendList';
 import PendingList from './components/PendingList';
 
 import { User } from '@/data/types';
+import { Friend } from '@/data/types';
 
 import { fetchAllUsers } from '@/data/UserDataService';
 import { PendingQuery, FriendQuery } from '@/data/FriendshipQuery';
-import { handleAccept, handleDeny } from '@/data/Friendship';
+import { AcceptFriendship, DenyFriendship } from '@/data/Friendship';
 
 import sharedStyles from '@/constants/sharedStyles';
 import FooterBar from '@/components/FooterBar';
 
 const Friends = () => {
-  const [friendsList, setFriendsList] = useState<{ id: string; friendId: string, friendUsername: string }[]>([]);
+  const [friendsList, setFriendsList] = useState<Friend[]>([]);
+  const [pendingRequests, setPendingRequests] = useState<Friend[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [pendingRequests, setPendingRequests] = useState<{ id: string; friendId: string, friendUsername: string }[]>([]);
 
   useEffect(() => {
     const auth = getAuth();
@@ -48,9 +49,42 @@ const Friends = () => {
         console.error('No user is logged in!');
       }
     });
-
     return () => unsubscribe();
   }, []);
+
+  const handleAccept = async (friendship: Friend) => {
+    console.log('Accepted friend request from friendshipId:', friendship.id);
+    try {
+      await AcceptFriendship(friendship.id); // Update friendship status in Firestore
+      
+      // Update state to remove the accepted request from the UI    
+      setFriendsList([...friendsList, friendship])
+      setPendingRequests(oldRequest => {
+        return oldRequest.filter(pendingRequests => pendingRequests != friendship)
+      })
+
+    } catch (error) {
+    console.error('Error handling friend acceptance:', error);
+    }
+};
+
+const handleDeny = async (friendship: Friend) => {
+    console.log('Denied friend request from friendshipId:', friendship.id);
+    try {
+      // Handle deny logic (e.g., remove the friendship request or change the status)
+        await DenyFriendship(friendship.id); 
+        // Update state
+        setFriendsList(oldRequest => {
+          return oldRequest.filter(friendsList => friendsList != friendship)
+        })
+        setPendingRequests(oldRequest => {
+          return oldRequest.filter(pendingRequests => pendingRequests != friendship)
+        })
+    } catch (error) {
+      console.error('Error handling friend denial:', error);
+    }
+  };
+
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -59,27 +93,23 @@ const Friends = () => {
    
   return (
     <View style={sharedStyles.fullContainer}>
-
       <SearchBar value={searchQuery} onChange={handleSearch} />
       <UserList users={filteredUsers} visible={!!searchQuery} />
-
       <Text style={sharedStyles.header}>Friends:</Text>
       <FriendList 
         friends={friendsList} 
-        onViewProfile={handleAccept}
-        onUnfriend={handleDeny} />
-
+        onViewProfile={handleAccept} // Placeholder 
+        onUnfriend={handleDeny} // Delete Friendship 
+        />
       <Text style={sharedStyles.header}>Pending Requests:</Text>
       <PendingList 
         pending={pendingRequests}
         onAccept={handleAccept}
-        onDeny={handleDeny} />
-
+        onDeny={handleDeny} 
+        />
       <View>
         <FooterBar/>
       </View>
-      
-
     </View>
   
   );

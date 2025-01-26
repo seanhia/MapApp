@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { haversineDistance } from "../utils/geolocation";
 import Geolocation from "@react-native-community/geolocation";
 import { saveLocation, fetchLocations } from "../../firestore";
@@ -20,9 +20,6 @@ export interface GeoPosition {
 export interface GeolocationError {
   code: number;
   message: string;
-  PERMISSION_DENIED: number;
-  POSITION_UNAVAILABLE: number;
-  TIMEOUT: number;
 }
 
 interface Location {
@@ -35,17 +32,31 @@ const useRealTimeTracking = (
   userId: string,
   radius: number
 ): [GeoPosition | null, string | null] => {
-  const [location, setLocation] = useState<GeoPosition | null>(null); // Current location
-  const [error, setError] = useState<string | null>(null); // Error messages
-  const [savedLocations, setSavedLocations] = useState<Location[]>([]); // Cached saved locations
+  const [location, setLocation] = useState<GeoPosition | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [savedLocations, setSavedLocations] = useState<Location[]>([]);
+  const savedLocationsRef = useRef<Location[]>([]);
+
+
+  if (!userId) {
+    console.error("User is not logged in!");
+  } else {
+    console.log("Authenticated user ID:", userId);
+  }
 
   useEffect(() => {
+    if (!userId) {
+      setError("User not authenticated.");
+      return;
+    }
+
     let watchId: number | null = null;
 
-    (async () => {
+    const initializeTracking = async () => {
       try {
         // Fetch saved locations from Firestore
         const locations = await fetchLocations(userId);
+        savedLocationsRef.current = locations;
         setSavedLocations(locations);
 
         // Start real-time tracking
@@ -53,8 +64,8 @@ const useRealTimeTracking = (
           async (position: GeoPosition) => {
             const { latitude, longitude } = position.coords;
 
-            // Check if this location is far enough from all saved locations
-            const isFarEnough = savedLocations.every((saved) => {
+            // Check if this location is far enough from saved locations
+            const isFarEnough = savedLocationsRef.current.every((saved) => {
               const distance = haversineDistance(
                 latitude,
                 longitude,
@@ -69,10 +80,12 @@ const useRealTimeTracking = (
               await saveLocation(userId, latitude, longitude, "New location");
 
               // Update cached locations
-              setSavedLocations((prev) => [
-                ...prev,
-                { latitude, longitude, description: "New location" },
-              ]);
+              savedLocationsRef.current.push({
+                latitude,
+                longitude,
+                description: "New location",
+              });
+              setSavedLocations([...savedLocationsRef.current]);
             }
 
             // Update current location
@@ -84,15 +97,17 @@ const useRealTimeTracking = (
           },
           {
             enableHighAccuracy: true,
-            distanceFilter: 10, // Minimum distance in meters for updates
-            interval: 5000, // Minimum time in milliseconds for updates
+            distanceFilter: 10,
+            interval: 5000,
           }
         );
       } catch (err) {
-        console.error("Error initializing real-time tracking:", err);
+        console.error("Error initializing tracking:", err);
         setError("Failed to initialize location tracking.");
       }
-    })();
+    };
+
+    initializeTracking();
 
     // Cleanup watcher on unmount
     return () => {
@@ -100,9 +115,10 @@ const useRealTimeTracking = (
         Geolocation.clearWatch(watchId);
       }
     };
-  }, [userId, radius, savedLocations]);
+  }, [userId, radius]);
 
   return [location, error];
 };
+
 
 export default useRealTimeTracking;

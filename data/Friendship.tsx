@@ -4,28 +4,6 @@ import db from '@/firestore';
 import { getAuth } from 'firebase/auth';
 import { fetchUserByUID } from '@/data/UserDataService'
 
-export const handleAccept = async (friendshipId: string) => {
-    console.log('Accepted friend request from friendshipId:', friendshipId);
-    try {
-    await AcceptFriendship(friendshipId); // Update friendship status in Firestore
-    // Optionally, refresh the pending requests after accepting
-    // Update state to remove the accepted request from the UI
-    } catch (error) {
-    console.error('Error handling friend acceptance:', error);
-    }
-};
-
-export const handleDeny = async (friendshipId: string) => {
-    console.log('Denied friend request from friendshipId:', friendshipId);
-    try {
-      // Handle deny logic (e.g., remove the friendship request or change the status)
-        await DenyFriendship(friendshipId); 
-    } catch (error) {
-      console.error('Error handling friend denial:', error);
-    }
-  };
-
-
 export const createFriendship = async (userId: string , username: string) => {
     try {
         // Auth instance to get the current user's ID (optional)
@@ -65,7 +43,7 @@ export const createFriendship = async (userId: string , username: string) => {
             status: 'pending', // pending, approved, rejected
             username1: user.username || null, 
             username2: username, 
-            created_at: new Date()
+            createdAt: new Date()
         }
         const newFriendshipRef = doc(collection(db, 'friendships'));
         
@@ -78,7 +56,7 @@ export const createFriendship = async (userId: string , username: string) => {
     }
 }; 
 
-const AcceptFriendship = async (id: string) => {
+export const AcceptFriendship = async (id: string) => {
     const data = {
         status: 'approved',
     };
@@ -94,7 +72,7 @@ const AcceptFriendship = async (id: string) => {
     }  
 };
 
-const DenyFriendship = async (id: string) => {
+export const DenyFriendship = async (id: string) => {
     try {
         const friendshipDoc = doc(db, 'friendships', id);
         

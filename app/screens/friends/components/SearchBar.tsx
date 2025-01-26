@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput } from 'react-native';
+import { TextInput, Text, View,  } from 'react-native';
 import sharedStyles from '@/constants/sharedStyles';
 
 interface SearchBarProps {
@@ -9,12 +9,15 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
   return (
-    <TextInput
-      style={sharedStyles.input}
-      placeholder="Search users..."
-      value={value}
-      onChangeText={onChange}
-    />
+    <View>
+      <Text style={sharedStyles.topMargin}></Text>
+      <TextInput
+        style={sharedStyles.input}
+        placeholder="Search users..."
+        value={value}
+        onChangeText={onChange}
+      />
+    </View>
   );
 };
 
