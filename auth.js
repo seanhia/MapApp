@@ -1,8 +1,9 @@
 // auth.js
-import { createUserWithEmailAndPassword, PhoneMultiFactorGenerator, signInWithEmailAndPassword , userCredential, sendEmailVerification} from 'firebase/auth';
+import { createUserWithEmailAndPassword, PhoneMultiFactorGenerator, signInWithEmailAndPassword , userCredential, sendEmailVerification, reauthenticateWithCredential, EmailAuthProvider, credential} from 'firebase/auth';
 import {auth} from "./firebase"
 import { doc, setDoc, serverTimestamp } from "firebase/firestore"; 
 import {db} from "./firebase"
+
 
 export const signUpWithEmail = async (email,password, fname, lname, phone, username) => {
   try {
@@ -41,5 +42,40 @@ export const signInWithEmail = async (email, password) => {
   } catch (error) {
     console.error("Error signing in:", error.code, error.message);
     throw error; // Re-throw error for component to handle
+  }
+};
+
+// export const validatePassword = async (password) => {
+//   try {
+//     const user = auth.currentUser;
+//     const cred = auth.EmailAuthProvider.credential(user.email, password)
+//     await user.reauthenticateWithCredential(cred)
+//     return user
+//   } catch (e) {
+//     alert(e.message)
+//   }
+// };
+
+export const validatePassword = async (password) => {
+  try {
+    const user = auth.currentUser;
+
+    // Check if a user is logged in
+    if (!user) {
+      throw new Error('No user is signed in');
+    }
+
+    // Generate credentials
+
+
+    const cred = auth.EmailAuthProvider.credential(user.email, password);
+
+    // Reauthenticate the user with the provided password
+    await user.reauthenticateWithCredential(cred);
+
+    // If reauthentication is successful, return the user
+    return user;
+  } catch (e) {
+    alert(e.message);  // Show error message if something goes wrong
   }
 };

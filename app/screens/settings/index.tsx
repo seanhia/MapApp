@@ -4,6 +4,8 @@ import { TextInput } from 'react-native-gesture-handler';
 import sharedStyles from '@/constants/sharedStyles';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors'
+import { Link } from 'expo-router';
+
 
 import { fetchCurrentUser, writeUserData } from '@/data/UserDataService';
 import { User } from '@/data/types'
@@ -133,6 +135,7 @@ const UserSettings = () => {
                         placeholderTextColor="#aaa"
                         secureTextEntry
                     />
+                    <Link style={sharedStyles.input} href="/screens/settings/UpdatePassword">Change Password</Link>
                 </View>
 
 
