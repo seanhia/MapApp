@@ -1,10 +1,10 @@
 import React from "react";
 import { getAuth } from "firebase/auth";
-import useRealTimeTracking from "../hooks/useRealTimeTracking"; // Adjust the path to your hook
+import useRealTimeTracking from "@/app/hooks/useRealTimeTracking";
 
 const RealTimeTracker: React.FC = () => {
-  const auth = getAuth(); // Initialize Firebase Auth
-  const userId = auth.currentUser?.uid; // Get the current user's ID
+  const auth = getAuth(); // initialize Firebase Auth
+  const userId = auth.currentUser?.uid; // get current user's ID
 
   console.log("RealTimeTracker - Current userId:", userId);
 
@@ -13,8 +13,8 @@ const RealTimeTracker: React.FC = () => {
     return <p>Please log in to use location tracking.</p>;
   }
 
-  // Call the useRealTimeTracking hook
-  const [location, error] = useRealTimeTracking(userId, 100); // Pass userId and a radius of 100 meters
+  // pass userId and a radius of 100 meters
+  const [location, error] = useRealTimeTracking(userId, 100); 
 
   return (
     <div>

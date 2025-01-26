@@ -54,7 +54,6 @@ export const deleteDocument = async (collectionName: string, docId: string) => {
  * @param userId - The ID of the user
  * @param latitude - Latitude of the location
  * @param longitude - Longitude of the location
- * @param description - Description of the location
  */
 
 // Save location
@@ -62,7 +61,6 @@ export const saveLocation = async (
   userId: string,
   latitude: number,
   longitude: number,
-  description: string
 ): Promise<void> => {
   if (!userId) {
     throw new Error("User ID is required to save location.");
@@ -75,7 +73,6 @@ export const saveLocation = async (
     await addDoc(locationsRef, {
       latitude,
       longitude,
-      description,
       timestamp: Date.now(),
     });
     console.log("Location saved successfully.");
@@ -85,23 +82,6 @@ export const saveLocation = async (
   }
 };
 
-
-// export const getLocationData = async (userId: string) => {
-//   try {
-//       // Reference the user's locations subcollection
-//       const locationsRef = collection(doc(db, "users", userId), "locations");
-
-//       // Get all documents in the subcollection
-//       const querySnapshot = await getDocs(locationsRef);
-//       const locations = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-//       console.log("User's locations:", locations);
-//       return locations;
-//   } catch (error) {
-//       console.error("Error retrieving location data:", error);
-//   }
-// };
-
-
 /**
  * Fetch all locations from the user's subcollection in Firestore
  * @param userId - The ID of the user
@@ -109,7 +89,7 @@ export const saveLocation = async (
  */
 export const fetchLocations = async (
   userId: string
-): Promise<{ latitude: number; longitude: number; description: string }[]> => {
+): Promise<{ latitude: number; longitude: number}[]> => {
   if (!userId) {
     throw new Error("User ID is required to fetch locations.");
   }
@@ -123,7 +103,6 @@ export const fetchLocations = async (
     return querySnapshot.docs.map((doc) => ({
       latitude: doc.data().latitude,
       longitude: doc.data().longitude,
-      description: doc.data().description,
     }));
   } catch (error) {
     console.error("Error fetching locations:", error);

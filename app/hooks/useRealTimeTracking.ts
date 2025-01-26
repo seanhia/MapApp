@@ -25,7 +25,6 @@ export interface GeolocationError {
 interface Location {
   latitude: number;
   longitude: number;
-  description: string;
 }
 
 const useRealTimeTracking = (
@@ -77,13 +76,12 @@ const useRealTimeTracking = (
 
             if (isFarEnough) {
               // Save the new location to Firestore
-              await saveLocation(userId, latitude, longitude, "New location");
+              await saveLocation(userId, latitude, longitude);
 
               // Update cached locations
               savedLocationsRef.current.push({
                 latitude,
-                longitude,
-                description: "New location",
+                longitude
               });
               setSavedLocations([...savedLocationsRef.current]);
             }
