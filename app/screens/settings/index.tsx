@@ -127,15 +127,9 @@ const UserSettings = () => {
                         keyboardType="phone-pad"
                     />
       
-                    <TextInput
-                        style={sharedStyles.input}
-                        onChangeText={setPassword}
-                        value={password}
-                        placeholder="Password"
-                        placeholderTextColor="#aaa"
-                        secureTextEntry
-                    />
-                    <Link style={sharedStyles.input} href="/screens/settings/UpdatePassword">Change Password</Link>
+      <TouchableOpacity style={sharedStyles.lightButton} onPress={() => router.push('/screens/change_password')}>
+                    <Text style={styles.tutorialText}>Change Password</Text>
+                </TouchableOpacity>
                 </View>
 
 

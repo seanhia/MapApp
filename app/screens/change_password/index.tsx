@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
   Modal,
   Pressable,
 } from 'react-native';
@@ -13,7 +12,6 @@ import { getAuth, updatePassword } from 'firebase/auth';
 import sharedStyles from '../../../constants/sharedStyles'; // Import the shared styles 
 import { ImageHeader } from '@/components/ImageHeader';
 import {validatePassword} from "@/auth";
-import { Circle } from '@react-google-maps/api';
 
 
 const UpdatePasswordScreen = () => {
@@ -55,7 +53,7 @@ const UpdatePasswordScreen = () => {
         Enter your current password, then enter your new password
       </Text>
 
-      {/* Email Input */}
+      {/* Password Input */}
       <TextInput
         style={sharedStyles.input}
         placeholder="Current Password"
