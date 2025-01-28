@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, Modal, Pressable,  Alert, Platform, PermissionsAndroid } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTheme } from '@/hooks/useTheme';
+import { launchImageLibrary } from 'react-native-image-picker'; 
+
+
 
 
 const uploadPhoto = () => {
