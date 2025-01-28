@@ -1,12 +1,64 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, Pressable } from 'react-native';
+import { View, Text, Modal, Pressable,  Alert, Platform, PermissionsAndroid } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import sharedStyles from '@/constants/sharedStyles';
-
+import { launchImageLibrary, launchCamera} from 'react-native-image-picker';
 
 const uploadPhoto = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [imageUri, setImageUri] = useState<string | null>(null);
+
+    const permission = async () => {
+
+        if (Platform.OS == 'android') {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,{
+                    title: 'Storage Permission',
+                    message: 'App needs acess to your storage to upload a photo', 
+                    buttonPositive: 'ok'
+
+                }
+
+            );
+            return granted === PermissionsAndroid.RESULTS.GRANTED;
+        }
+        return true; // ios automatic 
+
+    };
+
+    const imagePicker = async () => {
+        try {
+            const permissionGranted = await permission();
+            if (!permissionGranted) {
+                Alert.alert('Permission Denied', 'Storage permission is required.');
+                return;
+            }
+
+            const result = await launchImageLibrary({
+                mediaType: 'photo',
+                quality: 1,
+            });
+
+            if (result.didCancel) {
+                Alert.alert('Cancelled', 'You cancelled image selection');
+            } else if (result.errorMessage) {
+                Alert.alert('Error', result.errorMessage)
+            } else if (result.assets && result.assets.length > 0) {
+                const selectedImageUri = result.assets[0].uri;
+                if (selectedImageUri) {
+                    setImageUri(selectedImageUri);
+                    setModalVisible(false);
+                } else {
+                    Alert.alert('Error', 'something went wrong while picking the image.')
+                }
+            }
+        } catch (error){
+            console.error('Error with image picker:', error);
+            Alert.alert('Error', 'something went wrong while picking the image.')
+        }
+    };
+ 
 
     return (
         <View>
@@ -22,7 +74,7 @@ const uploadPhoto = () => {
                         <View style={sharedStyles.centered}>
 
 
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={imagePicker}>
                                 <Pressable>
                                     <Text style={sharedStyles.modalText}>Select from device</Text>
                                 </Pressable>
@@ -51,7 +103,6 @@ const uploadPhoto = () => {
                     style={sharedStyles.sideButton}
                     onPress={() => setModalVisible(true)}>
                     <Text style={sharedStyles.boldText}>Upload Photo</Text>
-
                 </Pressable>
             </TouchableOpacity>
 
