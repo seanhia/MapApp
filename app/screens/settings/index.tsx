@@ -14,11 +14,12 @@ const UserSettings = () => {
     const router = useRouter();
 
     const [isPrivateAccount, setIsPrivateAccount] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(false);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
     const [eMail, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    // const [password, setPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
 
 
@@ -41,10 +42,12 @@ const UserSettings = () => {
             setEmail(currentUser.eMail || '');
             setPhoneNumber(currentUser.phoneNumber || '');
             setIsPrivateAccount(currentUser.isPrivate || false);
+            setIsDarkMode(currentUser.isDarkMode || false);
         }
     }, [currentUser]);
 
-    const toggleSwitch = () => setIsPrivateAccount((prev) => !prev);
+    const togglePrivate = () => setIsPrivateAccount((prev) => !prev);
+    const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
     const handleSubmit = async () => {
         if (!currentUser) {
@@ -58,6 +61,7 @@ const UserSettings = () => {
             eMail,
             phoneNumber,
             'isPrivate': isPrivateAccount,
+            'isDarkMode': isDarkMode,
         };
         try {
             await writeUserData(updatedUser);
@@ -84,8 +88,15 @@ const UserSettings = () => {
                         <Switch
                             trackColor={{ false: '#aaa', true: Colors.light.tint }}
                             thumbColor={isPrivateAccount ? '#f5dd4b' : '#f4f3f4'}
-                            onValueChange={toggleSwitch}
+                            onValueChange={togglePrivate}
                             value={isPrivateAccount}
+                        />
+                        <Text style={styles.label}>Dark Mode</Text>
+                        <Switch
+                            trackColor={{ false: '#aaa', true: Colors.light.tint }}
+                            thumbColor={isDarkMode ? '#f5dd4b' : '#f4f3f4'}
+                            onValueChange={toggleDarkMode}
+                            value={isDarkMode}
                         />
                     </View>
 
@@ -126,18 +137,18 @@ const UserSettings = () => {
                         placeholderTextColor="#aaa"
                         keyboardType="phone-pad"
                     />
+                    <TouchableOpacity style={sharedStyles.lightButton} onPress={handleSubmit}>
+                        <Text style={styles.tutorialText}>
+                            Submit Chanages
+                        </Text>
+                    </TouchableOpacity>
       
-      <TouchableOpacity style={sharedStyles.lightButton} onPress={() => router.push('/screens/change_password')}>
-                    <Text style={styles.tutorialText}>Change Password</Text>
-                </TouchableOpacity>
                 </View>
 
-
-                <TouchableOpacity style={sharedStyles.lightButton} onPress={handleSubmit}>
-                    <Text>
-                        Submit Chanages
-                    </Text>
+                <TouchableOpacity style={sharedStyles.lightButton} onPress={() => router.push('/screens/change_password')}>
+                    <Text style={styles.tutorialText}>Change Password</Text>
                 </TouchableOpacity>
+                
                 <TouchableOpacity style={sharedStyles.lightButton} onPress={() => router.push('/screens/tutorial')}>
                     <Text style={styles.tutorialText}>View Tutorial</Text>
                 </TouchableOpacity>

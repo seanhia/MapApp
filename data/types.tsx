@@ -6,6 +6,7 @@ export interface User {
     bio?: string; 
     phoneNumber?: string; 
     isPrivate?: boolean; 
+    isDarkMode?: boolean; 
   };
 
 export interface Friend {
