@@ -115,7 +115,8 @@ const uploadPhoto = () => {
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={takePhoto}>
-                                <Pressable>
+                                <Pressable
+                                 onPress={() => setModalVisible(!modalVisible)}>
                                     <Text style={styles.modalText}>Take a photo</Text>
                                 </Pressable>
                             </TouchableOpacity>
