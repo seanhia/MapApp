@@ -2,11 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
 import MapComponent from '@/components/MapComponent';
 import FooterBar from '@/components/FooterBar';
-//import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { PlaceDetails } from '@/data/types';
 import { SearchBar } from '@/components/MapSearchBar';
 import Geolocation from 'react-native-geolocation-service';
-import { saveLocation } from '../../../firestore';
 import useRealTimeTracking from "../../hooks/useRealTimeTracking"; // Adjust the path as needed
 import { getAuth } from "firebase/auth"; // For getting the userId
 
@@ -15,13 +13,14 @@ export default function Home() {
   const auth = getAuth();
   const userId = auth.currentUser?.uid; // Get the current user's ID
 
+  // check if user is logged in
   if (!userId) {
     console.error("User is not logged in!");
     Alert.alert("Error", "You are not logged in. Please log in to use the app.");
     return null;
   }
 
-  // Use the real-time tracking hook
+  // use the real-time tracking hook to get user's current location
   const [location, error] = useRealTimeTracking(userId, 100); // Radius of 100 meters
   const [mapCenter, setMapCenter] = useState({ lat: 33.7838, lng: -118.1141 }); // Default location
 
