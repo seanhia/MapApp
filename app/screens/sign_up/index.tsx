@@ -37,81 +37,83 @@ export default function SignUp() {
   };
 
   return (
-    <View
-      style={styles.centerContainer}
-    >
-      <ImageHeader
-      image={require("@/assets/images/cloud.png")}
-      text ="Sign Up"
-      />
-      <KeyboardAvoidingView behavior="padding">
-          <TextInput
-            style={styles.input}
-            value={firstname}
-            onChangeText= {setFName}
-            autoCapitalize="none"
-            placeholder = "First Name"
-            keyboardType="default"
-            />
-            <TextInput
-            style={styles.input}
-            value={lastname}
-            onChangeText= {setLName}
-            autoCapitalize="none"
-            placeholder = "Last Name"
-            keyboardType="default"
-            />
+    <View style={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
+      <View
+        style={styles.centerContainer}
+      >
+        <ImageHeader
+        image={require("@/assets/images/cloud.png")}
+        text ="Sign Up"
+        />
+        <KeyboardAvoidingView behavior="padding">
             <TextInput
               style={styles.input}
-              value={username}
-              onChangeText={setUsername}
+              value={firstname}
+              onChangeText= {setFName}
+              autoCapitalize="none"
+              placeholder = "First Name"
               keyboardType="default"
-              placeholder = "Username"
-
-
-            />
-            <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            placeholder = "Email"
-            />
-            <TextInput
+              />
+              <TextInput
               style={styles.input}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              placeholder = "Password"
+              value={lastname}
+              onChangeText= {setLName}
+              autoCapitalize="none"
+              placeholder = "Last Name"
+              keyboardType="default"
+              />
+              <TextInput
+                style={styles.input}
+                value={username}
+                onChangeText={setUsername}
+                keyboardType="default"
+                placeholder = "Username"
 
-            />
-            <TextInput
+
+              />
+              <TextInput
               style={styles.input}
-              value={phone}
-              onChangeText={setPhone}
-              placeholder = "Phone Number"
-              keyboardType="phone-pad"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              placeholder = "Email"
+              />
+              <TextInput
+                style={styles.input}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                placeholder = "Password"
 
-            />
-            {
-              loading ? (
-                <ActivityIndicator size={'small'} style ={{ margin: 100}} />
-              ) : (
-                <>
-                  <TouchableOpacity style={styles.lightButton} onPress={signUp} >
-                    <Text style={styles.text}>Sign Up </Text>
-                  </TouchableOpacity>
-                  <Text style = {{marginBottom: 90}}> </Text>
-                    <Link 
-                      style={{fontSize: 20, alignSelf: 'center', marginBottom: 85, padding: 20, color: Colors.light.tabIconDefault}} 
-                      href="/">Already have an existing account? Sign In ⇨ 
-                    </Link>
-                </>
-              )}
+              />
+              <TextInput
+                style={styles.input}
+                value={phone}
+                onChangeText={setPhone}
+                placeholder = "Phone Number"
+                keyboardType="phone-pad"
+
+              />
+              {
+                loading ? (
+                  <ActivityIndicator size={'small'} style ={{ margin: 100}} />
+                ) : (
+                  <>
+                    <TouchableOpacity style={styles.lightButton} onPress={signUp} >
+                      <Text style={styles.text}>Sign Up </Text>
+                    </TouchableOpacity>
+                    <Text style = {{marginBottom: 90}}> </Text>
+                      <Link 
+                        style={{fontSize: 20, alignSelf: 'center', marginBottom: 85, padding: 20, color: Colors.light.tabIconDefault}} 
+                        href="/">Already have an existing account? Sign In ⇨ 
+                      </Link>
+                  </>
+                )}
 
 
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+      </View>
     </View>
   );
 }

@@ -32,57 +32,58 @@ export default function Index() {
   };
 
   return (
-    
-    <View
-      style={styles.centerContainer}
-    >
-      <Link style={{alignSelf: 'center'}} href="/screens/home">
-        <Text style={{ color: Colors.light.tabIconDefault}}>Homepage (Temporary)</Text>
-      </Link>
+    <View style={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
+      <View
+        style={styles.centerContainer}
+      >
+        <Link style={{alignSelf: 'center'}} href="/screens/home">
+          <Text style={{ color: Colors.light.tabIconDefault}}>Homepage (Temporary)</Text>
+        </Link>
 
-      <ImageHeader 
-        image={require('@/assets/images/cloud.png')}
-        text='EXPLORE'
-      />
-      <KeyboardAvoidingView behavior="padding" >
-          <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            placeholder = "Email"
-            />
+        <ImageHeader 
+          image={require('@/assets/images/cloud.png')}
+          text='EXPLORE'
+        />
+        <KeyboardAvoidingView behavior="padding" >
             <TextInput
               style={styles.input}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              placeholder = "Password"
-            />
-            {
-              loading ? (
-                <ActivityIndicator size={'small'} style ={{ margin: 28}} />
-              ) : (
-                <>
-                  <Link style={styles.rightLink} href="/screens/forgot_password">Forgot Password?</Link>
-                  <TouchableOpacity style={styles.lightButton} onPress={signIn}> 
-                    <Text style={styles.text}>Sign In</Text> 
-                    </TouchableOpacity>
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              placeholder = "Email"
+              />
+              <TextInput
+                style={styles.input}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                placeholder = "Password"
+              />
+              {
+                loading ? (
+                  <ActivityIndicator size={'small'} style ={{ margin: 28}} />
+                ) : (
                   <>
-                    <Text style = {{marginBottom: 80}}>
-              
-                    </Text>
-                    <Link style={{fontSize: 20, alignSelf: 'center', marginBottom: 85, color: Colors.light.tabIconDefault}} href="/screens/sign_up">Don't have an account? Sign Up ⇨ </Link>
-                    <View style={styles.lowerContainer}>
-                      <Image style={styles.profilePicture} source={require('../assets/images/cloud.png')} />
-                      <Link style={styles.tutorial} href="/screens/tutorial">Tutorial?</Link>
-                    </View>
+                    <Link style={styles.rightLink} href="/screens/forgot_password">Forgot Password?</Link>
+                    <TouchableOpacity style={styles.lightButton} onPress={signIn}> 
+                      <Text style={styles.text}>Sign In</Text> 
+                      </TouchableOpacity>
+                    <>
+                      <Text style = {{marginBottom: 80}}>
+                
+                      </Text>
+                      <Link style={{fontSize: 20, alignSelf: 'center', marginBottom: 85, color: Colors.light.tabIconDefault}} href="/screens/sign_up">Don't have an account? Sign Up ⇨ </Link>
+                      <View style={styles.lowerContainer}>
+                        <Image style={styles.profilePicture} source={require('../assets/images/cloud.png')} />
+                        <Link style={styles.tutorial} href="/screens/tutorial">Tutorial?</Link>
+                      </View>
+                    </>
                   </>
-                </>
-              )}
-        </KeyboardAvoidingView>
-        
+                )}
+          </KeyboardAvoidingView>
+          
+      </View>
     </View>
     
   );

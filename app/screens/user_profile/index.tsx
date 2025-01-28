@@ -14,7 +14,7 @@ const userProfile = () => {
   
   return (
       <View style={styles.fullContainer}>
-        <ScrollView>
+        <ScrollView >
 
           <ProfileHeader />
 

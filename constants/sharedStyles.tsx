@@ -33,6 +33,7 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       fontSize: 24,
       fontWeight: 'bold',
       marginBottom: 20,
+      color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
     },
     text: {
       fontSize: 16,
@@ -55,7 +56,7 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
     input: {
       width: '100%',
       height: 50,
-      backgroundColor: theme === 'dark' ? Colors.dark.background : Colors.light.background,
+      backgroundColor: theme === 'dark' ? Colors.dark.tint : Colors.light.tint,
       borderRadius: 25,
       paddingHorizontal: 20,
       fontSize: 16,
@@ -68,12 +69,20 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       borderRadius: 8,
       marginBottom: 10,
     },
+    label: {
+      fontSize: 16,
+      fontWeight: '500',
+      color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
+
+  },
 
     /** Containers  */
     centerContainer: { //Centered Page with margin 
       marginHorizontal: 40,
       flex: 1,
       justifyContent: 'space-evenly',
+      backgroundColor: theme === 'dark' ? Colors.dark.background : Colors.light.background,
+
     },
     fullContainer: { //Horizonatal Full Page 
       flex: 1,
@@ -84,7 +93,14 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
     halfContainer: { //Vertical Half Page 
       marginHorizontal: 40, 
       flex: .6, 
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
+      backgroundColor: theme === 'dark' ? Colors.dark.background : Colors.light.background,
+
+    },
+    scrollContainer: {
+      padding: 12,
+      backgroundColor: theme === 'dark' ? Colors.dark.background : Colors.light.background,
+
     },
     buttonContainer: {
       width: '85%',
@@ -117,7 +133,7 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
     lightButton: {
       width: '100%',
       height: 50,
-      backgroundColor: theme === 'dark' ? Colors.dark.background : Colors.light.background,
+      backgroundColor: theme === 'dark' ? Colors.dark.button : Colors.light.button,
       borderRadius: 25,
       justifyContent: 'center',
       alignItems: 'center',

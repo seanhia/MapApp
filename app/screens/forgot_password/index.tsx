@@ -12,6 +12,7 @@ import {
 import { getAuth, fetchSignInMethodsForEmail, sendPasswordResetEmail } from 'firebase/auth';
 import { useTheme } from '@/hooks/useTheme';
 import { ImageHeader } from '@/components/ImageHeader';
+import { Colors } from '@/constants/Colors';
 
 
 
@@ -53,53 +54,55 @@ const ForgotPassword = () => {
   };
 
   return (
-    <View style={styles.halfContainer}>
-      <ImageHeader
-        image={require('@/assets/images/cloud.png')}
-        text='EXPLORE'
-      />      
+    <View style={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
+      <View style={styles.halfContainer}>
+        <ImageHeader
+          image={require('@/assets/images/cloud.png')}
+          text='EXPLORE'
+        />      
 
-      {/* Instructions */}
-      <Text style={style.instructions}>
-        Enter the email associated with your account and we'll send you a link to reset your password.
-      </Text>
+        {/* Instructions */}
+        <Text style={style.instructions}>
+          Enter the email associated with your account and we'll send you a link to reset your password.
+        </Text>
 
-      {/* Email Input */}
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#BDBDBD"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        onChangeText={setEmail}
-        value={email}
-      />
+        {/* Email Input */}
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#BDBDBD"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          onChangeText={setEmail}
+          value={email}
+        />
 
-      {/* Continue Button */}
-      <TouchableOpacity style={styles.lightButton} onPress={handleContinue}>
-        <Text style={styles.boldText}>Continue</Text>
-      </TouchableOpacity>
+        {/* Continue Button */}
+        <TouchableOpacity style={styles.lightButton} onPress={handleContinue}>
+          <Text style={styles.boldText}>Continue</Text>
+        </TouchableOpacity>
 
-      {/* Modal for Feedback */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)} // Handle modal close on back button
-      >
-        <View style={style.modalOverlay}>
-          <View style={style.modalContent}>
-            <Text style={style.modalTitle}>Notification</Text>
-            <Text style={style.modalMessage}>{modalMessage}</Text>
-            <Pressable
-              style={styles.lightButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.boldText}>OK</Text>
-            </Pressable>
+        {/* Modal for Feedback */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)} // Handle modal close on back button
+        >
+          <View style={style.modalOverlay}>
+            <View style={style.modalContent}>
+              <Text style={style.modalTitle}>Notification</Text>
+              <Text style={style.modalMessage}>{modalMessage}</Text>
+              <Pressable
+                style={styles.lightButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.boldText}>OK</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      </View>
     </View>
   );
 };

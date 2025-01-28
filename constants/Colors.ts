@@ -14,19 +14,20 @@ const tan = '#FBE8C5';
 export const Colors = {
   light: {
     text: darkBlue,
-    background: tan,
+    background: '#FFFFFF',
     tint: lightBlue,
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
-    button: lightYellow
+    button: tan
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
+    text: '#FFFFF6',
+    background: '#000000',
+    tint: lightBlue,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
+    button: '#FFFFFF',
   },
 };

@@ -79,20 +79,20 @@ const UserSettings = () => {
 
 
     return (
-        <ScrollView contentContainerStyle={style.scrollContainer}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View>
                 <Text style={style.header}>Settings</Text>
 
                 <View style={style.card}>
                     <View style={style.rowBetween}>
-                        <Text style={style.label}>Private Account</Text>
+                        <Text style={styles.label}>Private Account</Text>
                         <Switch
                             trackColor={{ false: '#aaa', true: Colors.light.tint }}
                             thumbColor={isPrivateAccount ? '#f5dd4b' : '#f4f3f4'}
                             onValueChange={togglePrivate}
                             value={isPrivateAccount}
                         />
-                        <Text style={style.label}>Dark Mode</Text>
+                        <Text style={styles.label}>Dark Mode</Text>
                         <Switch
                             trackColor={{ false: '#aaa', true: Colors.light.tint }}
                             thumbColor={isDarkMode ? '#f5dd4b' : '#f4f3f4'}
@@ -164,9 +164,6 @@ const UserSettings = () => {
 export default UserSettings;
 
 const style = StyleSheet.create({
-    scrollContainer: {
-        padding: 12,
-    },
     container: {
         flex: 1,
     },
@@ -190,10 +187,6 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
-    label: {
-        fontSize: 16,
-        fontWeight: '500',
     },
     tutorialButton: {
         backgroundColor: Colors.light.background,
