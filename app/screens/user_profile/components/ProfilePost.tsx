@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Modal, Pressable,  Alert, Platform, PermissionsAndroid } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTheme } from '@/hooks/useTheme';
-import { launchImageLibrary } from 'react-native-image-picker'; 
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker'; 
 
 
 
@@ -44,7 +44,7 @@ const uploadPhoto = () => {
             });
 
             if (result.didCancel) {
-                Alert.alert('Cancelled', 'You cancelled image selection');
+                Alert.alert('Cancelled', 'You cancelled image selection.');
             } else if (result.errorMessage) {
                 Alert.alert('Error', result.errorMessage)
             } else if (result.assets && result.assets.length > 0) {
@@ -60,6 +60,37 @@ const uploadPhoto = () => {
             console.error('Error with image picker:', error);
             Alert.alert('Error', 'something went wrong while picking the image.')
         }
+    };
+
+    const takePhoto = async () => {
+        try{
+            const permissionGranted = await permission();
+            if (!permissionGranted){
+                Alert.alert('Permission Denied','Camera permission is required.')
+                return;
+            }
+            const result = await launchCamera({
+                mediaType: 'photo',
+                quality: 1,
+            });
+            if(result.didCancel) {
+                Alert.alert('Cancelled', 'You cancelled photo capture.')
+            } else if (result.errorMessage) {
+                Alert.alert('Error', result.errorMessage)
+            } else if (result.assets && result.assets.length > 0) {
+                const selectedImageUri = result.assets[0].uri;
+                if (selectedImageUri) {
+                    setImageUri(selectedImageUri);
+                    setModalVisible(false);
+                } else {
+                    Alert.alert('Error', 'something went wrong while taking the picture.')
+                }
+            }
+
+        } catch (error){
+            console.error('Error with the camera')
+        }
+
     };
  
 
@@ -83,7 +114,7 @@ const uploadPhoto = () => {
                                 </Pressable>
                             </TouchableOpacity>
 
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={takePhoto}>
                                 <Pressable>
                                     <Text style={styles.modalText}>Take a photo</Text>
                                 </Pressable>
