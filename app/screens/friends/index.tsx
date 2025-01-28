@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, useColorScheme} from 'react-native';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 import SearchBar from './components/SearchBar';
@@ -17,12 +17,17 @@ import { AcceptFriendship, DenyFriendship } from '@/data/Friendship';
 import sharedStyles from '@/constants/sharedStyles';
 import FooterBar from '@/components/FooterBar';
 
+
 const Friends = () => {
+  const colorScheme = useColorScheme(); 
+  const styles = sharedStyles(colorScheme);
+
   const [friendsList, setFriendsList] = useState<Friend[]>([]);
   const [pendingRequests, setPendingRequests] = useState<Friend[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+
 
   useEffect(() => {
     const auth = getAuth();
@@ -96,16 +101,16 @@ const handleDeny = async (friendship: Friend) => {
   };    
    
   return (
-    <View style={sharedStyles.fullContainer}>
+    <View style={styles.fullContainer}>
       <SearchBar value={searchQuery} onChange={handleSearch} />
       <UserList users={filteredUsers} visible={!!searchQuery} />
-      <Text style={sharedStyles.header}>Friends:</Text>
+      <Text style={styles.header}>Friends:</Text>
       <FriendList 
         friends={friendsList} 
         onViewProfile={handleProfile} // Placeholder 
         onUnfriend={handleDeny} // Delete Friendship 
         />
-      <Text style={sharedStyles.header}>Pending Requests:</Text>
+      <Text style={styles.header}>Pending Requests:</Text>
       <PendingList 
         pending={pendingRequests}
         onAccept={handleAccept}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, FlatList, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import sharedStyles from '@/constants/sharedStyles';
+import { useColorScheme, FlatList, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 import { Friend } from "@/data/types"
 
 
@@ -11,28 +11,31 @@ interface FriendListProps {
 }
 
 const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfriend }) => {
+  const { colorScheme, styles } = useTheme();
+  
   return (
     <FlatList
       data={friends}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <View style={sharedStyles.buttonContainer}>
-          <Image source={require('@/assets/images/cloud.png')} 
-            style={sharedStyles.profilePicture} />
-          <Text style={sharedStyles.boldText}>@{item.friend_username}</Text>
+        <ScrollView contentContainerStyle={styles.buttonContainer}>
+          <Image source={require('@/assets/images/cloud.png')} // Placeholder Profile Picture 
+            style={styles.profilePicture} />
+          <Text style={styles.boldText}>@{item.friend_username}</Text>
+
             <TouchableOpacity 
-              style={sharedStyles.sideButton}
-              onPress={() => onViewProfile(item)}
-              >
-                <Text style={sharedStyles.tinyText}>View Profile</Text>
-              </TouchableOpacity>
+              style={styles.sideButton}
+              onPress={() => onViewProfile(item)}>
+              <Text style={styles.tinyText}>View Profile</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity 
-              style={sharedStyles.sideButton}
-              onPress={() => onUnfriend(item)}
-              >
-                <Text style={sharedStyles.tinyText}>Unfriend</Text>
-              </TouchableOpacity>
-        </View>
+              style={styles.sideButton}
+              onPress={() => onUnfriend(item)}>
+              <Text style={styles.tinyText}>Unfriend</Text>
+            </TouchableOpacity>
+
+        </ScrollView>
       )}
     />
   );

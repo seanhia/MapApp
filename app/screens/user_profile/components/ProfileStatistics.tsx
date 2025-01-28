@@ -1,23 +1,24 @@
-import sharedStyles from '@/constants/sharedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
 const ProfileStatistics = () => {
+    const { colorScheme, styles } = useTheme();
     return (
-        <View style={sharedStyles.fullContainer}>
-            <Text style={sharedStyles.header}>Statistics</Text>
-            <View style={sharedStyles.profileContainer}>
-                <Image style={styles.statsImage} source={require('@/assets/images/distance.jpg')} />
-                <Image style={styles.statsImage} source={require('@/assets/images/city.jpg')} />
-                <Image style={styles.statsImage} source={require('@/assets/images/globe.jpg')} />
+        <View style={styles.fullContainer}>
+            <Text style={styles.header}>Statistics</Text>
+            <View style={styles.profileContainer}>
+                <Image style={style.statsImage} source={require('@/assets/images/distance.jpg')} />
+                <Image style={style.statsImage} source={require('@/assets/images/city.jpg')} />
+                <Image style={style.statsImage} source={require('@/assets/images/globe.jpg')} />
             </View>
-            <View style={sharedStyles.profileContainer}>
+            <View style={styles.profileContainer}>
                 <Text>Distance Traveled</Text>
                 <Text>Cities Visited</Text>
                 <Text>Countries Visited</Text>
 
             </View>
-            <View style={sharedStyles.profileContainer}>
+            <View style={styles.profileContainer}>
                 <Text>2462 m</Text>
                 <Text>3</Text>
                 <Text>1</Text>
@@ -30,7 +31,7 @@ const ProfileStatistics = () => {
 
 export default ProfileStatistics;
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
     statsImage: {
         height: 100, width: 100
     },

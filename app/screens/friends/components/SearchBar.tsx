@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, Text, View,  } from 'react-native';
-import sharedStyles from '@/constants/sharedStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 interface SearchBarProps {
   value: string;
@@ -8,11 +8,13 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
+  const { colorScheme, styles } = useTheme();
+  
   return (
     <View>
-      <Text style={sharedStyles.topMargin}></Text>
+      <Text style={styles.topMargin}></Text>
       <TextInput
-        style={sharedStyles.input}
+        style={styles.input}
         placeholder="Search users..."
         value={value}
         onChangeText={onChange}

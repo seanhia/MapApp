@@ -5,16 +5,15 @@ import ProfileDetails from './components/ProfileDetails'
 import ProfilePost from './components/ProfilePost';
 import { useRouter } from 'expo-router';
 import ProfileStatistics from './components/ProfileStatistics';
-import sharedStyles from '@/constants/sharedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import FooterBar from '@/components/FooterBar';
-import { User } from '@/data/types'
-import { fetchCurrentUser } from '@/data/UserDataService';
 
 const userProfile = () => {
+  const { colorScheme, styles } = useTheme();
   const router = useRouter();
   
   return (
-      <View style={sharedStyles.fullContainer}>
+      <View style={styles.fullContainer}>
         <ScrollView>
 
           <ProfileHeader />

@@ -10,11 +10,14 @@ import {
   Pressable,
 } from 'react-native';
 import { getAuth, fetchSignInMethodsForEmail, sendPasswordResetEmail } from 'firebase/auth';
-import sharedStyles from '../../../constants/sharedStyles'; // Import the shared styles 
+import { useTheme } from '@/hooks/useTheme';
 import { ImageHeader } from '@/components/ImageHeader';
 
 
+
 const ForgotPassword = () => {
+  const { colorScheme, styles } = useTheme();
+  
   const [email, setEmail] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
@@ -50,20 +53,20 @@ const ForgotPassword = () => {
   };
 
   return (
-    <View style={sharedStyles.halfContainer}>
+    <View style={styles.halfContainer}>
       <ImageHeader
         image={require('@/assets/images/cloud.png')}
         text='EXPLORE'
       />      
 
       {/* Instructions */}
-      <Text style={styles.instructions}>
+      <Text style={style.instructions}>
         Enter the email associated with your account and we'll send you a link to reset your password.
       </Text>
 
       {/* Email Input */}
       <TextInput
-        style={sharedStyles.input}
+        style={styles.input}
         placeholder="Email"
         placeholderTextColor="#BDBDBD"
         keyboardType="email-address"
@@ -73,8 +76,8 @@ const ForgotPassword = () => {
       />
 
       {/* Continue Button */}
-      <TouchableOpacity style={sharedStyles.lightButton} onPress={handleContinue}>
-        <Text style={sharedStyles.boldText}>Continue</Text>
+      <TouchableOpacity style={styles.lightButton} onPress={handleContinue}>
+        <Text style={styles.boldText}>Continue</Text>
       </TouchableOpacity>
 
       {/* Modal for Feedback */}
@@ -84,15 +87,15 @@ const ForgotPassword = () => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)} // Handle modal close on back button
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Notification</Text>
-            <Text style={styles.modalMessage}>{modalMessage}</Text>
+        <View style={style.modalOverlay}>
+          <View style={style.modalContent}>
+            <Text style={style.modalTitle}>Notification</Text>
+            <Text style={style.modalMessage}>{modalMessage}</Text>
             <Pressable
-              style={sharedStyles.lightButton}
+              style={styles.lightButton}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={sharedStyles.boldText}>OK</Text>
+              <Text style={styles.boldText}>OK</Text>
             </Pressable>
           </View>
         </View>
@@ -101,7 +104,7 @@ const ForgotPassword = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   instructions: {
     fontSize: 14,
     color: '#6B6B6B',

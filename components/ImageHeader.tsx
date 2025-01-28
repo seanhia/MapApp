@@ -1,5 +1,6 @@
 import React, {Text, Image, View, StyleSheet} from 'react-native'
 import sharedStyles from '@/constants/sharedStyles'
+import { useTheme } from '@/hooks/useTheme'
 
 export type ImageHeaderProps =  {
     image: string; 
@@ -12,28 +13,19 @@ export function ImageHeader( {
     text,
     // style
 }:  ImageHeaderProps)  {
+    const { colorScheme, styles } = useTheme();
+    
 
     return (
         // <View style={style === 'half' ? styles.half : styles.full}>
         <View>
-            <Text style={sharedStyles.title}>
+            <Text style={styles.title}>
                 {text}
             </Text>
             <Image
-                style={sharedStyles.image}
+                style={styles.image}
                 source={image} // Directly use the passed `require()`
             />
         </View>
     )
 }
-
-// const styles = StyleSheet.create({
-//     half: {
-//         marginHorizontal: 40,
-//         flex: .5,
-//         justifyContent: 'space-evenly',
-//     },
-//     full: {
-
-//     }
-// })

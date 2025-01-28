@@ -12,10 +12,11 @@ import { Image, StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react
 import { useRouter } from 'expo-router';
 
 import slides from './TutorialSlides' // page info for each onboarding swipe 
-import sharedStyles from '@/constants/sharedStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 
 const Tutorial = ({ onComplete }: { onComplete: () => void }) => {
+  const { colorScheme, styles } = useTheme();
   const router = useRouter();
   
   
@@ -28,7 +29,7 @@ const Tutorial = ({ onComplete }: { onComplete: () => void }) => {
   }));
 
   return (
-    <View style={sharedStyles.fullContainer}>
+    <View style={styles.fullContainer}>
             <Onboarding 
         
       pages={pages}

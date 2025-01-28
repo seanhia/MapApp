@@ -5,11 +5,12 @@ import { launchImageLibrary } from 'react-native-image-picker';  //install this
 import { fetchFriendCount } from '@/data/FriendshipQuery';
 import { fetchCurrentUser } from '@/data/UserDataService';
 import { User } from '@/data/types'
-import sharedStyles from '@/constants/sharedStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 
  
 const ProfileDetails : React.FC = ({  }) => {
+    const { colorScheme, styles } = useTheme();
     const [friendCount, setFriendCount] = useState<string | null>(null);
     const [profileImage, setProfileImage] = useState<string | null>(null);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -86,12 +87,12 @@ const ProfileDetails : React.FC = ({  }) => {
 
     return (
         <View style={{ paddingHorizontal: 15 }}>
-            <View style={sharedStyles.buttonContainer}>
+            <View style={styles.buttonContainer}>
                 {}
     
                 <TouchableOpacity onPress={handleImagePicker}>
                     <Image
-                        style={sharedStyles.profilePicture} 
+                        style={styles.profilePicture} 
                         source={
                             profileImage
                                 ? { uri: profileImage } 
@@ -123,11 +124,11 @@ const ProfileDetails : React.FC = ({  }) => {
 
             
             <View>
-                <Text style={sharedStyles.text}>@{currentUser?.username}</Text>
+                <Text style={styles.text}>@{currentUser?.username}</Text>
             </View>
 
             
-            <View style={sharedStyles.fullContainer}>
+            <View style={styles.fullContainer}>
                 <Text style={{ fontWeight: '100' }}>Account Created</Text>
                 <Text style={{ fontWeight: '100' }}>11/30/24</Text>
             </View>

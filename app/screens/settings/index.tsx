@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Switch, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import sharedStyles from '@/constants/sharedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors'
 import { Link } from 'expo-router';
@@ -11,6 +11,7 @@ import { fetchCurrentUser, writeUserData } from '@/data/UserDataService';
 import { User } from '@/data/types'
 
 const UserSettings = () => {
+    const { colorScheme, styles } = useTheme();
     const router = useRouter();
 
     const [isPrivateAccount, setIsPrivateAccount] = useState(false);
@@ -78,20 +79,20 @@ const UserSettings = () => {
 
 
     return (
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <View style={sharedStyles.fullContainer}>
-                <Text style={styles.header}>Settings</Text>
+        <ScrollView contentContainerStyle={style.scrollContainer}>
+            <View>
+                <Text style={style.header}>Settings</Text>
 
-                <View style={styles.card}>
-                    <View style={styles.rowBetween}>
-                        <Text style={styles.label}>Private Account</Text>
+                <View style={style.card}>
+                    <View style={style.rowBetween}>
+                        <Text style={style.label}>Private Account</Text>
                         <Switch
                             trackColor={{ false: '#aaa', true: Colors.light.tint }}
                             thumbColor={isPrivateAccount ? '#f5dd4b' : '#f4f3f4'}
                             onValueChange={togglePrivate}
                             value={isPrivateAccount}
                         />
-                        <Text style={styles.label}>Dark Mode</Text>
+                        <Text style={style.label}>Dark Mode</Text>
                         <Switch
                             trackColor={{ false: '#aaa', true: Colors.light.tint }}
                             thumbColor={isDarkMode ? '#f5dd4b' : '#f4f3f4'}
@@ -102,18 +103,18 @@ const UserSettings = () => {
 
                 </View>
                 
-                <View style={styles.card}> 
+                <View style={style.card}> 
 
                     <TextInput
-                        style={sharedStyles.input}
+                        style={styles.input}
                         onChangeText={setUsername}
                         value={username}
                         placeholder="Username"
-                        placeholderTextColor="#aaa"
+                        placeholderTextColor= "#aaa"
                     />
 
                     <TextInput
-                        style={sharedStyles.input}
+                        style={styles.input}
                         onChangeText={setBio}
                         value={bio}
                         placeholder="Bio"
@@ -121,7 +122,7 @@ const UserSettings = () => {
                     />
              
                     <TextInput
-                        style={sharedStyles.input}
+                        style={styles.input}
                         onChangeText={setEmail}
                         value={eMail}
                         placeholder={"Email"}
@@ -130,27 +131,27 @@ const UserSettings = () => {
                     />
 
                     <TextInput
-                        style={sharedStyles.input}
+                        style={styles.input}
                         onChangeText={setPhoneNumber}
                         value={phoneNumber}
                         placeholder="Phone Number"
                         placeholderTextColor="#aaa"
                         keyboardType="phone-pad"
                     />
-                    <TouchableOpacity style={sharedStyles.lightButton} onPress={handleSubmit}>
-                        <Text style={styles.tutorialText}>
+                    <TouchableOpacity style={styles.lightButton} onPress={handleSubmit}>
+                        <Text style={style.tutorialText}>
                             Submit Chanages
                         </Text>
                     </TouchableOpacity>
       
                 </View>
 
-                <TouchableOpacity style={sharedStyles.lightButton} onPress={() => router.push('/screens/change_password')}>
-                    <Text style={styles.tutorialText}>Change Password</Text>
+                <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/change_password')}>
+                    <Text style={style.tutorialText}>Change Password</Text>
                 </TouchableOpacity>
                 
-                <TouchableOpacity style={sharedStyles.lightButton} onPress={() => router.push('/screens/tutorial')}>
-                    <Text style={styles.tutorialText}>View Tutorial</Text>
+                <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/tutorial')}>
+                    <Text style={style.tutorialText}>View Tutorial</Text>
                 </TouchableOpacity>
 
 
@@ -162,7 +163,7 @@ const UserSettings = () => {
 
 export default UserSettings;
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
     scrollContainer: {
         padding: 12,
     },

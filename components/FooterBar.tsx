@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import sharedStyles from '@/constants/sharedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useRouter } from 'expo-router';
 
 interface FooterBarProps {
@@ -8,28 +8,29 @@ interface FooterBarProps {
 }
 
 const FooterBar: React.FC<FooterBarProps> = ( ) => {
+  const { colorScheme, styles } = useTheme();
   const router = useRouter();
   
   return (
     
-    <View style={sharedStyles.footer}>
+    <View style={styles.footer}>
       <TouchableOpacity
-        style={sharedStyles.footerButton}
+        style={styles.footerButton}
         onPress={() => router.push('/screens/leaderboard')}
       >
-        <Text style={sharedStyles.text}>Leaderboard</Text>
+        <Text style={styles.text}>Leaderboard</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={sharedStyles.footerButton}
+        style={styles.footerButton}
         onPress={() => router.push('/screens/friends')}
       >
-        <Text style={sharedStyles.text}>Friends</Text>
+        <Text style={styles.text}>Friends</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={sharedStyles.footerButton}
+        style={styles.footerButton}
         onPress={() => router.push('/screens/user_profile')}
       >
-        <Text style={sharedStyles.text}>Profile</Text>
+        <Text style={styles.text}>Profile</Text>
       </TouchableOpacity>
     </View>
   );

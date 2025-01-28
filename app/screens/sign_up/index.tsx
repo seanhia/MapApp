@@ -6,16 +6,15 @@ import { TextInput } from "react-native-gesture-handler";
 // import auth from '@react-native-firebase/auth';
 import { FirebaseError } from 'firebase/app'
 import {signUpWithEmail} from "@/auth";
-import sharedStyles from '../../../constants/sharedStyles'; 
+import { useTheme } from '@/hooks/useTheme'; 
 
 import { Redirect, router, Link } from 'expo-router';
 import {Colors} from '@/constants/Colors'
 
 import { ImageHeader} from '@/components/ImageHeader'
 
-
-
 export default function SignUp() {
+  const { colorScheme, styles } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstname, setFName] = useState('');
@@ -39,7 +38,7 @@ export default function SignUp() {
 
   return (
     <View
-      style={sharedStyles.centerContainer}
+      style={styles.centerContainer}
     >
       <ImageHeader
       image={require("@/assets/images/cloud.png")}
@@ -47,7 +46,7 @@ export default function SignUp() {
       />
       <KeyboardAvoidingView behavior="padding">
           <TextInput
-            style={sharedStyles.input}
+            style={styles.input}
             value={firstname}
             onChangeText= {setFName}
             autoCapitalize="none"
@@ -55,7 +54,7 @@ export default function SignUp() {
             keyboardType="default"
             />
             <TextInput
-            style={sharedStyles.input}
+            style={styles.input}
             value={lastname}
             onChangeText= {setLName}
             autoCapitalize="none"
@@ -63,7 +62,7 @@ export default function SignUp() {
             keyboardType="default"
             />
             <TextInput
-              style={sharedStyles.input}
+              style={styles.input}
               value={username}
               onChangeText={setUsername}
               keyboardType="default"
@@ -72,7 +71,7 @@ export default function SignUp() {
 
             />
             <TextInput
-            style={sharedStyles.input}
+            style={styles.input}
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
@@ -80,7 +79,7 @@ export default function SignUp() {
             placeholder = "Email"
             />
             <TextInput
-              style={sharedStyles.input}
+              style={styles.input}
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -88,7 +87,7 @@ export default function SignUp() {
 
             />
             <TextInput
-              style={sharedStyles.input}
+              style={styles.input}
               value={phone}
               onChangeText={setPhone}
               placeholder = "Phone Number"
@@ -100,8 +99,8 @@ export default function SignUp() {
                 <ActivityIndicator size={'small'} style ={{ margin: 100}} />
               ) : (
                 <>
-                  <TouchableOpacity style={sharedStyles.lightButton} onPress={signUp} >
-                    <Text style={sharedStyles.text}>Sign Up </Text>
+                  <TouchableOpacity style={styles.lightButton} onPress={signUp} >
+                    <Text style={styles.text}>Sign Up </Text>
                   </TouchableOpacity>
                   <Text style = {{marginBottom: 90}}> </Text>
                     <Link 

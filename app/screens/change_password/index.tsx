@@ -9,12 +9,14 @@ import {
   Pressable,
 } from 'react-native';
 import { getAuth, updatePassword } from 'firebase/auth';
-import sharedStyles from '../../../constants/sharedStyles'; // Import the shared styles 
+import { useTheme } from '@/hooks/useTheme'; 
 import { ImageHeader } from '@/components/ImageHeader';
 import {validatePassword} from "@/auth";
 
 
 const UpdatePasswordScreen = () => {
+  const { colorScheme, styles } = useTheme();
+
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -42,20 +44,20 @@ const UpdatePasswordScreen = () => {
   };
 
   return (
-    <View style={sharedStyles.halfContainer}>
+    <View style={styles.halfContainer}>
       <ImageHeader
         image={require('@/assets/images/cloud.png')}
         text='EXPLORE'
       />      
 
       {/* Instructions */}
-      <Text style={styles.instructions}>
+      <Text style={style.instructions}>
         Enter your current password, then enter your new password
       </Text>
 
       {/* Password Input */}
       <TextInput
-        style={sharedStyles.input}
+        style={styles.input}
         placeholder="Current Password"
         placeholderTextColor="#BDBDBD"
         secureTextEntry
@@ -65,7 +67,7 @@ const UpdatePasswordScreen = () => {
       />
 
       <TextInput
-        style={sharedStyles.input}
+        style={styles.input}
         placeholder="New Password"
         placeholderTextColor="#BDBDBD"
         keyboardType="email-address"
@@ -76,8 +78,8 @@ const UpdatePasswordScreen = () => {
       />
 
       {/* Continue Button */}
-      <TouchableOpacity style={sharedStyles.lightButton} onPress={handlePasswordChange}>
-        <Text style={sharedStyles.boldText}>Continue</Text>
+      <TouchableOpacity style={styles.lightButton} onPress={handlePasswordChange}>
+        <Text style={styles.boldText}>Continue</Text>
       </TouchableOpacity>
 
       {/* Modal for Feedback */}
@@ -87,15 +89,15 @@ const UpdatePasswordScreen = () => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)} // Handle modal close on back button
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Notification</Text>
-            <Text style={styles.modalMessage}>{modalMessage}</Text>
+        <View style={style.modalOverlay}>
+          <View style={style.modalContent}>
+            <Text style={style.modalTitle}>Notification</Text>
+            <Text style={style.modalMessage}>{modalMessage}</Text>
             <Pressable
-              style={sharedStyles.lightButton}
+              style={styles.lightButton}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={sharedStyles.boldText}>OK</Text>
+              <Text style={styles.boldText}>OK</Text>
             </Pressable>
           </View>
         </View>
@@ -104,7 +106,7 @@ const UpdatePasswordScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   instructions: {
     fontSize: 14,
     color: '#6B6B6B',

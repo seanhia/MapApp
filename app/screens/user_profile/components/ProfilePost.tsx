@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, Pressable,  Alert, Platform, PermissionsAndroid } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import sharedStyles from '@/constants/sharedStyles';
-import { launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import { useTheme } from '@/hooks/useTheme';
+
 
 const uploadPhoto = () => {
-
+    const { colorScheme, styles } = useTheme();
     const [modalVisible, setModalVisible] = useState(false);
     const [imageUri, setImageUri] = useState<string | null>(null);
 
@@ -69,26 +69,26 @@ const uploadPhoto = () => {
                 onRequestClose={() => {
                     setModalVisible(!modalVisible);
                 }}>
-                <View style={sharedStyles.centered}>
-                    <View style={sharedStyles.modalView}>
-                        <View style={sharedStyles.centered}>
+                <View style={styles.centered}>
+                    <View style={styles.modalView}>
+                        <View style={styles.centered}>
 
 
                             <TouchableOpacity onPress={imagePicker}>
                                 <Pressable>
-                                    <Text style={sharedStyles.modalText}>Select from device</Text>
+                                    <Text style={styles.modalText}>Select from device</Text>
                                 </Pressable>
                             </TouchableOpacity>
 
                             <TouchableOpacity>
                                 <Pressable>
-                                    <Text style={sharedStyles.modalText}>Take a photo</Text>
+                                    <Text style={styles.modalText}>Take a photo</Text>
                                 </Pressable>
                             </TouchableOpacity>
                             <Pressable
-                                style={sharedStyles.button}
+                                style={styles.button}
                                 onPress={() => setModalVisible(!modalVisible)}>
-                                <Text style={sharedStyles.text}>Cancel</Text>
+                                <Text style={styles.text}>Cancel</Text>
                             </Pressable>
                         </View>
 
@@ -100,9 +100,10 @@ const uploadPhoto = () => {
             </Modal>
             <TouchableOpacity>
                 <Pressable
-                    style={sharedStyles.sideButton}
+                    style={styles.sideButton}
                     onPress={() => setModalVisible(true)}>
-                    <Text style={sharedStyles.boldText}>Upload Photo</Text>
+                    <Text style={styles.boldText}>Upload Photo</Text>
+
                 </Pressable>
             </TouchableOpacity>
 

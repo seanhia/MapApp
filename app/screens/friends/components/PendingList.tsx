@@ -1,6 +1,6 @@
 import React from "react";
 import { View, FlatList, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import sharedStyles from "@/constants/sharedStyles";
+import { useTheme } from '@/hooks/useTheme'
 import { Friend } from "@/data/types"
 // import AcceptFriendship from "@/assets/data/AcceptFriendship";
 
@@ -16,26 +16,28 @@ interface PendingListProps {
 /* 
     Component for the Pending List of friend requests used in the Friends screen 
 */const PendingList: React.FC<PendingListProps> = ({ pending, onAccept, onDeny}) => {
+    const { colorScheme, styles } = useTheme();
+    
     return (
         <FlatList
             data={pending}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-                <View style={sharedStyles.buttonContainer}>
+                <View style={styles.buttonContainer}>
                     <Image source={require('@/assets/images/cloud.png')}
-                    style={sharedStyles.profilePicture} />
-                    <Text style={sharedStyles.boldText}>@{item.friend_username}</Text>
+                    style={styles.profilePicture} />
+                    <Text style={styles.boldText}>@{item.friend_username}</Text>
                         <TouchableOpacity
-                            style={sharedStyles.sideButton}
+                            style={styles.sideButton}
                             onPress={() => onAccept(item)}
                             >
-                                <Text style={sharedStyles.tinyText}>Accept</Text>
+                                <Text style={styles.tinyText}>Accept</Text>
                             </TouchableOpacity>
                         <TouchableOpacity
-                            style={sharedStyles.sideButton}
+                            style={styles.sideButton}
                             onPress={() => onDeny(item)}
                             >
-                                <Text style={sharedStyles.tinyText}>Deny</Text>
+                                <Text style={styles.tinyText}>Deny</Text>
                             </TouchableOpacity>
                 </View>
             )}
