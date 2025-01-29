@@ -5,6 +5,8 @@ import { useTheme } from '@/hooks/useTheme';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors'
 import { Link } from 'expo-router';
+import {changeEmail} from "@/auth";
+
 
 
 import { fetchCurrentUser, writeUserData } from '@/data/UserDataService';
@@ -51,6 +53,12 @@ const UserSettings = () => {
     const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
     const handleSubmit = async () => {
+        try { 
+        await changeEmail(eMail);
+        } catch(e) {
+            alert("Invalid Email")
+            return
+        }
         if (!currentUser) {
             alert('No user data found.');
             return;

@@ -9,16 +9,16 @@ import {
   Pressable,
 } from 'react-native';
 import { getAuth, updatePassword } from 'firebase/auth';
-import { useTheme } from '@/hooks/useTheme'; 
+import sharedStyles from '@/constants/sharedStyles'; // Import the shared styles 
 import { ImageHeader } from '@/components/ImageHeader';
 import {validatePassword} from "@/auth";
 
 
-const UpdatePasswordScreen = () => {
-  const { colorScheme, styles } = useTheme();
 
+const UpdatePasswordScreen = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
 
@@ -27,10 +27,15 @@ const UpdatePasswordScreen = () => {
   const auth = getAuth();
   const handlePasswordChange = async () => {
     setLoading(true);
+    if (newPassword !== confirmPassword) {
+      setModalMessage('New password does not match confirmed password');
+      setModalVisible(true); //Show the modal with the appropriate message 
+      setLoading(false);
+      return
+    }
     try {
       const user = await validatePassword(currentPassword);
       await updatePassword(user, newPassword)
-
         setModalMessage("Password Changed")
         setLoading(false);
     } catch (error) {
@@ -44,20 +49,20 @@ const UpdatePasswordScreen = () => {
   };
 
   return (
-    <View style={styles.halfContainer}>
+    <View style={sharedStyles('dark').halfContainer}>
       <ImageHeader
         image={require('@/assets/images/cloud.png')}
         text='EXPLORE'
       />      
 
       {/* Instructions */}
-      <Text style={style.instructions}>
+      <Text style={styles.instructions}>
         Enter your current password, then enter your new password
       </Text>
 
       {/* Password Input */}
       <TextInput
-        style={styles.input}
+        style={sharedStyles('dark').input}
         placeholder="Current Password"
         placeholderTextColor="#BDBDBD"
         secureTextEntry
@@ -67,19 +72,28 @@ const UpdatePasswordScreen = () => {
       />
 
       <TextInput
-        style={styles.input}
+        style={sharedStyles('dark').input}
         placeholder="New Password"
         placeholderTextColor="#BDBDBD"
-        keyboardType="email-address"
         autoCapitalize="none"
         secureTextEntry
         onChangeText={setNewPassword}
         value={newPassword}
       />
 
+      <TextInput
+        style={sharedStyles('dark').input}
+        placeholder="Confirm Password"
+        placeholderTextColor="#BDBDBD"
+        autoCapitalize="none"
+        secureTextEntry
+        onChangeText={setConfirmPassword}
+        value={confirmPassword}
+      />
+
       {/* Continue Button */}
-      <TouchableOpacity style={styles.lightButton} onPress={handlePasswordChange}>
-        <Text style={styles.boldText}>Continue</Text>
+      <TouchableOpacity style={sharedStyles('dark').lightButton} onPress={handlePasswordChange}>
+        <Text style={sharedStyles('dark').boldText}>Continue</Text>
       </TouchableOpacity>
 
       {/* Modal for Feedback */}
@@ -89,15 +103,15 @@ const UpdatePasswordScreen = () => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)} // Handle modal close on back button
       >
-        <View style={style.modalOverlay}>
-          <View style={style.modalContent}>
-            <Text style={style.modalTitle}>Notification</Text>
-            <Text style={style.modalMessage}>{modalMessage}</Text>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Notification</Text>
+            <Text style={styles.modalMessage}>{modalMessage}</Text>
             <Pressable
-              style={styles.lightButton}
+              style={sharedStyles('dark').lightButton}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.boldText}>OK</Text>
+              <Text style={sharedStyles('dark').boldText}>OK</Text>
             </Pressable>
           </View>
         </View>
@@ -106,7 +120,7 @@ const UpdatePasswordScreen = () => {
   );
 };
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   instructions: {
     fontSize: 14,
     color: '#6B6B6B',

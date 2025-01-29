@@ -9,7 +9,7 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import { getAuth, fetchSignInMethodsForEmail, sendPasswordResetEmail } from 'firebase/auth';
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import { useTheme } from '@/hooks/useTheme';
 import { ImageHeader } from '@/components/ImageHeader';
 import { Colors } from '@/constants/Colors';
