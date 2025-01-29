@@ -137,7 +137,7 @@ const uploadPhoto = () => {
                 <Pressable
                     style={styles.sideButton}
                     onPress={() => setModalVisible(true)}>
-                    <Text style={styles.boldText}>Upload Photo</Text>
+                    <Text style={styles.buttonText}>Upload Photo</Text>
 
                 </Pressable>
             </TouchableOpacity>

@@ -10,12 +10,16 @@ import {
 } from 'react-native';
 import { getAuth, updatePassword } from 'firebase/auth';
 import sharedStyles from '@/constants/sharedStyles'; // Import the shared styles 
+import { useTheme } from '@/hooks/useTheme'; 
+import { Colors } from '@/constants/Colors'
 import { ImageHeader } from '@/components/ImageHeader';
 import {validatePassword} from "@/auth";
 
 
 
 const UpdatePasswordScreen = () => {
+  const { colorScheme, styles } = useTheme();
+
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -49,78 +53,80 @@ const UpdatePasswordScreen = () => {
   };
 
   return (
-    <View style={sharedStyles('dark').halfContainer}>
-      <ImageHeader
-        image={require('@/assets/images/cloud.png')}
-        text='EXPLORE'
-      />      
+    <View style = {{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
+      <View style={styles.halfContainer}>
+        <ImageHeader
+          image={require('@/assets/images/cloud.png')}
+          text='EXPLORE'
+        />      
 
-      {/* Instructions */}
-      <Text style={styles.instructions}>
-        Enter your current password, then enter your new password
-      </Text>
+        {/* Instructions */}
+        <Text style={style.instructions}>
+          Enter your current password, then enter your new password
+        </Text>
 
-      {/* Password Input */}
-      <TextInput
-        style={sharedStyles('dark').input}
-        placeholder="Current Password"
-        placeholderTextColor="#BDBDBD"
-        secureTextEntry
-        autoCapitalize="none"
-        onChangeText={setCurrentPassword}
-        value={currentPassword}
-      />
+        {/* Password Input */}
+        <TextInput
+          style={styles.input}
+          placeholder="Current Password"
+          placeholderTextColor= 'black'
+          secureTextEntry
+          autoCapitalize="none"
+          onChangeText={setCurrentPassword}
+          value={currentPassword}
+        />
 
-      <TextInput
-        style={sharedStyles('dark').input}
-        placeholder="New Password"
-        placeholderTextColor="#BDBDBD"
-        autoCapitalize="none"
-        secureTextEntry
-        onChangeText={setNewPassword}
-        value={newPassword}
-      />
+        <TextInput
+          style={sharedStyles('dark').input}
+          placeholder="New Password"
+          placeholderTextColor= 'grey'
+            autoCapitalize="none"
+          secureTextEntry
+          onChangeText={setNewPassword}
+          value={newPassword}
+        />
 
       <TextInput
         style={sharedStyles('dark').input}
         placeholder="Confirm Password"
-        placeholderTextColor="#BDBDBD"
+        placeholderTextColor= 'grey'
         autoCapitalize="none"
         secureTextEntry
         onChangeText={setConfirmPassword}
         value={confirmPassword}
       />
 
-      {/* Continue Button */}
-      <TouchableOpacity style={sharedStyles('dark').lightButton} onPress={handlePasswordChange}>
-        <Text style={sharedStyles('dark').boldText}>Continue</Text>
-      </TouchableOpacity>
+        {/* Continue Button */}
+        <TouchableOpacity style={styles.lightButton} onPress={handlePasswordChange}>
+          <Text style={styles.buttonText}>Continue</Text>
+        </TouchableOpacity>
 
-      {/* Modal for Feedback */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)} // Handle modal close on back button
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Notification</Text>
-            <Text style={styles.modalMessage}>{modalMessage}</Text>
-            <Pressable
-              style={sharedStyles('dark').lightButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={sharedStyles('dark').boldText}>OK</Text>
-            </Pressable>
+        {/* Modal for Feedback */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)} // Handle modal close on back button
+        >
+          <View style={style.modalOverlay}>
+            <View style={style.modalContent}>
+              <Text style={style.modalTitle}>Notification</Text>
+              <Text style={style.modalMessage}>{modalMessage}</Text>
+              <Pressable
+                style={styles.lightButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.boldText}>OK</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   instructions: {
     fontSize: 14,
     color: '#6B6B6B',

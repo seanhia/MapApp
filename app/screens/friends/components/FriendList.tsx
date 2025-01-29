@@ -26,13 +26,13 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfri
             <TouchableOpacity 
               style={styles.sideButton}
               onPress={() => onViewProfile(item)}>
-              <Text style={styles.tinyText}>View Profile</Text>
+              <Text style={styles.buttonText}>View Profile</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.sideButton}
               onPress={() => onUnfriend(item)}>
-              <Text style={styles.tinyText}>Unfriend</Text>
+              <Text style={styles.buttonText}>Unfriend</Text>
             </TouchableOpacity>
 
         </ScrollView>

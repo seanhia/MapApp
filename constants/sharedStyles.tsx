@@ -23,9 +23,9 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       flexDirection: 'row',
       alignSelf: 'center',
       padding: 20,
-      backgroundColor: theme === 'dark' ? Colors.dark.tint : Colors.light.tint,
+      // backgroundColor: theme === 'dark' ? Colors.dark.tint : Colors.dark.tint,
       fontWeight: 'bold',
-      color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
+      color: theme === 'dark' ? Colors.dark.tint : Colors.light.tint,
       fontSize: 20,
       borderRadius: 25,
     },
@@ -37,12 +37,12 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
     },
     text: {
       fontSize: 16,
-      color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
+      // color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
       padding: 10,
     },
-    tinyText: {
-      fontSize: 12,
-      color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
+    buttonText: {
+      fontSize: 15,
+      color: theme === 'dark' ? Colors.light.text : Colors.light.text,
       padding: 10,
     },
     boldText: {
@@ -73,8 +73,11 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       fontSize: 16,
       fontWeight: '500',
       color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
+    },
+    placeholderText: {
+      color: 'black'
+    },
 
-  },
 
     /** Containers  */
     centerContainer: { //Centered Page with margin 

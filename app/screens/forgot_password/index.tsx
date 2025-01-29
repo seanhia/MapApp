@@ -70,7 +70,7 @@ const ForgotPassword = () => {
         <TextInput
           style={styles.input}
           placeholder="Email"
-          placeholderTextColor="#BDBDBD"
+          // placeholderTextColor="#BDBDBD"
           keyboardType="email-address"
           autoCapitalize="none"
           onChangeText={setEmail}
@@ -79,7 +79,7 @@ const ForgotPassword = () => {
 
         {/* Continue Button */}
         <TouchableOpacity style={styles.lightButton} onPress={handleContinue}>
-          <Text style={styles.boldText}>Continue</Text>
+          <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
 
         {/* Modal for Feedback */}

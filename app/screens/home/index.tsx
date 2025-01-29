@@ -7,9 +7,12 @@ import { SearchBar } from '@/components/MapSearchBar';
 import Geolocation from 'react-native-geolocation-service';
 import useRealTimeTracking from "../../hooks/useRealTimeTracking"; // Adjust the path as needed
 import { getAuth } from "firebase/auth"; // For getting the userId
+import { useTheme } from '@/hooks/useTheme';
+import { Colors } from '@/constants/Colors';
 
 
 export default function Home() {
+  const { colorScheme, styles } = useTheme();
   const auth = getAuth();
   const userId = auth.currentUser?.uid; // Get the current user's ID
 
@@ -61,11 +64,11 @@ export default function Home() {
   };
 
   return (
-    <View style={styles.background}>
+    <View style={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
 
      <SearchBar onPlaceSelected={handlePlaceChanged} />
           
-      <View style={styles.content}>
+      <View style={style.content}>
         <MapComponent
           initialCenter={mapCenter}
           />
@@ -75,7 +78,7 @@ export default function Home() {
   );
 }
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   background: {
     flex: 1,
     justifyContent: 'center',

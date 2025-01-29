@@ -31,13 +31,13 @@ interface PendingListProps {
                             style={styles.sideButton}
                             onPress={() => onAccept(item)}
                             >
-                                <Text style={styles.tinyText}>Accept</Text>
+                                <Text style={styles.buttonText}>Accept</Text>
                             </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.sideButton}
                             onPress={() => onDeny(item)}
                             >
-                                <Text style={styles.tinyText}>Deny</Text>
+                                <Text style={styles.buttonText}>Deny</Text>
                             </TouchableOpacity>
                 </View>
             )}

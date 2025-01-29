@@ -87,7 +87,7 @@ const UserSettings = () => {
 
 
     return (
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
             <View>
                 <Text style={style.header}>Settings</Text>
 
@@ -147,7 +147,7 @@ const UserSettings = () => {
                         keyboardType="phone-pad"
                     />
                     <TouchableOpacity style={styles.lightButton} onPress={handleSubmit}>
-                        <Text style={style.tutorialText}>
+                        <Text style={styles.buttonText}>
                             Submit Chanages
                         </Text>
                     </TouchableOpacity>
@@ -155,11 +155,11 @@ const UserSettings = () => {
                 </View>
 
                 <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/change_password')}>
-                    <Text style={style.tutorialText}>Change Password</Text>
+                    <Text style={styles.buttonText}>Change Password</Text>
                 </TouchableOpacity>
                 
                 <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/tutorial')}>
-                    <Text style={style.tutorialText}>View Tutorial</Text>
+                    <Text style={styles.buttonText}>View Tutorial</Text>
                 </TouchableOpacity>
 
 
