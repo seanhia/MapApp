@@ -18,19 +18,19 @@ const FooterBar: React.FC<FooterBarProps> = ( ) => {
         style={styles.footerButton}
         onPress={() => router.push('/screens/leaderboard')}
       >
-        <Text style={styles.text}>Leaderboard</Text>
+        <Text style={styles.buttonText}>Leaderboard</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.footerButton}
         onPress={() => router.push('/screens/friends')}
       >
-        <Text style={styles.text}>Friends</Text>
+        <Text style={styles.buttonText}>Friends</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.footerButton}
         onPress={() => router.push('/screens/user_profile')}
       >
-        <Text style={styles.text}>Profile</Text>
+        <Text style={styles.buttonText}>Profile</Text>
       </TouchableOpacity>
     </View>
   );

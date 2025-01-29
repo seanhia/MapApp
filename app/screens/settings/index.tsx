@@ -25,7 +25,6 @@ const UserSettings = () => {
     // const [password, setPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
 
-
     useEffect(() => {
         const loadCurrentUser = async () => {
             try {
@@ -87,7 +86,7 @@ const UserSettings = () => {
 
 
     return (
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
             <View>
                 <Text style={style.header}>Settings</Text>
 
@@ -114,40 +113,40 @@ const UserSettings = () => {
                 <View style={style.card}> 
 
                     <TextInput
-                        style={styles.input}
+                        style={styles.placeHolderInput}
                         onChangeText={setUsername}
                         value={username}
                         placeholder="Username"
-                        placeholderTextColor= "#aaa"
+                        // placeholderTextColor= "#fffff6"
                     />
 
                     <TextInput
-                        style={styles.input}
+                        style={styles.placeHolderInput}
                         onChangeText={setBio}
                         value={bio}
                         placeholder="Bio"
-                        placeholderTextColor="#aaa"
+                        // placeholderTextColor="#aaa"
                     />
              
                     <TextInput
-                        style={styles.input}
+                        style={styles.placeHolderInput}
                         onChangeText={setEmail}
                         value={eMail}
                         placeholder={"Email"}
-                        placeholderTextColor="#aaa"
+                        // placeholderTextColor="#aaa"
                         keyboardType="email-address"
                     />
 
                     <TextInput
-                        style={styles.input}
+                        style={styles.placeHolderInput}
                         onChangeText={setPhoneNumber}
                         value={phoneNumber}
                         placeholder="Phone Number"
-                        placeholderTextColor="#aaa"
+                        // placeholderTextColor="#aaa"
                         keyboardType="phone-pad"
                     />
                     <TouchableOpacity style={styles.lightButton} onPress={handleSubmit}>
-                        <Text style={style.tutorialText}>
+                        <Text style={styles.buttonText}>
                             Submit Chanages
                         </Text>
                     </TouchableOpacity>
@@ -155,11 +154,11 @@ const UserSettings = () => {
                 </View>
 
                 <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/change_password')}>
-                    <Text style={style.tutorialText}>Change Password</Text>
+                    <Text style={styles.buttonText}>Change Password</Text>
                 </TouchableOpacity>
                 
                 <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/tutorial')}>
-                    <Text style={style.tutorialText}>View Tutorial</Text>
+                    <Text style={styles.buttonText}>View Tutorial</Text>
                 </TouchableOpacity>
 
 

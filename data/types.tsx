@@ -7,6 +7,7 @@ export interface User {
     phoneNumber?: string; 
     isPrivate?: boolean; 
     isDarkMode?: boolean; 
+    points?: number; 
   };
 
 export interface Friend {
@@ -15,6 +16,8 @@ export interface Friend {
     friend_username: string,
 };
 
+
+/** ALL INTERFACES BELOW ARE NOT INMPLEMENTED YET */
 
 export interface PlaceDetails {
     geometry: {
@@ -26,7 +29,6 @@ export interface PlaceDetails {
 };
 
 
-/** ALL INTERFACES BELOW ARE NOT INMPLEMENTED YETs */
 export interface Post {
     id: string,
     title: string,

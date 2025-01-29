@@ -103,22 +103,21 @@ const ProfileDetails : React.FC = ({  }) => {
 
                 
                 <View style={{ width: 75, alignItems: 'center' }}>
-                    <Text style={style.text}>Friends</Text>
-                    <Text style={style.text}>{friendCount}</Text>
+                    <Text style={styles.label}>Friends</Text>
+                    <Text style={styles.profileDetailText}>{friendCount}</Text>
                 </View>
 
-                {}
+                
                 <View style={{ width: 75, alignItems: 'center' }}>
-                    <Text style={style.text}>Points</Text>
-                    <Text style={style.text}>1679</Text>
+                    <Text style={styles.label}>Points</Text>
+                    <Text style={styles.profileDetailText}>1679</Text>
                 </View>
             </View>
 
         
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 15 }}>
                 <View>
-                    <Text style={style.bioText}>   Bio:</Text>
-                    <Text style={style.bioText}>~{currentUser?.bio}~</Text>
+                    <Text style={[styles.text, {fontSize: 20, fontWeight: '400'}]}>~{currentUser?.bio}~</Text>
                 </View>
             </View>
 
@@ -129,8 +128,8 @@ const ProfileDetails : React.FC = ({  }) => {
 
             
             <View style={styles.fullContainer}>
-                <Text style={{ fontWeight: '100' }}>Account Created</Text>
-                <Text style={{ fontWeight: '100' }}>11/30/24</Text>
+                <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>Account Created</Text>
+                <Text style={[styles.text, { fontWeight: '100' }]}>11/30/24</Text>
             </View>
         </View>
     );
