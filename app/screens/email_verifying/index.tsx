@@ -2,13 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
-  Modal,
-  Pressable,
 } from 'react-native';
-import { getAuth, updatePassword } from 'firebase/auth';
 import sharedStyles from '@/constants/sharedStyles'; // Import the shared styles 
 import { ImageHeader } from '@/components/ImageHeader';
 import {waitForEmailVerification} from "@/auth";
@@ -36,7 +31,7 @@ const emailVerifyScreen = () => {
 
       {/* Instructions */}
       <Text style={styles.instructions}>
-        Please go to your eMail inbox and verify your email
+        Please go to your email inbox and verify your email
       </Text>
     </View>
   );
