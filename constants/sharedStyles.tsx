@@ -37,7 +37,7 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
     },
     text: {
       fontSize: 16,
-      // color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
+      color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
       padding: 10,
     },
     buttonText: {
@@ -83,6 +83,11 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       fontSize: 16,
       fontWeight: '500',
       color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
+    },
+    profileDetailText: {
+      fontSize: 25,
+      fontWeight: 'bold',
+      color: theme === 'dark' ? Colors.dark.text : Colors.light.text, // Highlighted color
     },
 
 

@@ -3,6 +3,7 @@ import { View, Text,Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
+import { Colors } from '@/constants/Colors'
 
 
 const ProfileHeader = () => {
@@ -16,7 +17,10 @@ const ProfileHeader = () => {
 
                     <TouchableOpacity onPress={() => router.push('/screens/settings')}>
                         <Image 
-                            style={{height: 30, width: 30, tintColor: 'black'}} 
+                            style={[styles.profilePicture, { 
+                                height: 30, 
+                                width: 30, 
+                                tintColor: colorScheme === 'dark' ? Colors.dark.text : Colors.light.text}]} 
                             source={require('@/assets/images/setting-icon.png')}
                         />
                     </TouchableOpacity>

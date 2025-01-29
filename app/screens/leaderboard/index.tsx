@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import FooterBar from '@/components/FooterBar';
+import { useTheme } from '@/hooks/useTheme';
 
 const Leaderboard = () => {
+    const {colorScheme, styles } = useTheme();
     const data = [
         { id: '1', username: 'user1', score: 150 },
         { id: '2', username: 'user2', score: 120 },
@@ -11,16 +13,16 @@ const Leaderboard = () => {
     ];
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Leaderboard</Text>
-            <View style={styles.box}>
+        <View style={style.container}>
+            <Text style={style.text}>Leaderboard</Text>
+            <View style={style.box}>
                 <FlatList
                     data={data}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
-                        <View style={styles.row}>
-                            <Text style={styles.username}>{item.username}</Text>
-                            <Text style={styles.score}>{item.score}</Text>
+                        <View style={style.row}>
+                            <Text style={style.username}>{item.username}</Text>
+                            <Text style={style.score}>{item.score}</Text>
                         </View>
                     )}
                 />
@@ -31,7 +33,7 @@ const Leaderboard = () => {
     );
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
