@@ -17,7 +17,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
           fetchDetails={true} // Ensures detailed information is returned
           onPress={onPlaceSelected}
           query={{
-            key: 'AIzaSyAetkasDlFSrTmAfJfAIF3ZGKTWkR6v4e0', // Replace with your API key
+            key: 'AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c', // Replace with your API key
             language: 'en',
           }}
           styles={{
