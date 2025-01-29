@@ -4,6 +4,7 @@ import {auth} from "./firebase"
 import { doc, setDoc, serverTimestamp } from "firebase/firestore"; 
 import {db} from "./firebase"
 
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 export const signUpWithEmail = async (email,password, fname, lname, phone, username) => {
   try {
@@ -13,6 +14,7 @@ export const signUpWithEmail = async (email,password, fname, lname, phone, usern
       if (user != null) {
         sendEmailVerification(auth.currentUser);
       }
+
       setDoc(doc(db, "users", user.uid), {
         eMail: email,
         firstName: fname,
@@ -21,7 +23,7 @@ export const signUpWithEmail = async (email,password, fname, lname, phone, usern
         username: username,
         createdAt: serverTimestamp()
       }
-      
+  
     );
     
       console.log("User signed up successfully");
@@ -75,4 +77,21 @@ export const changeEmail = async (newEmail) => {
   catch (e) {
     throw e;
   }
+}
+
+export const waitForEmailVerification = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  while (true) {
+    try {
+      user.reload();
+      if (user.emailVerified) {
+        return
+      } 
+      await sleep(5000);
+    } catch (e) {
+      alert(e);
+    }
+  } 
 }

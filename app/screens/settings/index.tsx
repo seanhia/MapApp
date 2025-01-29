@@ -56,7 +56,7 @@ const UserSettings = () => {
         try { 
         await changeEmail(eMail);
         } catch(e) {
-            alert("Invalid Email")
+            alert(e)
             return
         }
         if (!currentUser) {
