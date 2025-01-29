@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
-const googleMapsAPIKey="AIzaSyAetkasDlFSrTmAfJfAIF3ZGKTWkR6v4e0"
+const googleMapsAPIKey="AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c"
 
 const containerStyle = {
   width: "100%",
