@@ -63,6 +63,16 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       color: '#000000',
       marginBottom: 20,
     },
+    placeHolderInput: {
+      width: '100%',
+      height: 50,
+      backgroundColor: theme === 'dark' ? Colors.dark.tint : Colors.light.tint,
+      borderRadius: 25,
+      paddingHorizontal: 20,
+      fontSize: 16,
+      color: theme === 'dark' ? Colors.dark.placeHolder : Colors.light.placeHolder,
+      marginBottom: 20,
+    },
     item: {
       padding: 10,
       backgroundColor: theme === 'dark' ? Colors.dark.tint : Colors.light.tint,
@@ -73,9 +83,6 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       fontSize: 16,
       fontWeight: '500',
       color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
-    },
-    placeholderText: {
-      color: 'black'
     },
 
 

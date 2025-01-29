@@ -46,7 +46,7 @@ export default function Index() {
         />
         <KeyboardAvoidingView behavior="padding" >
             <TextInput
-              style={styles.input}
+              style={styles.placeHolderInput}
               value={email}
               onChangeText={setEmail}
               autoCapitalize="none"
@@ -54,7 +54,7 @@ export default function Index() {
               placeholder = "Email"
               />
               <TextInput
-                style={styles.input}
+                style={styles.placeHolderInput}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry

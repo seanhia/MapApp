@@ -30,7 +30,8 @@ export const Colors = {
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
-    button: lightSecondary
+    button: lightSecondary,
+    placeHolder: placeHolder
   },
   dark: {
     text: white,
@@ -40,5 +41,6 @@ export const Colors = {
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
     button: darkPrimary,
+    placeHolder: placeHolder 
   },
 };

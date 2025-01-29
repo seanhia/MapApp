@@ -67,9 +67,8 @@ const UpdatePasswordScreen = () => {
 
         {/* Password Input */}
         <TextInput
-          style={styles.input}
+          style={styles.placeHolderInput}
           placeholder="Current Password"
-          placeholderTextColor= 'black'
           secureTextEntry
           autoCapitalize="none"
           onChangeText={setCurrentPassword}
@@ -77,19 +76,17 @@ const UpdatePasswordScreen = () => {
         />
 
         <TextInput
-          style={sharedStyles('dark').input}
+          style={styles.placeHolderInput}
           placeholder="New Password"
-          placeholderTextColor= 'grey'
-            autoCapitalize="none"
+          autoCapitalize="none"
           secureTextEntry
           onChangeText={setNewPassword}
           value={newPassword}
         />
 
       <TextInput
-        style={sharedStyles('dark').input}
+        style={styles.placeHolderInput}
         placeholder="Confirm Password"
-        placeholderTextColor= 'grey'
         autoCapitalize="none"
         secureTextEntry
         onChangeText={setConfirmPassword}

@@ -14,7 +14,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
     <View>
       <Text style={styles.topMargin}></Text>
       <TextInput
-        style={styles.input}
+        style={styles.placeHolderInput}
         placeholder="Search users..."
         value={value}
         onChangeText={onChange}
