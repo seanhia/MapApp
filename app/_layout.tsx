@@ -55,11 +55,14 @@ export default function RootLayout() {
         <Stack.Screen name="screens/sign_up/index" options={{ title: ''}}/>
         <Stack.Screen name="screens/tutorial/index" options={{ title: ''}}/>
         <Stack.Screen name="screens/forgot_password/index" options={{ title: ''}}/>
-        <Stack.Screen name="screens/home/index" options={{ title: ''}}/>
+        <Stack.Screen name="screens/home/index" options={{ title: '', headerShown: false }}/>
         <Stack.Screen name="screens/friends/index" options={{ title: ''}}/>
         <Stack.Screen name="screens/user_profile/index" options={{ title: ''}}/>
         <Stack.Screen name="screens/settings/index" options={{ title: ''}}/>
         <Stack.Screen name="screens/leaderboard/index" options={{ title: ''}}/>
+        <Stack.Screen name="screens/email_verifying/index" options={{ title: '', headerShown: false}}/>
+        <Stack.Screen name="screens/change_password/index" options={{ title: ''}}/>
+
       </Stack>
     // </ThemeProvider>
   );

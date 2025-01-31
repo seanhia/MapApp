@@ -1,5 +1,5 @@
 import app, {auth} from "../firebase";
-
+import {sendEmailVerification} from 'firebase/auth';
 import { useState} from "react";
 import { Text, View, StyleSheet, KeyboardAvoidingView, Button, ActivityIndicator, TouchableOpacity, Image } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -21,8 +21,14 @@ export default function Index() {
   const signIn = async () => {
     setLoading(true);
     try {
-      const user = await signInWithEmail(email, password)
-      router.replace('/screens/home');
+      const user = await signInWithEmail(email, password);
+      if (user.emailVerified) {
+        router.replace('/screens/home');
+      } else {
+        sendEmailVerification(user);
+        router.replace('/screens/email_verifying');
+      }
+  
     } catch (e: any) {
       const err = e as FirebaseError;
       alert('Sign in failed: ' + err.message);

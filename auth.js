@@ -71,7 +71,10 @@ export const validatePassword = async (password) => {
 export const changeEmail = async (newEmail) => {
   try {
     const auth = getAuth();
-    await updateEmail(auth.currentUser, newEmail);
+    const user = auth.currentUser;
+    
+    updateEmail(auth.currentUser, newEmail);
+    
     return
   }
   catch (e) {
@@ -89,7 +92,7 @@ export const waitForEmailVerification = async () => {
       if (user.emailVerified) {
         return
       } 
-      await sleep(5000);
+      await sleep(2500);
     } catch (e) {
       alert(e);
     }
