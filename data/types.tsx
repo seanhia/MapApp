@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface User {
     id: string;
     username: string;
@@ -6,14 +8,37 @@ export interface User {
     bio?: string; 
     phoneNumber?: string; 
     isPrivate?: boolean; 
-    isDarkMode?: boolean; 
+    isDarkMode?: boolean; // Currently based on the user device settings 
     points?: number; 
+    profilePhoto?: URL;
   };
 
 export interface Friend {
     id: string,
     friend_id: string,
     friend_username: string,
+};
+
+export interface Post {
+    id: string,
+    title: string,
+    content: string,
+    published: boolean, 
+    authorUid: string, 
+    images?: [URL], //at most 5
+    createdAt: Timestamp,
+    rating: Rating,
+    likes: string, 
+    comment?: string
+
+};
+
+enum Rating {
+    One = 1,
+    two = 2,
+    three = 3,
+    four = 4,
+    five = 5,
 };
 
 
@@ -27,16 +52,6 @@ export interface PlaceDetails {
         };
     };  
 };
-
-
-export interface Post {
-    id: string,
-    title: string,
-    content: string,
-    published: boolean, 
-
-};
-
 
 export interface Friendship {
     id: string,

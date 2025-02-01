@@ -90,7 +90,7 @@ const handleDeny = async (friendship: Friend) => {
     }
   };
 
-  const handleProfile = async (friendship: Friend) => {
+  const handleViewProfile = async (friendship: Friend) => { ////
     console.log('Attempting to view the following users profile', friendship.friend_id) 
   }
 
@@ -107,7 +107,7 @@ const handleDeny = async (friendship: Friend) => {
       <Text style={styles.header}>Friends:</Text>
       <FriendList 
         friends={friendsList} 
-        onViewProfile={handleProfile} // Placeholder 
+        onViewProfile={handleViewProfile} // Placeholder 
         onUnfriend={handleDeny} // Delete Friendship 
         />
       <Text style={styles.header}>Pending Requests:</Text>

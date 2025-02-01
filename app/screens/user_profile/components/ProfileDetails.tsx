@@ -3,29 +3,32 @@ import { View, Text, StyleSheet,  Image, TouchableOpacity, Alert, Platform, Perm
 import { launchImageLibrary } from 'react-native-image-picker';  //install this
 
 import { fetchFriendCount } from '@/data/FriendshipQuery';
-import { fetchCurrentUser } from '@/data/UserDataService';
 import { User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme';
 
 
- 
-const ProfileDetails : React.FC = ({  }) => {
+ interface ProfileDetailsProps {
+   user: User | null;
+//    onViewProfile: (id: Friend) => void;
+//    onUnfriend: (id: Friend) => void;
+ };
+const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
     const { colorScheme, styles } = useTheme();
     const [friendCount, setFriendCount] = useState<string | null>(null);
     const [profileImage, setProfileImage] = useState<string | null>(null);
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    // const [currentUser, setCurrentUser] = useState<User | null>(null);
 
     useEffect(() => {
        
 
-        const loadCurrentUser = async () => {
-            try {
-                const user = await fetchCurrentUser();
-                setCurrentUser(user)
-            } catch (error) {
-                console.error('Error fetching user')
-            }
-        };
+        // const loadCurrentUser = async () => {
+        //     try {
+        //         const user = await fetchCurrentUser();
+        //         setCurrentUser(user)
+        //     } catch (error) {
+        //         console.error('Error fetching user')
+        //     }
+        // };
        
         const loadFriendCount = async () => {
             try {
@@ -36,7 +39,7 @@ const ProfileDetails : React.FC = ({  }) => {
             }
         };
         loadFriendCount();
-        loadCurrentUser(); 
+        // loadCurrentUser(); 
     }, []);
     
     const handleImagePicker = async () => {
@@ -117,13 +120,13 @@ const ProfileDetails : React.FC = ({  }) => {
         
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 15 }}>
                 <View>
-                    <Text style={[styles.text, {fontSize: 20, fontWeight: '400'}]}>~{currentUser?.bio}~</Text>
+                    <Text style={[styles.text, {fontSize: 20, fontWeight: '400'}]}>~{user?.bio}~</Text>
                 </View>
             </View>
 
             
             <View>
-                <Text style={styles.text}>@{currentUser?.username}</Text>
+                <Text style={styles.text}>@{user?.username}</Text>
             </View>
 
             
