@@ -21,7 +21,7 @@ const userProfile = () => {
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true); // Flag to check if more posts are available
   const [lastPostId, setLastPostId] = useState<string>(''); // Track the last post ID for pagination
 
-  const loadPosts = async () => {
+   const loadPosts = async () => {
     try {
       // Fetch posts with the lastPostId (which is a string)
       const posts = await fetchPostbyAuthor(lastPostId, 'z926xE2jufbFT4XfiqEmavt1fxL2', loadedPosts); 

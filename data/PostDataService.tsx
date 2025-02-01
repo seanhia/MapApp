@@ -1,6 +1,6 @@
 import { Post } from '@/data/types'
 import db from '@/firestore';
-import { doc, getDocs, collection, query, limit} from 'firebase/firestore';
+import { doc, getDocs, collection, query, limit, orderBy, startAfter} from 'firebase/firestore';
 
 
 /**
@@ -9,11 +9,27 @@ import { doc, getDocs, collection, query, limit} from 'firebase/firestore';
  * @param loadedPosts - Array of posts already loaded to avoid duplicates.
  * @returns Updated list of posts including the newly fetched one.
  */
-export const fetchPostbyAuthor = async (lastPostId: string, authorId: string, loadedPosts: Post[] | []): Promise<Post[] | null> => {
+export const fetchPostbyAuthor = async (
+    lastPostId: string, 
+    authorId: string, 
+    loadedPosts: Post[] | []
+): Promise<Post[] | null> => {
     try {
         const postRef = collection(db, `users/${authorId}/posts`); 
+        let postsQuery; 
 
-        const postsQuery = query(postRef, limit(1)); 
+        if (lastPostId) {
+            // ascen (default) - oldest to newest 
+            const lastestPostDoc = await getDocs(query(postRef, orderBy('createdAt', 'desc'), limit(1))); 
+            const lastDoc = lastestPostDoc.docs.find(doc => doc.id === lastPostId);
+            
+            if (!lastDoc) return null; 
+
+            postsQuery = query(postRef, orderBy('createdAt'), startAfter(lastDoc), limit(1));
+        } else {
+            postsQuery = query(postRef, orderBy('createdAt'), limit(1));
+        }
+        // const postsQuery = query(postRef, limit(4)); 
 
         const querySnapshot = await getDocs(postsQuery); 
         const newPosts: Post[] = [];
