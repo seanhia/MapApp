@@ -39,7 +39,7 @@ export default function Home() {
     }
   }, [location, error]);
 
-  const fetchWeather = async (latitude, longitude) => {
+  const fetchWeather = async (latitude: number, longitude: number): Promise<void> => {
     try {
       const response = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}`
@@ -52,7 +52,7 @@ export default function Home() {
     }
   };
 
-  const handlePlaceChanged = (data, details) => {
+  const handlePlaceChanged = (data: any, details:any) => {
     if (details && details.geometry) {
       const location = details.geometry.location;
       setMapCenter({ lat: location.lat, lng: location.lng });

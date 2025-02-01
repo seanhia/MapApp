@@ -22,7 +22,7 @@ export default function MapComponent({ initialCenter, weather }) {
       {weather && weather.weather[0]?.icon && (
         <Marker coordinate={{ latitude: initialCenter.lat, longitude: initialCenter.lng }}>
           <Image
-  source={{ uri: weather ? `https://openweathermap.org/img/wn/${weather.weather[0]?.icon || "01d"}@2x.png` : null }}
+  source={{ uri: weather ? `http://openweathermap.org/img/w/10d.png${weather.weather[0]?.icon || "01d"}@2x.png` : null }}
   style={{ width: 50, height: 50 }}
   onError={() => console.error("Weather icon failed to load!")}
         />
