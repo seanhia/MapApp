@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { GooglePlacesAutocomplete, GooglePlaceData, GooglePlaceDetail } from 'react-native-google-places-autocomplete';
 import { PlaceDetails } from '@/data/types';
 
 interface SearchBarProps {
   onPlaceSelected: (
-    data: any, 
-    details: PlaceDetails) => void
+    data: GooglePlaceData, 
+    details: GooglePlaceDetail | null) => void
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
@@ -14,15 +14,28 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
       <View style={styles.searchBar}>
         <GooglePlacesAutocomplete
           placeholder="Search for places"
-          fetchDetails={true} // Ensures detailed information is returned
-          onPress={onPlaceSelected}
+          fetchDetails={true} 
+          minLength={2} // wait for at least 2 characters before searching
+          onPress={(data, details) => {
+            console.log("Selected Place:", data, details); // Debugging
+            onPlaceSelected(data, details);
+          }}
+          requestUrl={{
+            url: 'https://maps.googleapis.com/maps/api', // Fixes web environment issue
+            useOnPlatform: 'all', // Ensures this works on all platforms
+          }}
           query={{
-            key: 'AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c', // Replace with your API key
+            key: 'AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c', 
             language: 'en',
           }}
+
+          onFail={(error) => console.log("API Error:", error)} // Debug API errors
+          onNotFound={() => console.log("No Places Found")} // Log if no results
+
           styles={{
             textInput: styles.searchInput,
             container: styles.autoCompleteContainer,
+            listView: styles.listView,
           }}
         />
       </View>
@@ -46,7 +59,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
       backgroundColor: '#fff',
     },
     autoCompleteContainer: {
-      flex: 0, // Prevents the autocomplete from stretching
+      flex: 1, 
+    },
+    listView: {
+      position: 'absolute',
+      top: 50,
+      backgroundColor: 'white',
+      zIndex: 1000, // Ensures it appears above other elements
     },
   });
   

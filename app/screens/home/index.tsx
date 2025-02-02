@@ -23,7 +23,7 @@ export default function Home() {
     return null;
   }
 
-  const [location, error] = useRealTimeTracking(userId, 100);
+  const [location, error] = useRealTimeTracking(userId, 100); //save a new location once 100 meters away from prev coordinates
   const [mapCenter, setMapCenter] = useState({ lat: 33.7838, lng: -118.1141 });
   const [weather, setWeather] = useState(null);
 

@@ -1,6 +1,8 @@
 //import firestore from '@react-native-firebase/firestore';
 import {getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, serverTimestamp} from 'firebase/firestore';
 import app from './firebase'
+import { query, orderBy, limit } from "firebase/firestore";
+import { haversineDistance } from "./app/utils/geolocation";
 
 //const db = firebase.firestore();
 const db = getFirestore(app);
@@ -68,14 +70,27 @@ export const saveLocation = async (
   try {
     const userDocRef = doc(db, "users", userId); // Reference to the user's document
     const locationsRef = collection(userDocRef, "locations"); // Subcollection under the user document
-    console.log("Saving to Firestore path:", locationsRef.path);
+
+     // Fetch last saved location to compute distance
+     const lastLocation = await getLastLocation(userId);
+     let distanceFromLast = 0;
+ 
+     if (lastLocation) {
+       distanceFromLast = haversineDistance(
+         lastLocation.latitude,
+         lastLocation.longitude,
+         latitude,
+         longitude
+       );
+     }
 
     await addDoc(locationsRef, {
       latitude,
       longitude,
       timestamp: Date.now(),
+      distanceFromLast,
     });
-    console.log("Location saved successfully.");
+    console.log(`Saved location. Moved ${distanceFromLast} meters from the last saved location.`);
   } catch (error) {
     console.error("Error saving location:", error);
     throw error;
@@ -110,3 +125,17 @@ export const fetchLocations = async (
   }
 };
 export default db;
+
+// Function to fetch the last saved location for a user
+const getLastLocation = async (userId: string) => {
+  const userDocRef = doc(db, "users", userId);
+  const locationsRef = collection(userDocRef, "locations");
+
+  const q = query(locationsRef, orderBy("timestamp", "desc"), limit(1));
+  const querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    return querySnapshot.docs[0].data();
+  }
+  return null;
+};
