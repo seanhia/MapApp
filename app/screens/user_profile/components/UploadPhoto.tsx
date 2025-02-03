@@ -12,19 +12,22 @@ const UploadPhoto = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [imageUri, setImageUri] = useState<string | null>(null);
 
-    const permission = async () => {
+    const permission = async (type: 'gallery' | 'camera') => {
 
         if (Platform.OS == 'android') {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,{
-                    title: 'Storage Permission',
-                    message: 'App needs acess to your storage to upload a photo', 
-                    buttonPositive: 'ok'
+            let permissions = [PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE];
+            if(type === 'camera'){
+                permissions.push(PermissionsAndroid.PERMISSIONS.CAMERA);
+            }
 
-                }
+            const granted = await PermissionsAndroid.requestMultiple(permissions);
 
-            );
-            return granted === PermissionsAndroid.RESULTS.GRANTED;
+            return(
+                granted[PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE] === PermissionsAndroid.RESULTS.GRANTED &&
+                (type === 'gallery' || granted[PermissionsAndroid.PERMISSIONS.CAMERA] === PermissionsAndroid.RESULTS.GRANTED)
+        
+            )
+
         }
         return true; // ios automatic 
 
@@ -32,7 +35,7 @@ const UploadPhoto = () => {
 
     const imagePicker = async () => {
         try {
-            const permissionGranted = await permission();
+            const permissionGranted = await permission('gallery');
             if (!permissionGranted) {
                 Alert.alert('Permission Denied', 'Storage permission is required.');
                 return;
@@ -64,7 +67,7 @@ const UploadPhoto = () => {
 
     const takePhoto = async () => {
         try{
-            const permissionGranted = await permission();
+            const permissionGranted = await permission('camera');
             if (!permissionGranted){
                 Alert.alert('Permission Denied','Camera permission is required.')
                 return;
@@ -109,16 +112,13 @@ const UploadPhoto = () => {
 
 
                             <TouchableOpacity onPress={imagePicker}>
-                                <Pressable>
+                             
                                     <Text style={styles.modalText}>Select from device</Text>
-                                </Pressable>
+                               
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={takePhoto}>
-                                <Pressable
-                                 onPress={() => setModalVisible(!modalVisible)}>
                                     <Text style={styles.modalText}>Take a photo</Text>
-                                </Pressable>
                             </TouchableOpacity>
                             <Pressable
                                 style={styles.button}
