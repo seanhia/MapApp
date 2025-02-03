@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, useColorScheme} from 'react-native';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { Link , router} from 'expo-router';
 
 import SearchBar from './components/SearchBar';
 import UserList from './components/UserList';
 import FriendList from './components/FriendList';
 import PendingList from './components/PendingList';
+import FooterBar from '@/components/FooterBar';
 
-import { User } from '@/data/types';
-import { Friend } from '@/data/types';
+import { User, Friend } from '@/data/types';
 
 import { fetchAllUsers } from '@/data/UserDataService';
 import { PendingQuery, FriendQuery } from '@/data/FriendshipQuery';
 import { AcceptFriendship, DenyFriendship } from '@/data/Friendship';
 
 import sharedStyles from '@/constants/sharedStyles';
-import FooterBar from '@/components/FooterBar';
+
 
 
 const Friends = () => {
@@ -92,6 +93,11 @@ const handleDeny = async (friendship: Friend) => {
 
   const handleViewProfile = async (friendship: Friend) => { ////
     console.log('Attempting to view the following users profile', friendship.friend_id) 
+    router.push({
+      pathname: '/screens/profile_view',
+      params: { userId: friendship.friend_id } // Pass friend_id as a parameter
+  });
+
   }
 
 
