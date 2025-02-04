@@ -56,7 +56,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ visible, onClose, onSubmit }) =
                         />
                         <Text style={styles.text}>Rate the location:</Text>
                         <Rating
-                        type ="start"
+                        type ="star"
                         ratingCount={5}
                         imageSize={30}
                         startingValue={rating}

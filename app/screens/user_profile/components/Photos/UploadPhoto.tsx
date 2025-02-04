@@ -5,14 +5,15 @@ import { useTheme } from '@/hooks/useTheme';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'; 
 
 
+interface UploadPhotoProps {
+    onImageSelect: (uri: string) => void;
+}
 
-
-const UploadPhoto = () => {
+const UploadPhoto: React.FC<UploadPhotoProps> = ({onImageSelect}) => {
     const { colorScheme, styles } = useTheme();
     const [modalVisible, setModalVisible] = useState(false);
-    const [imageUri, setImageUri] = useState<string | null>(null);
-
-    const permission = async (type: 'gallery' | 'camera') => {
+    
+    const permission = async (type: 'gallery' | 'camera') => { // handels permission request based on action 
 
         if (Platform.OS == 'android') {
             let permissions = [PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE];
@@ -40,6 +41,7 @@ const UploadPhoto = () => {
                 Alert.alert('Permission Denied', 'Storage permission is required.');
                 return;
             }
+            setModalVisible(false);
 
             const result = await launchImageLibrary({
                 mediaType: 'photo',
@@ -53,8 +55,7 @@ const UploadPhoto = () => {
             } else if (result.assets && result.assets.length > 0) {
                 const selectedImageUri = result.assets[0].uri;
                 if (selectedImageUri) {
-                    setImageUri(selectedImageUri);
-                    setModalVisible(false);
+                    onImageSelect(selectedImageUri);
                 } else {
                     Alert.alert('Error', 'something went wrong while picking the image.')
                 }
@@ -72,6 +73,7 @@ const UploadPhoto = () => {
                 Alert.alert('Permission Denied','Camera permission is required.')
                 return;
             }
+            setModalVisible(false);
             const result = await launchCamera({
                 mediaType: 'photo',
                 quality: 1,
@@ -83,8 +85,7 @@ const UploadPhoto = () => {
             } else if (result.assets && result.assets.length > 0) {
                 const selectedImageUri = result.assets[0].uri;
                 if (selectedImageUri) {
-                    setImageUri(selectedImageUri);
-                    setModalVisible(false);
+                    onImageSelect(selectedImageUri);
                 } else {
                     Alert.alert('Error', 'something went wrong while taking the picture.')
                 }

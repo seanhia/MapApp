@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView } from 'react-native';
 import ProfileHeader from './components/ProfileHeader'
 import ProfileDetails from './components/ProfileDetails'
-import UploadPhoto from './components/UploadPhoto';
-import ProfilePost from './components/ProfilePost'
+//import ProfilePost from './components/Photos/ProfilePost'
+import UserPhotos from './components/Photos/UserPhotos';
 import { useRouter } from 'expo-router';
 import ProfileStatistics from './components/ProfileStatistics';
 import { useTheme } from '@/hooks/useTheme';
@@ -67,13 +67,14 @@ const userProfile = () => {
           <ProfileDetails 
             user={currentUser} />
 
-          <UploadPhoto />
+          {/*<UploadPhoto />*/}
+          <UserPhotos/>
 
-          <ProfilePost 
+          {/*<ProfilePost 
             posts={loadedPosts}
             onLoadMore={loadPosts} // Pass loadPosts function to ProfilePost
             hasMorePosts={hasMorePosts} // Pass flag to show/hide Load More button
-            />
+            />*/}
 
           <ProfileStatistics />
 
