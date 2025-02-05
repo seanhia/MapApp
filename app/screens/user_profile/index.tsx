@@ -24,7 +24,7 @@ const userProfile = () => {
    const loadPosts = async () => {
     try {
       // Fetch posts with the lastPostId (which is a string)
-      const posts = await fetchPostbyAuthor(lastPostId, 'z926xE2jufbFT4XfiqEmavt1fxL2', loadedPosts); 
+      const posts = await fetchPostbyAuthor(lastPostId, 'z926xE2jufbFT4XfiqEmavt1fxL2', loadedPosts);  // Static User ID 
       if (posts && posts.length > 0) {
         setLoadedPosts((prevPosts) => [...prevPosts, ...posts]);
         setLastPostId(posts[posts.length - 1].id); // Set last post ID for next batch
