@@ -10,22 +10,29 @@ const containerStyle = {
 
 interface MapComponentProps {
   initialCenter: { lat: number; lng: number };
+  mapId: string;
 }
 
-const MapComponent: React.FC<MapComponentProps> = ({ initialCenter }) => {
+const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId}) => {
   const [currentCenter, setCurrentCenter] = useState(initialCenter);
+
 
   // Update the map's center when initialCenter changes
   useEffect(() => {
     setCurrentCenter(initialCenter);
   }, [initialCenter]);
 
+  const options = {
+    mapId: mapId, // Add the mapId here to apply the custom style
+  };
+
   return (
     <LoadScript googleMapsApiKey={googleMapsAPIKey}>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={currentCenter} // Always use the updated center
-        zoom={12}
+        zoom={17}
+        options={options} 
       >
         <Marker position={currentCenter} />
       </GoogleMap>
@@ -34,3 +41,4 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter }) => {
 };
 
 export default MapComponent;
+

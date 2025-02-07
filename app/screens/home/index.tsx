@@ -64,7 +64,7 @@ export default function Home() {
     <View style={{ backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1 }}>
       <SearchBar onPlaceSelected={handlePlaceChanged} />
       <View style={styles.content}>
-        <MapComponent initialCenter={mapCenter} weather={weather} />
+        <MapComponent initialCenter={mapCenter} weather={weather} mapId='37201bcde93d12e8'/>
       </View>
       <FooterBar />
     </View>
@@ -81,3 +81,22 @@ const styles = StyleSheet.create({
   },
 });
 
+const customMapStyles: google.maps.MapTypeStyle[] = [
+  {
+    featureType: "water",
+    stylers: [
+      {
+        color: "#19a0d8",
+      },
+    ],
+  },
+  {
+    featureType: "landscape",
+    stylers: [
+      {
+        color: "#f1f1f1",
+      },
+    ],
+  },
+  // Add more styles here...
+];
