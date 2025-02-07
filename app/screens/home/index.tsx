@@ -80,23 +80,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-const customMapStyles: google.maps.MapTypeStyle[] = [
-  {
-    featureType: "water",
-    stylers: [
-      {
-        color: "#19a0d8",
-      },
-    ],
-  },
-  {
-    featureType: "landscape",
-    stylers: [
-      {
-        color: "#f1f1f1",
-      },
-    ],
-  },
-  // Add more styles here...
-];
