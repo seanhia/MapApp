@@ -95,6 +95,8 @@ export const saveLocation = async (
     console.error("Error saving location:", error);
     throw error;
   }
+
+
 };
 
 /**
@@ -139,3 +141,4 @@ const getLastLocation = async (userId: string) => {
   }
   return null;
 };
+
