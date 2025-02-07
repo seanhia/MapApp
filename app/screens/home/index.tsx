@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Alert, Platform, PermissionsAndroid } from 'react-native';
+import { StyleSheet, View, Alert, Text, Image } from 'react-native';
 import MapComponent from '@/components/MapComponent';
 import FooterBar from '@/components/FooterBar';
 import { SearchBar } from '@/components/MapSearchBar';
-import Geolocation from 'react-native-geolocation-service';
 import useRealTimeTracking from '../../hooks/useRealTimeTracking';
 import { getAuth } from "firebase/auth";
 import axios from 'axios';
@@ -23,9 +22,9 @@ export default function Home() {
     return null;
   }
 
-  const [location, error] = useRealTimeTracking(userId, 100); //save a new location once 100 meters away from prev coordinates
+  const [location, error] = useRealTimeTracking(userId, 100); // Save new location once 100 meters away
   const [mapCenter, setMapCenter] = useState({ lat: 33.7838, lng: -118.1141 });
-  const [weather, setWeather] = useState(null);
+  const [weather, setWeather] = useState<{ iconUrl?: string; description?: string } | null>(null);
 
   useEffect(() => {
     if (location) {
@@ -42,17 +41,23 @@ export default function Home() {
   const fetchWeather = async (latitude: number, longitude: number): Promise<void> => {
     try {
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}`
-      );
-      setWeather(response.data);
-      console.log("Weather Data:", response.data);
+        'https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}'
+            );
+
+      const weatherData = response.data;
+      const iconCode = weatherData.weather[0].icon;
+      const iconUrl = 'http://openweathermap.org/img/wn/${iconCode}@2x.png';
+      const description = weatherData.weather[0].description;
+
+      setWeather({ iconUrl, description });
+      console.log("Weather Data:", weatherData);
     } catch (error) {
       console.error("Error fetching weather data:", error);
       Alert.alert("Unable to fetch weather data.");
     }
   };
 
-  const handlePlaceChanged = (data: any, details:any) => {
+  const handlePlaceChanged = (data: any, details: any) => {
     if (details && details.geometry) {
       const location = details.geometry.location;
       setMapCenter({ lat: location.lat, lng: location.lng });
@@ -63,8 +68,18 @@ export default function Home() {
   return (
     <View style={{ backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1 }}>
       <SearchBar onPlaceSelected={handlePlaceChanged} />
-      <View style={styles.content}>
-        <MapComponent initialCenter={mapCenter} weather={weather} mapId='37201bcde93d12e8'/>
+      <View style={styles.container}>
+        <View style={styles.mapContainer}>
+          <MapComponent initialCenter={mapCenter} weatherIcon={weather?.iconUrl} mapId='37201bcde93d12e8'/>
+        </View>
+        <View style={styles.weatherSidebar}>
+          {weather && (
+            <View style={styles.weatherCard}>
+              <Text style={styles.weatherDescription}>{weather.description}</Text>
+              <Image source={{ uri: weather.iconUrl }} style={styles.weatherIcon} />
+            </View>
+          )}
+        </View>
       </View>
       <FooterBar />
     </View>
@@ -72,11 +87,34 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  content: {
+  container: {
     flex: 1,
-    width: '100%',
+    flexDirection: 'row',
+  },
+  mapContainer: {
+    flex: 1,
+    height: '100%',
+  },
+  weatherSidebar: {
+    width: 120,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: Colors.light.background, // Or dark, depending on theme
+    borderLeftWidth: 1,
+    borderLeftColor: Colors.light.border,
+  },
+  weatherCard: {
+    padding: 10,
+    alignItems: 'center',
+  },
+  weatherIcon: {
+    width: 50,
+    height: 50,
+  },
+  weatherDescription: {
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });
