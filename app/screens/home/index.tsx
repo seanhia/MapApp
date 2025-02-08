@@ -41,14 +41,14 @@ export default function Home() {
   const fetchWeather = async (latitude: number, longitude: number): Promise<void> => {
     try {
       const response = await axios.get(
-        'https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}'
-            );
-
+        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}`
+      );
+  
       const weatherData = response.data;
       const iconCode = weatherData.weather[0].icon;
-      const iconUrl = 'http://openweathermap.org/img/wn/${iconCode}@2x.png';
+      const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`; // Use backticks here too
       const description = weatherData.weather[0].description;
-
+  
       setWeather({ iconUrl, description });
       console.log("Weather Data:", weatherData);
     } catch (error) {
@@ -56,6 +56,7 @@ export default function Home() {
       Alert.alert("Unable to fetch weather data.");
     }
   };
+  
 
   const handlePlaceChanged = (data: any, details: any) => {
     if (details && details.geometry) {
