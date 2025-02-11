@@ -5,7 +5,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors'
 import { Link } from 'expo-router';
-import {changeEmail} from "@/auth";
+import {changeEmail, singOutUser} from "@/auth";
 import { deleteUser } from '@/data/UserDataService';
 
 
@@ -93,7 +93,15 @@ const UserSettings = () => {
             console.log("Error: ", error, ". Unable to delete account.")
         }
     }
-       
+    
+    const handleSignOut = async () => {
+        try {
+            singOutUser();
+            router.push('/');
+        } catch (e) {
+            throw (e)
+        }
+    }
 
 
 
@@ -177,8 +185,8 @@ const UserSettings = () => {
                     <Text style={styles.buttonText}>Delete Account</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/')}>
-                    <Text style={styles.buttonText}>Log Out - needs auth functionality</Text> 
+                <TouchableOpacity style={styles.lightButton} onPress={handleSignOut}>
+                    <Text style={styles.buttonText}>Log Out</Text> 
                 </TouchableOpacity>
 
 

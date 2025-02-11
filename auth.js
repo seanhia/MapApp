@@ -1,5 +1,5 @@
 // auth.js
-import { createUserWithEmailAndPassword, PhoneMultiFactorGenerator, signInWithEmailAndPassword , userCredential, sendEmailVerification, reauthenticateWithCredential, EmailAuthProvider, credential, getAuth, updateEmail} from 'firebase/auth';
+import { createUserWithEmailAndPassword, PhoneMultiFactorGenerator, signInWithEmailAndPassword , userCredential, sendEmailVerification, reauthenticateWithCredential, EmailAuthProvider, credential, getAuth, updateEmail, signOut} from 'firebase/auth';
 import {auth} from "./firebase"
 import { doc, setDoc, serverTimestamp } from "firebase/firestore"; 
 import {db} from "./firebase"
@@ -97,4 +97,16 @@ export const waitForEmailVerification = async () => {
       alert(e);
     }
   } 
+}
+
+export const singOutUser = async () => {
+  try {
+    const auth = getAuth();
+    // const user = auth.currentUser;
+    signOut(auth);
+    return
+  }
+  catch (e) {
+    throw e;
+  }
 }
