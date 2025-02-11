@@ -1,7 +1,7 @@
-import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc } from 'firebase/firestore';
 import db from '@/firestore'; 
-import { getAuth } from 'firebase/auth';
-import { User } from './types';
+import { getAuth, deleteUser as authDeleteUser  } from 'firebase/auth';
+import { User, userSubcollections as subcollections } from './types';
 
 /**
  * Fetch the current user's data.
@@ -104,5 +104,95 @@ export const fetchAllUsers = async (): Promise<User[]> => {
   } catch (error) {
     console.error('Error fetching all users:', error);
     return [];
+  }
+}
+
+/**
+ * Delete User and all associated friendships, including Firebase Authentication account
+ * @param {string} uid - user id of the deleted user 
+ * @return {void}
+ */
+export const deleteUser = async (uid: string) => {
+  try {
+    const auth = getAuth(); 
+
+     // Delete all subcollections before deleting the user document
+     await deleteSubcollections(uid);
+
+    // Reference to the user's document
+    const userDocRef = doc(db, 'users', uid);
+
+    // Delete the user document
+    await deleteDoc(userDocRef);
+    console.log(`User ${uid} deleted successfully.`);
+
+    // Query friendships where the user is involved
+    const friendshipsRef = collection(db, 'friendships');
+    const friendshipsQuery = query(friendshipsRef, where('user1', '==', uid));
+    const friendshipsQuery2 = query(friendshipsRef, where('user2', '==', uid));
+
+    const [friendshipsSnap1, friendshipsSnap2] = await Promise.all([
+      getDocs(friendshipsQuery),
+      getDocs(friendshipsQuery2),
+    ]);
+
+    const friendshipDocs = [...friendshipsSnap1.docs, ...friendshipsSnap2.docs];
+
+    // Delete all friendship documents found
+    const deleteFriendships = friendshipDocs.map(friendshipDoc => deleteDoc(friendshipDoc.ref));
+    await Promise.all(deleteFriendships);
+    console.log(`All friendships associated with user ${uid} deleted.`);
+
+ 
+    // Delete user from Firebase Authentication
+    const user = auth.currentUser;
+    if (user && user.uid === uid) {
+      await authDeleteUser(user);
+      console.log(`User ${uid} deleted from Firebase Authentication.`);
+    } else {
+      console.warn(`User ${uid} not authenticated or different user is signed in.`);
+    }
+
+  } catch (error) {
+    console.error(`Error deleting user ${uid} and associated data:`, error);
+  }
+};
+
+/**
+ * Recursively deletes all subcollections for a given document.
+ * @param {string} userId - The user ID whose subcollections should be deleted.
+ */
+const deleteSubcollections = async (userId: string) => {
+  const userDocRef = doc(db, 'users', userId);
+
+  for (const subcollection of subcollections) {
+    const subcollectionRef = collection(userDocRef, subcollection);
+    const subDocsSnap = await getDocs(subcollectionRef);
+
+    const deletePromises = subDocsSnap.docs.map((subDoc) => deleteDoc(subDoc.ref));
+    await Promise.all(deletePromises);
+    console.log(`Deleted all documents in subcollection: ${subcollection}`);
+  }
+};
+
+/**
+ * Checks if a user exists in Firestore.
+ * @param {string} id - The user ID to check.
+ * @return {Promise<boolean>} - Returns true if the user exists, false otherwise.
+ */
+const userExists = async (id: string): Promise<boolean> => {
+  try {
+    const userDocRef = doc(db, 'users', id);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (!userDocSnap.exists()) {
+      console.error(`No user found with UID: ${id}`);
+      return false;
+    } else { 
+      return true
+    }
+  } catch (error) {
+    console.error(`Error checking user existence:`, error);
+    return false;
   }
 }

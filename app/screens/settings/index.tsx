@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors'
 import { Link } from 'expo-router';
 import {changeEmail} from "@/auth";
-
+import { deleteUser } from '@/data/UserDataService';
 
 
 import { fetchCurrentUser, writeUserData } from '@/data/UserDataService';
@@ -81,6 +81,18 @@ const UserSettings = () => {
             alert('Error updating settings. Please try again.');
         }
     }
+    const handleDeleteAccount = async () => {
+        try {
+            const confirmDeny = window.confirm("Are you sure you want to delete your account?");
+
+            if (currentUser && confirmDeny) {
+
+                await deleteUser(currentUser.id)
+            }
+        } catch (error) {
+            console.log("Error: ", error, ". Unable to delete account.")
+        }
+    }
        
 
 
@@ -88,7 +100,7 @@ const UserSettings = () => {
     return (
         <ScrollView contentContainerStyle={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
             <View>
-                <Text style={style.header}>Settings</Text>
+                <Text style={[styles.heading, {padding:16}]}>Settings</Text>
 
                 <View style={style.card}>
                     <View style={style.rowBetween}>
@@ -159,6 +171,14 @@ const UserSettings = () => {
                 
                 <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/tutorial')}>
                     <Text style={styles.buttonText}>View Tutorial</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.lightButton} onPress={handleDeleteAccount}>
+                    <Text style={styles.buttonText}>Delete Account</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/')}>
+                    <Text style={styles.buttonText}>Log Out - needs auth functionality</Text> 
                 </TouchableOpacity>
 
 

@@ -13,6 +13,8 @@ export interface User {
     profilePhoto?: URL;
   };
 
+export const userSubcollections = ['posts', 'locations'];
+
 export interface Friend {
     id: string,
     friend_id: string,

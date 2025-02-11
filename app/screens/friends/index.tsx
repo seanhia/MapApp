@@ -13,11 +13,9 @@ import { User, Friend } from '@/data/types';
 
 import { fetchAllUsers } from '@/data/UserDataService';
 import { PendingQuery, FriendQuery } from '@/data/FriendshipQuery';
-import { AcceptFriendship, DenyFriendship } from '@/data/Friendship';
+import { AcceptFriendship, DeleteFriendship } from '@/data/Friendship';
 
 import sharedStyles from '@/constants/sharedStyles';
-
-
 
 const Friends = () => {
   const colorScheme = useColorScheme(); 
@@ -75,10 +73,11 @@ const Friends = () => {
 };
 
 const handleDeny = async (friendship: Friend) => {
-    console.log('Denied friend request from friendshipId:', friendship.id);
-    try {
+    const confirmDeny = window.confirm("Are you sure you want to deny this friend request?");
+    if (confirmDeny) {
       // Handle deny logic (e.g., remove the friendship request or change the status)
-        await DenyFriendship(friendship.id); 
+        await DeleteFriendship(friendship.id); 
+        console.log('Denied friend request from friendshipId:', friendship.id);
         // Update state
         setFriendsList(oldRequest => {
           return oldRequest.filter(friendsList => friendsList != friendship)
@@ -86,8 +85,8 @@ const handleDeny = async (friendship: Friend) => {
         setPendingRequests(oldRequest => {
           return oldRequest.filter(pendingRequests => pendingRequests != friendship)
         })
-    } catch (error) {
-      console.error('Error handling friend denial:', error);
+    // } catch (error) {
+    //   console.error('Error handling friend denial:', error);
     }
   };
 

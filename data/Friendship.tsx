@@ -29,7 +29,9 @@ export const createFriendship = async (userId: string , username: string) => {
         const existingFriendshipSnapshot = await getDocs(existingFriendshipQuery);
 
         if (!existingFriendshipSnapshot.empty) {
-            console.log('Friendship already exists:', existingFriendshipSnapshot.docs[0].id);
+            const friendRef = existingFriendshipSnapshot.docs[0]
+            alert('Friendship already exists')
+            console.log('Friendship already exists:', friendRef.id);
             return;
         }
         if (currentUser.uid === userId) {
@@ -50,6 +52,7 @@ export const createFriendship = async (userId: string , username: string) => {
         
         // Write the data into Firestore
         await setDoc(newFriendshipRef, data);
+        alert('Friend Request Sent!')
         console.log('Friendship successfully initiated!');
 
     } catch (error) {
@@ -73,7 +76,12 @@ export const AcceptFriendship = async (id: string) => {
     }  
 };
 
-export const DenyFriendship = async (id: string) => {
+/**
+* Deletes Friendship Document
+* @param {string} id - Friendship Document ID
+* @returns {void}
+*/
+export const DeleteFriendship = async (id: string) => {
     try {
         const friendshipDoc = doc(db, 'friendships', id);
         
