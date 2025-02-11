@@ -89,9 +89,18 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       fontWeight: 'bold',
       color: theme === 'dark' ? Colors.dark.text : Colors.light.text, // Highlighted color
     },
+    warningMessage: {
+      fontSize: 18,
+      color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
+      textAlign: 'center',
+    },
 
 
     /** Containers  */
+    basicContainer: {
+      padding: 16,
+      backgroundColor: theme === 'dark' ? Colors.dark.background : Colors.light.background,
+    },
     centerContainer: { //Centered Page with margin 
       marginHorizontal: 40,
       flex: 1,
@@ -110,12 +119,10 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       flex: .6, 
       justifyContent: 'space-around',
       backgroundColor: theme === 'dark' ? Colors.dark.background : Colors.light.background,
-
     },
     scrollContainer: {
       padding: 12,
       backgroundColor: theme === 'dark' ? Colors.dark.background : Colors.light.background,
-
     },
     buttonContainer: {
       width: '85%',
@@ -134,7 +141,16 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       flexDirection: 'row',
       justifyContent: 'space-evenly',
       paddingTop: 30,
-  },
+    },
+    postContainer: {
+      padding: 12,
+      marginBottom: 10,
+      backgroundColor: theme === 'dark' ? Colors.dark.container : Colors.light.container,
+      borderRadius: 8,
+      borderColor: '#ddd',
+      borderWidth: 1,
+    },
+
 
     /** Buttons  */
     button: {
@@ -168,6 +184,13 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       padding: 10,
       alignItems: 'center',
       color: theme === 'dark' ? Colors.dark.background : Colors.light.background,
+    },
+    smallButton: {
+      width: 100, // Small button size
+      paddingVertical: 8, // Adjust height
+      backgroundColor: Colors.light.tint,
+      borderRadius: 8, // Rounded corners
+      alignItems: 'center', // Center text
     },
     
     

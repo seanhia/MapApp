@@ -30,17 +30,17 @@ const ProfilePost:  React.FC<ProfilePostProp> = ({posts, onLoadMore, hasMorePost
          comment?: string
      */
     return (
-        <View style={style.container}>
-          <Text style={style.header}>Posts</Text>
+        <View style={styles.basicContainer}>
+          <Text style={styles.heading}>Posts</Text>
     
           {/* Scrollable list of posts */}
-          <ScrollView style={style.scrollContainer}>
+          <ScrollView style={styles.scrollContainer}>
             {posts.length === 0 ? (
-              <Text style={style.noPostsText}>No posts to display.</Text>
+              <Text style={styles.warningMessage}>No posts to display.</Text>
             ) : (
               posts.map((post) => (
-                <View key={post.id} style={style.postContainer}>
-                  <Text style={style.postContent}>{post.content}</Text>
+                <View key={post.id} style={styles.postContainer}>
+                  <Text style={styles.text}>{post.content}</Text>
                   {/* You can add other post details here, like a timestamp or likes */}
                 </View>
               ))
@@ -49,11 +49,11 @@ const ProfilePost:  React.FC<ProfilePostProp> = ({posts, onLoadMore, hasMorePost
     
           {/* Load more button */}
           {hasMorePosts && (
-            <View style={style.buttonContainer}>
+            <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
             <TouchableOpacity 
-            style={[style.button,{}]}
+            style={[styles.smallButton]}
             onPress={onLoadMore}>
-                <Text style={style.buttonText}>
+                <Text style={[styles.buttonText, {fontWeight: 'bold'}]}>
                     Load More
                 </Text>
             </TouchableOpacity>
@@ -62,54 +62,5 @@ const ProfilePost:  React.FC<ProfilePostProp> = ({posts, onLoadMore, hasMorePost
         </View>
       );
     };
-    
-    const style = StyleSheet.create({
-      container: {
-        padding: 16,
-        backgroundColor: '#fff',
-      },
-      header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 8,
-      },
-      scrollContainer: {
-        marginBottom: 16,
-      },
-      postContainer: {
-        padding: 12,
-        marginBottom: 10,
-        backgroundColor: '#f9f9f9',
-        borderRadius: 8,
-        borderColor: '#ddd',
-        borderWidth: 1,
-      },
-      postContent: {
-        fontSize: 16,
-        color: '#333',
-      },
-      noPostsText: {
-        fontSize: 18,
-        color: '#999',
-        textAlign: 'center',
-      },
-      buttonContainer: {
-        alignItems: 'center', // Centers horizontally
-        justifyContent: 'center', // Centers vertically
-        marginVertical: 10, // Adds spacing above and below
-      },
-      button: {
-        width: 100, // Small button size
-        paddingVertical: 8, // Adjust height
-        backgroundColor: Colors.light.tint, // Darker shade than the screen
-        borderRadius: 8, // Rounded corners
-        alignItems: 'center', // Center text
-      },
-      buttonText: {
-        color: '#aaaaa', // White text for contrast
-        fontSize: 14,
-        fontWeight: 'bold',
-      },
-});
 
 export default ProfilePost; 
