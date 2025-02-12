@@ -261,6 +261,17 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       marginBottom: 15,
       textAlign: 'center'
     },
+    
+     /**Photo Details */
+
+     rating: {
+
+      color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
+      padding: 10,
+
+    },
+
+
   });
 }
 
