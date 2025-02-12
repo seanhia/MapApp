@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Alert, Text, Image } from 'react-native';
 import MapComponent from '@/components/MapComponent';
 import FooterBar from '@/components/FooterBar';
@@ -6,25 +6,29 @@ import { SearchBar } from '@/components/MapSearchBar';
 import useRealTimeTracking from '../../hooks/useRealTimeTracking';
 import { getAuth } from "firebase/auth";
 import axios from 'axios';
-import { useTheme } from '@/hooks/useTheme';
 import { Colors } from '@/constants/Colors';
 
 const WEATHER_API_KEY = "c91505cb2ca1c66df5e70feade5e8d06"; // Replace with your API key
 
 export default function Home() {
-  const { colorScheme } = useTheme();
   const auth = getAuth();
   const userId = auth.currentUser?.uid;
 
   if (!userId) {
     console.error("User is not logged in!");
     Alert.alert("Error", "You are not logged in. Please log in to use the app.");
-    return null;
+    return (
+      <View style={styles.container}>
+        <Text>User is not logged in. Please log in to continue.</Text>
+      </View>
+    );null;
   }
 
   const [location, error] = useRealTimeTracking(userId, 100); // Save new location once 100 meters away
   const [mapCenter, setMapCenter] = useState({ lat: 33.7838, lng: -118.1141 });
   const [weather, setWeather] = useState<{ iconUrl?: string; description?: string } | null>(null);
+  const lastFetchedLocation = useRef<{ lat: number; lng: number } | null>(null);
+
 
   useEffect(() => {
     if (location) {
@@ -34,7 +38,7 @@ export default function Home() {
     }
     if (error) {
       console.error("Error with real-time tracking:", error);
-      Alert.alert("Error", error);
+      Alert.alert("Error", error.toString());
     }
   }, [location, error]);
 
@@ -66,10 +70,9 @@ export default function Home() {
     }
   };
 
-  return (
-    <View style={{ backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1 }}>
-      <SearchBar onPlaceSelected={handlePlaceChanged} />
+  return (     
       <View style={styles.container}>
+         <SearchBar onPlaceSelected={handlePlaceChanged} />
         <View style={styles.mapContainer}>
           <MapComponent initialCenter={mapCenter} weatherIcon={weather?.iconUrl} mapId='37201bcde93d12e8'/>
         </View>
@@ -81,9 +84,9 @@ export default function Home() {
             </View>
           )}
         </View>
+        <FooterBar />
       </View>
-      <FooterBar />
-    </View>
+      
   );
 }
 
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.light.background, // Or dark, depending on theme
     borderLeftWidth: 1,
-    borderLeftColor: Colors.light.border,
+    borderLeftColor: "#ffff",
   },
   weatherCard: {
     padding: 10,

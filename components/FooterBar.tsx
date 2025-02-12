@@ -28,6 +28,12 @@ const FooterBar: React.FC<FooterBarProps> = ( ) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.footerButton}
+        onPress={() => router.push('/screens/home')}
+      >
+        <Text style={styles.buttonText}>Home</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.footerButton}
         onPress={() => router.push('/screens/user_profile')}
       >
         <Text style={styles.buttonText}>Profile</Text>
