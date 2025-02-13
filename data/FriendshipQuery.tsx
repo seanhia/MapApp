@@ -54,17 +54,18 @@ export const PendingQuery = async () => {
     }
 };
 
-export const fetchFriendCount = async (): Promise<string | null> => {
+
+export const fetchFriendCount = async (user: User | null): Promise<string> => {
 
     try {
-        const currentUser = await fetchCurrentUser();
-        if (!currentUser) {
+        // const currentUser = await fetchCurrentUser();
+        if (!user) {
             throw new Error('No user is currently signed in!');
         }  
        
         const friendshipsRef = collection(db, 'friendships');
-        const countQuery1 = query(friendshipsRef, where('status', '==', 'approved'), where('user1', '==', currentUser.id));
-        const countQuery2 = query(friendshipsRef, where('status', '==', 'approved'), where('user2', '==', currentUser.id));
+        const countQuery1 = query(friendshipsRef, where('status', '==', 'approved'), where('user1', '==', user.id));
+        const countQuery2 = query(friendshipsRef, where('status', '==', 'approved'), where('user2', '==', user.id));
 
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(countQuery1), getDocs(countQuery2)]);
         const friendCount = querySnapshot1.size + querySnapshot2.size;
@@ -72,6 +73,6 @@ export const fetchFriendCount = async (): Promise<string | null> => {
 
     } catch (error) {
         console.error('Error fetching friends:', error);
-        return null;
+        return '0';
     }
 }   

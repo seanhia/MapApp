@@ -14,7 +14,7 @@ import { useTheme } from '@/hooks/useTheme';
  };
 const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
     const { colorScheme, styles } = useTheme();
-    const [friendCount, setFriendCount] = useState<string | null>(null);
+    const [friendCount, setFriendCount] = useState<string>('0');
     const [profileImage, setProfileImage] = useState<string | null>(null);
     // const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -32,15 +32,17 @@ const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
        
         const loadFriendCount = async () => {
             try {
-                const count = await fetchFriendCount();
-                setFriendCount(count);
+                if (user) {
+                    const count = await fetchFriendCount(user);
+                    setFriendCount(count);
+                }
             } catch (error) {
                 console.error('Error fetching friends or users:', error);
             }
         };
         loadFriendCount();
         // loadCurrentUser(); 
-    }, []);
+    }, [user]);
     
     const handleImagePicker = async () => {
         
