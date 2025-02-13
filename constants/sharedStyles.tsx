@@ -94,6 +94,12 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
       textAlign: 'center',
     },
+    postTitle: {
+      fontSize: 16,
+      color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
+      alignSelf: 'center',
+      fontWeight:'bold'
+    },
 
 
     /** Containers  */
@@ -145,7 +151,7 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
     postContainer: {
       padding: 12,
       marginBottom: 10,
-      backgroundColor: theme === 'dark' ? Colors.dark.container : Colors.light.container,
+      backgroundColor: theme === 'dark' ? Colors.dark.background : Colors.light.background,
       borderRadius: 8,
       borderColor: '#ddd',
       borderWidth: 1,
@@ -206,6 +212,12 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       height: 64,
       borderRadius: 40,
       },
+    imagePost: {
+      width: 300,
+      height: 300, 
+      marginBottom: 10, 
+      alignSelf: 'center'
+    },
 
     /** Components  */
     footer: {

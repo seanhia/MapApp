@@ -8,6 +8,7 @@ import { useLocalSearchParams } from 'expo-router';
 import ProfileHeader from "../user_profile/components/ProfileHeader";
 import FooterBar from "@/components/FooterBar";
 import { fetchPostbyAuthor } from "@/data/PostDataService";
+import {Posts} from '@/constants/posts'
 import ProfilePost from "../user_profile/components/Photos/ProfilePost";
 
 
@@ -22,7 +23,8 @@ const ProfileView = () => {
     const loadPosts = async () => {
         try {
           // Fetch posts with the lastPostId (which is a string)
-          const posts = await fetchPostbyAuthor(lastPostId, 'z926xE2jufbFT4XfiqEmavt1fxL2', loadedPosts); 
+          const posts = Posts
+          // const posts = await fetchPostbyAuthor(lastPostId, 'z926xE2jufbFT4XfiqEmavt1fxL2', loadedPosts); 
           if (posts && posts.length > 0) {
             setLoadedPosts((prevPosts) => [...prevPosts, ...posts]);
             setLastPostId(posts[posts.length - 1].id); // Set last post ID for next batch

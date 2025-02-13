@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase/firestore";
+import { ImageSourcePropType } from "react-native";
 
 export interface User {
     id: string;
@@ -27,15 +28,15 @@ export interface Post {
     content: string,
     published: boolean, 
     authorUid: string, 
-    images?: [URL], //at most 5
+    images?: ImageSourcePropType[], //at most 5?
     createdAt: Timestamp,
     rating: Rating,
-    likes: string, 
-    comment?: string
+    likes?: User[], 
+    comment?: string[]
 
 };
 
-enum Rating {
+export enum Rating {
     One = 1,
     two = 2,
     three = 3,
