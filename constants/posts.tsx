@@ -1,4 +1,4 @@
-import japan1 from '@/assets/images/Japan_1.png';
+import japan1 from '@/assets/images/posts/Japan_1.png';
 import japan2 from '@/assets/images/posts/Japan_2.png';
 import france1 from '@/assets/images/posts/France1.png';
 import usa1 from '@/assets/images/posts/USA_1.png';
