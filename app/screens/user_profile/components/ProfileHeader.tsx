@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text,Image } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
 import { Colors } from '@/constants/Colors'
@@ -10,7 +10,7 @@ const ProfileHeader = () => {
     const { colorScheme, styles } = useTheme();
     const router = useRouter();
     return (
-       
+        <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={{flexDirection:'row', justifyContent: 'space-between', padding: 20}} >
                 
                 <Text style={styles.heading}>Profile</Text>
@@ -26,7 +26,7 @@ const ProfileHeader = () => {
                     </TouchableOpacity>
                     
             </View>
-
+        </GestureHandlerRootView>
     );
 };
 

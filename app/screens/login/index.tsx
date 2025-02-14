@@ -2,7 +2,7 @@ import app, {auth} from "@/firebase";
 import {sendEmailVerification} from 'firebase/auth';
 import { useState} from "react";
 import { Text, View, StyleSheet, KeyboardAvoidingView, Button, ActivityIndicator, TouchableOpacity, Image } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { Link , router} from 'expo-router';
 import { FirebaseError } from 'firebase/app'
 import {signUpWithEmail, signInWithEmail} from "@/auth";
@@ -38,6 +38,7 @@ export default function Login() {
   };
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <View style={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
       <View
         style={styles.centerContainer}
@@ -91,7 +92,7 @@ export default function Login() {
           
       </View>
     </View>
-    
+    </GestureHandlerRootView>
   );
 }
 

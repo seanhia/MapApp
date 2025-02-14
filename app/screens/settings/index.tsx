@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Switch, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, TextInput } from 'react-native-gesture-handler';
 import { useTheme } from '@/hooks/useTheme';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors'
@@ -106,6 +106,7 @@ const UserSettings = () => {
 
 
     return (
+        <GestureHandlerRootView style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
             <View>
                 <Text style={[styles.heading, {padding:16}]}>Settings</Text>
@@ -192,6 +193,7 @@ const UserSettings = () => {
 
             </View>
         </ScrollView>
+        </GestureHandlerRootView>
     );
 };
 
