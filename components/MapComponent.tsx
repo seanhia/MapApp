@@ -38,21 +38,41 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weath
 
   return (
     <LoadScript googleMapsApiKey={googleMapsAPIKey} onLoad={() => setGoogleMaps(window.google)}>
-      <GoogleMap mapContainerStyle={containerStyle} center={currentCenter} zoom={17} options={options}>
-        {/* User's location marker */}
-        <Marker position={currentCenter} />
+      {/* Wrapper div to position the overlay */}
+      <div style={{ position: "relative", width: "100%", height: "90%" }}>
+        {/* Google Map */}
+        <GoogleMap mapContainerStyle={containerStyle} center={currentCenter} zoom={17} options={options}>
+          {/* User's location marker */}
+          <Marker position={currentCenter} />
 
-        {/* Weather icon marker */}
-        {weatherIcon && (
-          <Marker
-            position={currentCenter}
-            icon={{
-              url: weatherIcon || "https://maps.google.com/mapfiles/ms/icons/red-dot.png", // Default marker if no weather icon
-              scaledSize: scaledSize, // Use the computed scaled size
-            }}
-          />
-        )}
-      </GoogleMap>
+          {/* Weather icon marker */}
+          {weatherIcon && (
+            <Marker
+              position={currentCenter}
+              icon={{
+                url: weatherIcon || "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                scaledSize: scaledSize,
+              }}
+            />
+          )}
+        </GoogleMap>
+
+        {/* Overlay with circular cutout */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.9)", // Dark overlay
+            zIndex: 9999, 
+            pointerEvents: "none", // Allow interaction with the map
+            maskImage: `radial-gradient(circle 150px at center, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 60%)`, // Circular transparency effect
+            WebkitMaskImage: `radial-gradient(circle 150px at center, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 1) 60%)`, // For Safari compatibility
+          }}
+        />
+      </div>
     </LoadScript>
   );
 };
