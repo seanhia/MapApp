@@ -32,10 +32,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weath
     mapId: mapId, // Applying custom map style
   };
 
-  const scaledSize = googleMaps?.maps?.Size
-    ? new googleMaps.maps.Size(50, 50)
-    : { width: 50, height: 50 }; // Fallback size
-
   return (
     <LoadScript googleMapsApiKey={googleMapsAPIKey} onLoad={() => setGoogleMaps(window.google)}>
       {/* Wrapper div to position the overlay */}
@@ -44,17 +40,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weath
         <GoogleMap mapContainerStyle={containerStyle} center={currentCenter} zoom={17} options={options}>
           {/* User's location marker */}
           <Marker position={currentCenter} />
-
-          {/* Weather icon marker */}
-          {weatherIcon && (
-            <Marker
-              position={currentCenter}
-              icon={{
-                url: weatherIcon || "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
-                scaledSize: scaledSize,
-              }}
-            />
-          )}
         </GoogleMap>
 
         {/* Overlay with circular cutout */}

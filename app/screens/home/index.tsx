@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Alert, Text, Image } from 'react-native';
+import { StyleSheet, View, Alert, Text, Image, TouchableOpacity } from 'react-native';
 import MapComponent from '@/components/MapComponent';
 import FooterBar from '@/components/FooterBar';
 import { SearchBar } from '@/components/MapSearchBar';
@@ -26,9 +26,9 @@ export default function Home() {
 
   const [location, error] = useRealTimeTracking(userId, 100); // Save new location once 100 meters away
   const [mapCenter, setMapCenter] = useState({ lat: 33.7838, lng: -118.1141 });
-  const [weather, setWeather] = useState<{ iconUrl?: string; description?: string } | null>(null);
+  const [weather, setWeather] = useState<{ iconUrl?: string; description?: string; details?: any } | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false); // Toggle for pop-up details
   const lastFetchedLocation = useRef<{ lat: number; lng: number } | null>(null);
-
 
   useEffect(() => {
     if (location) {
@@ -50,17 +50,16 @@ export default function Home() {
   
       const weatherData = response.data;
       const iconCode = weatherData.weather[0].icon;
-      const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`; // Use backticks here too
+      const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
       const description = weatherData.weather[0].description;
   
-      setWeather({ iconUrl, description });
+      setWeather({ iconUrl, description, details: weatherData });
       console.log("Weather Data:", weatherData);
     } catch (error) {
       console.error("Error fetching weather data:", error);
       Alert.alert("Unable to fetch weather data.");
     }
   };
-  
 
   const handlePlaceChanged = (data: any, details: any) => {
     if (details && details.geometry) {
@@ -71,22 +70,31 @@ export default function Home() {
   };
 
   return (     
-      <View style={styles.container}>
-         <SearchBar onPlaceSelected={handlePlaceChanged} />
-        <View style={styles.mapContainer}>
-          <MapComponent initialCenter={mapCenter} weatherIcon={weather?.iconUrl} mapId='37201bcde93d12e8'/>
-        </View>
-        <View style={styles.weatherSidebar}>
-          {weather && (
-            <View style={styles.weatherCard}>
-              <Text style={styles.weatherDescription}>{weather.description}</Text>
-              <Image source={{ uri: weather.iconUrl }} style={styles.weatherIcon} />
-            </View>
-          )}
-        </View>
-        <FooterBar />
+    <View style={styles.container}>
+      <SearchBar onPlaceSelected={handlePlaceChanged} />
+      <View style={styles.mapContainer}>
+        <MapComponent initialCenter={mapCenter} weatherIcon={weather?.iconUrl} mapId='37201bcde93d12e8'/>
       </View>
-      
+
+      {/* Floating Weather Box */}
+      {weather?.iconUrl && (
+        <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={styles.weatherBox}>
+          <Image source={{ uri: weather.iconUrl }} style={styles.weatherIcon} />
+        </TouchableOpacity>
+      )}
+
+      {/*  Weather Details  */}
+      {isExpanded && weather?.details && (
+        <View style={styles.weatherPopup}>
+          <Text style={styles.weatherDescription}>{weather.details.weather[0]?.description}</Text>
+          <Text>Temperature: {weather.details.main?.temp}°C</Text>
+          <Text>Humidity: {weather.details.main?.humidity}%</Text>
+          <Text>Wind Speed: {weather.details.wind?.speed} m/s</Text>
+        </View>
+      )}
+
+      <FooterBar />
+    </View>
   );
 }
 
@@ -99,26 +107,44 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
   },
-  weatherSidebar: {
-    width: 120,
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.light.background, // Or dark, depending on theme
-    borderLeftWidth: 1,
-    borderLeftColor: "#ffff",
-  },
-  weatherCard: {
+  // weather box (light box)
+  weatherBox: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.9)", // Light effect
     padding: 10,
-    alignItems: 'center',
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5, 
   },
   weatherIcon: {
     width: 50,
     height: 50,
   },
+  // Weather details pop-up
+  weatherPopup: {
+    position: "absolute",
+    top: 80,
+    right: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5, 
+  },
   weatherDescription: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 5,
     textAlign: 'center',
+    fontWeight: "bold",
   },
 });
+
+
