@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, LoadScriptNext, Marker } from "@react-google-maps/api";
 
 const googleMapsAPIKey = "AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c"; // Replace with your actual API key
 
@@ -33,7 +33,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weath
   };
 
   return (
-    <LoadScript googleMapsApiKey={googleMapsAPIKey} onLoad={() => setGoogleMaps(window.google)}>
+    <LoadScriptNext googleMapsApiKey={googleMapsAPIKey} onLoad={() => setGoogleMaps(window.google)}>
       {/* Wrapper div to position the overlay */}
       <div style={{ position: "relative", width: "100%", height: "90%" }}>
         {/* Google Map */}
@@ -58,7 +58,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weath
           }}
         />
       </div>
-    </LoadScript>
+    </LoadScriptNext>
   );
 };
 
