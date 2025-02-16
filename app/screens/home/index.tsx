@@ -7,6 +7,7 @@ import useRealTimeTracking from '../../hooks/useRealTimeTracking';
 import { getAuth } from "firebase/auth";
 import axios from 'axios';
 import { Colors } from '@/constants/Colors';
+import { useTheme } from '@/hooks/useTheme'; 
 
 const WEATHER_API_KEY = "c91505cb2ca1c66df5e70feade5e8d06"; // Replace with your API key
 
@@ -23,12 +24,19 @@ export default function Home() {
       </View>
     );null;
   }
-
+  const { colorScheme } = useTheme();
   const [location, error] = useRealTimeTracking(userId, 100); // Save new location once 100 meters away
   const [mapCenter, setMapCenter] = useState({ lat: 33.7838, lng: -118.1141 });
   const [weather, setWeather] = useState<{ iconUrl?: string; description?: string; details?: any } | null>(null);
   const [isExpanded, setIsExpanded] = useState(false); // Toggle for pop-up details
   const lastFetchedLocation = useRef<{ lat: number; lng: number } | null>(null);
+  var darkMode = '51d9728a5051a451'
+
+  if (colorScheme === 'dark') {
+    darkMode = '51d9728a5051a451'
+  } else {
+    darkMode = '37201bcde93d12e8'
+  }
 
   useEffect(() => {
     if (location) {
@@ -68,12 +76,12 @@ export default function Home() {
       fetchWeather(location.lat, location.lng);
     }
   };
-
+  colorScheme === 'dark' ? Colors.dark.background : Colors.light.background
   return (     
     <View style={styles.container}>
       <SearchBar onPlaceSelected={handlePlaceChanged} />
       <View style={styles.mapContainer}>
-        <MapComponent initialCenter={mapCenter} weatherIcon={weather?.iconUrl} mapId='37201bcde93d12e8'/>
+        <MapComponent initialCenter={mapCenter} weatherIcon={weather?.iconUrl} mapId={darkMode} />
       </View>
 
       {/* Floating Weather Box */}
