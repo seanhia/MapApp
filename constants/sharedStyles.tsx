@@ -3,7 +3,7 @@ import { Colors } from '../constants/Colors';
 
 type colorSchemeName = 'light' | 'dark' | null | undefined
 
-const sharedStyles = (colorScheme : colorSchemeName) => {
+const sharedStyles = (colorScheme: colorSchemeName) => {
   const theme = colorScheme || 'light';
   return StyleSheet.create({
     /** Spacing */
@@ -48,10 +48,10 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
     boldText: {
       fontSize: 16,
       color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
-      flex: 1.5, 
+      flex: 1.5,
       fontWeight: 'bold',
       alignSelf: 'center',
-      padding: 10, 
+      padding: 10,
     },
     input: {
       width: '100%',
@@ -98,7 +98,7 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       fontSize: 16,
       color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
       alignSelf: 'center',
-      fontWeight:'bold'
+      fontWeight: 'bold'
     },
 
 
@@ -121,8 +121,8 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       backgroundColor: theme === 'dark' ? Colors.dark.background : Colors.light.background,
     },
     halfContainer: { //Vertical Half Page 
-      marginHorizontal: 40, 
-      flex: .6, 
+      marginHorizontal: 40,
+      flex: .6,
       justifyContent: 'space-around',
       backgroundColor: theme === 'dark' ? Colors.dark.background : Colors.light.background,
     },
@@ -198,8 +198,8 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       borderRadius: 8, // Rounded corners
       alignItems: 'center', // Center text
     },
-    
-    
+
+
     /** Images  */
     image: {
       width: 220,
@@ -207,15 +207,15 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       marginBottom: 20,
       alignSelf: 'center',
     },
-    profilePicture: { 
+    profilePicture: {
       width: 70,
       height: 64,
       borderRadius: 40,
-      },
+    },
     imagePost: {
       width: 300,
-      height: 300, 
-      marginBottom: 10, 
+      height: 300,
+      marginBottom: 10,
       alignSelf: 'center'
     },
 
@@ -232,19 +232,19 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
     },
 
 
-      /** Links  */
-      rightLink: {
-        color: theme === 'dark' ? Colors.dark.tabIconDefault : Colors.light.tabIconDefault,
-        fontSize: 16,
-        alignSelf: 'flex-end',
-        marginBottom: 30,
-      }, 
-      tutorial: {
-        color: theme === 'dark' ? Colors.dark.tabIconDefault : Colors.light.tabIconDefault,
-        fontSize: 30,
-        marginTop: 15,
-        marginHorizontal: 10,
-      },
+    /** Links  */
+    rightLink: {
+      color: theme === 'dark' ? Colors.dark.tabIconDefault : Colors.light.tabIconDefault,
+      fontSize: 16,
+      alignSelf: 'flex-end',
+      marginBottom: 30,
+    },
+    tutorial: {
+      color: theme === 'dark' ? Colors.dark.tabIconDefault : Colors.light.tabIconDefault,
+      fontSize: 30,
+      marginTop: 15,
+      marginHorizontal: 10,
+    },
 
     /** Modal */
     centered: {
@@ -261,26 +261,46 @@ const sharedStyles = (colorScheme : colorSchemeName) => {
       padding: 35,
       alignItems: 'center',
       shadowColor: '#000',
-      shadowOffset:{
-        width:0,
+      shadowOffset: {
+        width: 0,
         height: 2,
       },
       shadowOpacity: 0.25,
       shadowRadius: 4,
-      elevation: 5, 
+      elevation: 5,
     },
-    modalText:{
+    modalText: {
       marginBottom: 15,
       textAlign: 'center'
     },
-    
-     /**Photo Details */
 
-     rating: {
+    /** Photo Details */
+
+    rating: {
 
       color: theme === 'dark' ? Colors.dark.text : Colors.light.text,
       padding: 10,
 
+    },
+    /** Post */
+    photoItemContainer: {
+      flex: 1 / 3,
+      margin: 8,
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 8,
+      overflow: 'hidden',
+    },
+    photoImage: {
+      width: '100%',
+      height: 200,
+      resizeMode: 'cover',
+    },
+    photoDetails: {
+      padding: 8,
+    },
+    photoList: {
+      marginTop: 20, 
     },
 
 

@@ -63,8 +63,11 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ visible, onClose, onSubmit }) =
                         onFinishRating={setRating}
                         />
 
-                        <View style={styles.button}>
-                            <TouchableOpacity onPress={handleSubmit}>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity onPress={onClose}>
+                                <Text style={styles.text}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity  onPress={handleSubmit}>
                                 <Text style={styles.text}>Submit</Text>
                             </TouchableOpacity>
 
