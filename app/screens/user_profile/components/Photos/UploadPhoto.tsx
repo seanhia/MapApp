@@ -4,7 +4,6 @@ import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-h
 import { useTheme } from '@/hooks/useTheme';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'; 
 
-
 interface UploadPhotoProps {
     onImageSelect: (uri: string) => void;
 }
@@ -86,6 +85,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({onImageSelect}) => {
                 const selectedImageUri = result.assets[0].uri;
                 if (selectedImageUri) {
                     onImageSelect(selectedImageUri);
+                    
                 } else {
                     Alert.alert('Error', 'something went wrong while taking the picture.')
                 }

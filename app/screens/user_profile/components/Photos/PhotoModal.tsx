@@ -30,6 +30,14 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ visible, onClose, onSubmit }) =
         onClose();
     };
 
+    const cancelUpload = () => {
+        setLocation('');
+        setReview('');
+        setRating(0);
+        onClose();
+    };
+
+
     return (
         <Modal
             animationType="fade"
@@ -64,7 +72,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ visible, onClose, onSubmit }) =
                         />
 
                         <View style={styles.buttonContainer}>
-                            <TouchableOpacity onPress={onClose}>
+                            <TouchableOpacity onPress={cancelUpload}>
                                 <Text style={styles.text}>Cancel</Text>
                             </TouchableOpacity>
                             <TouchableOpacity  onPress={handleSubmit}>
