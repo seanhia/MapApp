@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, Pressable,  Alert, Platform, PermissionsAndroid, TouchableOpacity} from 'react-native';
+import { View, Text, Modal, Pressable,  Alert, Platform, PermissionsAndroid} from 'react-native';
+import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useTheme } from '@/hooks/useTheme';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'; 
 
