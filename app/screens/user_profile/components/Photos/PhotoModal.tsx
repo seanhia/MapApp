@@ -40,7 +40,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ visible, onClose, onSubmit }) =
             <View style={styles.centered}>
                 <View style={styles.modalView}>
                     <View style={styles.centered}>
-                        <Text style={styles.header}>Photo Details</Text>
+                        <Text style={styles.title}>Photo Details</Text>
                         <TextInput
                         style ={styles.placeHolderInput}
                         placeholder="Enter location"

@@ -115,7 +115,7 @@ const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
                 
                 <View style={{ width: 75, alignItems: 'center' }}>
                     <Text style={styles.label}>Points</Text>
-                    <Text style={styles.profileDetailText}>1679</Text>
+                    <Text style={styles.profileDetailText}>0</Text>
                 </View>
             </View>
 

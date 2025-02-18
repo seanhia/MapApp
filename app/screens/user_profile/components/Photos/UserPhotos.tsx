@@ -7,6 +7,7 @@ import ProfilePost from './ProfilePost';
 import { User, Post } from '@/data/types'
 import { fetchCurrentUser } from '@/data/UserDataService';
 import { fetchPostbyAuthor } from '@/data/PostDataService';
+import { Rating } from 'react-native-ratings';
 
 interface PhotoDetails {
     imageUri: string | null;
@@ -82,9 +83,17 @@ const UserPhotos = () => {
         <View style={styles.photoItemContainer}>
             {item.imageUri && (<Image source={{ uri: item.imageUri }} style={styles.photoImage} />)}
             <View style={styles.photoDetails}>
-                <Text>Location: {item.location}</Text>
-                <Text>Review: {item.review}</Text>
-                <Text>Rating: {item.rating}</Text>
+                <Text style={styles.boldText}>{item.location}</Text>
+                <Text style={styles.text}>Rating:
+                <Rating style={styles.rating}
+                    type="star"
+                    ratingCount={5}
+                    imageSize={15}
+                    readonly={true} 
+                    startingValue={item.rating}/> 
+
+                </Text>
+                <Text style={styles.text}>Review: {item.review}</Text>
             </View>
         </View>
     )

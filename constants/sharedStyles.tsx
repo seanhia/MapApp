@@ -297,7 +297,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       resizeMode: 'cover',
     },
     photoDetails: {
-      padding: 8,
+      padding: 4,
     },
     photoList: {
       marginTop: 20, 
