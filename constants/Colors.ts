@@ -16,7 +16,6 @@ const black = '#010304'
 const lightPrimary = '#5dadee'
 const darkPrimary = '#1160a2'
 const lightSecondary = '#FBE8C5' //light yellow
-// '#ebefb8'
 const darkSecondary = '#434710'
 const lightAccent = '#1c5e82'
 const darkAccent = '#7dbfe3'
