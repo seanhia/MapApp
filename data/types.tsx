@@ -2,17 +2,17 @@ import { Timestamp } from "firebase/firestore";
 import { ImageSourcePropType } from "react-native";
 
 export interface User {
-    id: string;
-    username: string;
-    eMail: string;
-    createdAt: Date;
-    bio?: string; 
-    phoneNumber?: string; 
-    isPrivate?: boolean; 
-    isDarkMode?: boolean; // Currently based on the user device settings 
-    points?: number; 
-    profilePhoto?: URL;
-  };
+  id: string;
+  username: string;
+  eMail: string;
+  createdAt: Date;
+  bio?: string;
+  phoneNumber?: string;
+  isPrivate: boolean;
+  isDarkMode?: boolean; // Currently based on the user device settings
+  points?: number;
+  profilePhoto?: URL;
+}
 
 export const userSubcollections = ['posts', 'locations'];
 

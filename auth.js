@@ -25,6 +25,7 @@ export const signUpWithEmail = async (email,password, fname, lname, phone, usern
         lastName: lname,
         phoneNumber: phone,
         username: username,
+        isPrivate: true, 
         createdAt: serverTimestamp()
       }
   
