@@ -47,7 +47,28 @@ const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
                 console.error('Error fetching friends or users:', error);
             }
         };
-        loadFriendCount();
+        
+
+    const loadProfilePicture = async () => {
+        try{
+            if (user){
+                const userDocRef = doc(db, 'users', user.id);
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    if (userData && userData.profilePhoto) {
+                      setProfileImage(userData.profilePhoto);
+                    }
+                  }
+            }
+
+        } catch (error){
+            console.error('Error fetching profile picture:', error);
+        }
+    };
+
+    loadFriendCount();
+    loadProfilePicture();
         // loadCurrentUser(); 
     }, [user]);
 
