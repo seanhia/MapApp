@@ -228,9 +228,9 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       alignSelf: "center",
     },
     profilePicture: {
-      width: 70,
-      height: 64,
-      borderRadius: 40,
+      width: 100,
+      height: 100,
+      borderRadius: 50,
     },
     imagePost: {
       width: 300,
