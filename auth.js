@@ -1,8 +1,12 @@
 // auth.js
 import { createUserWithEmailAndPassword, PhoneMultiFactorGenerator, signInWithEmailAndPassword , userCredential, sendEmailVerification, reauthenticateWithCredential, EmailAuthProvider, credential, getAuth, updateEmail, signOut} from 'firebase/auth';
-import {auth} from "./firebase"
-import { doc, setDoc, serverTimestamp } from "firebase/firestore"; 
-import {db} from "./firebase"
+import {auth,db} from "./firebase"
+import { doc, setDoc, serverTimestamp, collection, getDoc } from "firebase/firestore"; 
+import { getCollectionSize } from '@/data/UserDataService';
+
+
+
+
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -25,7 +29,24 @@ export const signUpWithEmail = async (email,password, fname, lname, phone, usern
       }
   
     );
-    
+    getCollectionSize('leaderboard_entry')
+  .then(size => {
+    setDoc(doc(db, "leaderboard_entry", user.uid), {
+      last_updated: serverTimestamp(),
+      points: 0,
+      ranking: size,
+      userid: user.uid
+  });
+  console.log(size);
+});
+
+    // setDoc(doc(db, "leaderboard_entry", user.uid), {
+    //   last_updated: serverTimestamp(),
+    //   points: 0,
+    //   ranking: leaderboardSize,
+    //   userid: user.uid
+    // });
+ 
       console.log("User signed up successfully");
       })
   } catch (error) {

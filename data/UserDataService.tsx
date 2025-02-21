@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc, getCountFromServer, orderBy } from 'firebase/firestore';
 import db from '@/firestore'; 
 import { getAuth, deleteUser as authDeleteUser  } from 'firebase/auth';
 import { User, userSubcollections as subcollections } from './types';
@@ -48,6 +48,7 @@ export const fetchUserByUID = async (id: string): Promise<User | null> => {
     return null;
   }
 };
+
 
 /**
  * Write or update user data in Firestore.
@@ -106,6 +107,15 @@ export const fetchAllUsers = async (): Promise<User[]> => {
     return [];
   }
 }
+
+export async function getCollectionSize(collectionPath: string) {
+  const collectionRef = collection(db, collectionPath);
+  const snapshot = await getCountFromServer(collectionRef);
+  const size = snapshot.data().count;
+  return size;
+}
+
+
 
 /**
  * Delete User and all associated friendships, including Firebase Authentication account
