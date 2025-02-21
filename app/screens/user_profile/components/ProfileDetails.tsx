@@ -5,6 +5,11 @@ import { launchImageLibrary } from 'react-native-image-picker';  //install this
 import { fetchFriendCount } from '@/data/FriendshipQuery';
 import { User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme';
+import { fetchCurrentUser } from '@/data/UserDataService';
+import { storage } from '@/firebase'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc } from 'firebase/firestore';
+import db from '@/firestore'; 
 
 
  interface ProfileDetailsProps {
@@ -16,6 +21,8 @@ const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
     const { colorScheme, styles } = useTheme();
     const [friendCount, setFriendCount] = useState<string>('0');
     const [profileImage, setProfileImage] = useState<string | null>(null);
+
+
     // const [currentUser, setCurrentUser] = useState<User | null>(null);
 
     useEffect(() => {
@@ -43,6 +50,36 @@ const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
         loadFriendCount();
         // loadCurrentUser(); 
     }, [user]);
+
+
+    const profilePictureFirebase = async (imageUri: string) => {
+        try {
+            if (!user){
+                Alert.alert ('Error', 'Could not fetch current user');
+                return;
+            }
+            
+
+            const response = await fetch(imageUri);
+            const blob = await response.blob();
+
+            const storageRef = ref(storage, `profile_pictures/${user.id}`);
+            await uploadBytes(storageRef, blob);
+
+            const downloadURL = await getDownloadURL(storageRef);
+            setProfileImage(downloadURL);
+
+            const userDocRef = doc(db, 'users', user.id);
+            await setDoc(userDocRef, { profilePhoto: downloadURL }, { merge: true });
+
+
+
+        } catch (error){
+            console.error('Error uploading image:', error);
+            Alert.alert('Upload Failed', 'Could not upload profile picture.');
+        }
+
+    };
     
     const handleImagePicker = async () => {
         
@@ -79,7 +116,8 @@ const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
 
                 
                 if (imageUri) {
-                    setProfileImage(imageUri); 
+                    setProfileImage(imageUri);
+                    await profilePictureFirebase(imageUri);
                 } else {
                     Alert.alert('Invalid Image', 'The selected image could not be loaded.');
                 }
