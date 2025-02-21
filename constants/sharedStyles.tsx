@@ -305,6 +305,29 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       color: theme === "dark" ? Colors.dark.text : Colors.light.text,
       padding: 10,
     },
+
+     /** Post */
+     photoItemContainer: {
+      flex: 1 / 3,
+      margin: 8,
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 8,
+      overflow: 'hidden',
+    },
+    photoImage: {
+      width: '100%',
+      height: 200,
+      resizeMode: 'cover',
+    },
+    photoDetails: {
+      padding: 4,
+    },
+    photoList: {
+      marginTop: 20, 
+    },
+
+
   });
 };
 
