@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { haversineDistance } from "../utils/geolocation";
-// import Geolocation from "@react-native-community/geolocation"; doesn't work with expo go
 import * as Location from 'expo-location';
 import { saveLocation, fetchLocations } from "../../firestore";
 
@@ -35,7 +34,12 @@ const useRealTimeTracking = (
   const [location, setLocation] = useState<GeoPosition | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [savedLocations, setSavedLocations] = useState<Location[]>([]);
-  //const savedLocationsRef = useRef<Location[]>([]);
+  const savedLocationsRef = useRef<Location[]>([]);
+  const lastSavedLocationRef = useRef<Location | null>(null);
+
+  useEffect(() => { // update ref when savedLocations updates
+    savedLocationsRef.current = savedLocations;
+  }, [savedLocations]);
 
   useEffect(() => {
     if (!userId) {
@@ -43,8 +47,6 @@ const useRealTimeTracking = (
       return;
     }
     
-    //let watchId: number | null = null;
-
     let subscription: Location.LocationSubscription | null = null; // location tracking event listener
 
     const initializeTracking = async () => {
@@ -56,74 +58,48 @@ const useRealTimeTracking = (
           return;
         }
 
-        // Fetch saved locations from Firestore
-        const locations = await fetchLocations(userId);
-        //savedLocationsRef.current = locations;
-        setSavedLocations(locations);
+        // use ref to fetch all saved location instead of querying each location individually
+        const updateSavedLocation = (newLocation: Location) => {
+          setSavedLocations((prev) => {
+            const updated = [...prev, newLocation];
+            savedLocationsRef.current = updated;
+            return updated;
+          });
+        };
 
-        // Start real-time tracking
-        // watchId = Geolocation.watchPosition(
-        //   async (position: GeoPosition) => {
-        //     const { latitude, longitude } = position.coords;
-
-        //     // Check if this location is far enough from saved locations
-        //     const isFarEnough = savedLocationsRef.current.every((saved) => {
-        //       const distance = haversineDistance(
-        //         latitude,
-        //         longitude,
-        //         saved.latitude,
-        //         saved.longitude
-        //       );
-        //       return distance > radius;
-        //     });
-
-        //     if (isFarEnough) {
-        //       // Save the new location to Firestore
-        //       await saveLocation(userId, latitude, longitude);
-
-        //       // Update cached locations
-        //       savedLocationsRef.current.push({
-        //         latitude,
-        //         longitude
-        //       });
-        //       setSavedLocations([...savedLocationsRef.current]);
-        //     }
-
-        //     // Update current location
-        //     setLocation(position);
-        //   },
-        //   (error: GeolocationError) => {
-        //     console.error("Error getting location:", error.message);
-        //     setError(error.message);
-        //   },
-        //   {
-        //     enableHighAccuracy: true,
-        //     distanceFilter: 10,
-        //     interval: 5000,
-        //   }
-        // );
         subscription = await Location.watchPositionAsync(
           {
             accuracy: Location.Accuracy.High,
-            distanceInterval: 50, // 50 meters for interval from last point
-            timeInterval: 5000, // 5 seconds, 5k ms
+            distanceInterval: radius, // interval from last point
+            timeInterval: 30000, // 30 seconds
           },
-          async (position) => {
+          async (position) => { //callback 
             const {latitude, longitude} = position.coords;
 
-            const isFarEnough = savedLocations.every((saved) => {
+            // check for duplicates (usaully happens when location first initializes)
+            if (
+              lastSavedLocationRef.current &&
+              lastSavedLocationRef.current.latitude === latitude &&
+              lastSavedLocationRef.current.longitude === longitude
+            ) {
+              setLocation(position);
+              return;
+            }
+        
+
+            const isFarEnough = savedLocationsRef.current.every((saved) => {
               const distance = haversineDistance(
                 latitude,
                 longitude,
                 saved.latitude,
                 saved.longitude
               );
+              return distance >= radius; //return true if the distance is larger than radius
             });
 
             if (isFarEnough) {
               await saveLocation(userId, latitude, longitude); // save location to firestore
-
-              setSavedLocations((prev) => [...prev, {latitude, longitude}]); // update cached locations
+              updateSavedLocation({latitude, longitude}) // update cached locations
             }
             setLocation(position); // update current location
           }
