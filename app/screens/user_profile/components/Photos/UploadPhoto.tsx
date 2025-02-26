@@ -100,7 +100,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({onImageSelect}) => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-        <View>
+        <View  style={{marginTop:10}}>
             <Modal
                 animationType="fade"
                 transparent={true}

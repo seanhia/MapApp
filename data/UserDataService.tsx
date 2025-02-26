@@ -2,6 +2,8 @@ import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, dele
 import db from '@/firestore'; 
 import { getAuth, deleteUser as authDeleteUser  } from 'firebase/auth';
 import { User, userSubcollections as subcollections } from './types';
+import { Timestamp } from 'firebase/firestore';
+
 
 /**
  * Fetch the current user's data.
@@ -24,7 +26,13 @@ export const fetchCurrentUser = async (): Promise<User | null> => {
     return null;
   }
 
-  return { id: currentUser.uid, ...userDocSnap.data() } as User;
+  const userData = userDocSnap.data();
+  const createdAt = userData.createdAt instanceof Timestamp 
+  ? userData.createdAt.toDate() //if Timestamp change to Date format 
+  : userData.createdAt;
+
+
+  return { id: currentUser.uid, ...userData, createdAt: createdAt || new Date()} as User;
 };
 
 /**
@@ -94,11 +102,14 @@ export const fetchAllUsers = async (): Promise<User[]> => {
 
     const users = usersSnapshot.docs.map(doc => {
       const data = doc.data();
+
+  
       return {
         id: doc.id,
         username: data.username,
         eMail: data.email,
-        createdAt: data.createdAt?.toDate(),
+        createdAt: data.createdAt ? ( data.createdAt instanceof Timestamp ? data.createdAt.toDate() : data.createdAt) 
+        : new Date(),
       } as User;
     });
     return users; 

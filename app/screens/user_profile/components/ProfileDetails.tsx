@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet,  Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';  //install this
 
 import { fetchFriendCount } from '@/data/FriendshipQuery';
@@ -9,34 +9,32 @@ import { fetchCurrentUser } from '@/data/UserDataService';
 import { storage } from '@/firebase'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc } from 'firebase/firestore';
-import db from '@/firestore'; 
+import db from '@/firestore';
 
 
- interface ProfileDetailsProps {
-   user: User | null;
-//    onViewProfile: (id: Friend) => void;
-//    onUnfriend: (id: Friend) => void;
- };
-const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
+interface ProfileDetailsProps {
+    user: User | null;
+    //    onViewProfile: (id: Friend) => void;
+    //    onUnfriend: (id: Friend) => void;
+};
+const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
     const { colorScheme, styles } = useTheme();
     const [friendCount, setFriendCount] = useState<string>('0');
     const [profileImage, setProfileImage] = useState<string | null>(null);
-
-
-    // const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
 
     useEffect(() => {
-       
 
-        // const loadCurrentUser = async () => {
-        //     try {
-        //         const user = await fetchCurrentUser();
-        //         setCurrentUser(user)
-        //     } catch (error) {
-        //         console.error('Error fetching user')
-        //     }
-        // };
-       
+
+         const loadCurrentUser = async () => {
+             try {
+                const user = await fetchCurrentUser();
+             setCurrentUser(user)
+             } catch (error) {
+             console.error('Error fetching user')
+        }
+       };
+
         const loadFriendCount = async () => {
             try {
                 if (user) {
@@ -47,39 +45,39 @@ const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
                 console.error('Error fetching friends or users:', error);
             }
         };
-        
 
-    const loadProfilePicture = async () => {
-        try{
-            if (user){
-                const userDocRef = doc(db, 'users', user.id);
-                const userDoc = await getDoc(userDocRef);
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    if (userData && userData.profilePhoto) {
-                      setProfileImage(userData.profilePhoto);
+
+        const loadProfilePicture = async () => {
+            try {
+                if (user) {
+                    const userDocRef = doc(db, 'users', user.id);
+                    const userDoc = await getDoc(userDocRef);
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        if (userData && userData.profilePhoto) {
+                            setProfileImage(userData.profilePhoto);
+                        }
                     }
-                  }
+                }
+
+            } catch (error) {
+                console.error('Error fetching profile picture:', error);
             }
+        };
 
-        } catch (error){
-            console.error('Error fetching profile picture:', error);
-        }
-    };
-
-    loadFriendCount();
-    loadProfilePicture();
-        // loadCurrentUser(); 
+        loadFriendCount();
+        loadProfilePicture();
+        loadCurrentUser(); 
     }, [user]);
 
 
     const profilePictureFirebase = async (imageUri: string) => {
         try {
-            if (!user){
-                Alert.alert ('Error', 'Could not fetch current user');
+            if (!user) {
+                Alert.alert('Error', 'Could not fetch current user');
                 return;
             }
-            
+
 
             const response = await fetch(imageUri);
             const blob = await response.blob();
@@ -95,15 +93,15 @@ const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
 
 
 
-        } catch (error){
+        } catch (error) {
             console.error('Error uploading image:', error);
             Alert.alert('Upload Failed', 'Could not upload profile picture.');
         }
 
     };
-    
+
     const handleImagePicker = async () => {
-        
+
         try {
             // Request permissions for Android
             if (Platform.OS === 'android') {
@@ -122,7 +120,7 @@ const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
                 }
             }
 
-            
+
             const result = await launchImageLibrary({
                 mediaType: 'photo',
                 quality: 1,
@@ -135,7 +133,7 @@ const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
             } else if (result.assets && result.assets.length > 0) {
                 const imageUri = result.assets[0].uri;
 
-                
+
                 if (imageUri) {
                     setProfileImage(imageUri);
                     await profilePictureFirebase(imageUri);
@@ -152,48 +150,53 @@ const ProfileDetails : React.FC<ProfileDetailsProps> = ({user}) => {
     return (
         <View style={{ paddingHorizontal: 15 }}>
             <View style={styles.buttonContainer}>
-                {}
-    
+                { }
+
                 <TouchableOpacity onPress={handleImagePicker}>
                     <Image
-                        style={styles.profilePicture} 
+                        style={styles.profilePicture}
                         source={
                             profileImage
-                                ? { uri: profileImage } 
-                                : require('@/assets/images/profile-pic.jpg') 
+                                ? { uri: profileImage }
+                                : require('@/assets/images/profile-pic.jpg')
                         }
                     />
                 </TouchableOpacity>
 
-                
+
                 <View style={{ width: 75, alignItems: 'center' }}>
                     <Text style={styles.label}>Friends</Text>
                     <Text style={styles.profileDetailText}>{friendCount}</Text>
                 </View>
 
-                
+
                 <View style={{ width: 75, alignItems: 'center' }}>
                     <Text style={styles.label}>Points</Text>
                     <Text style={styles.profileDetailText}>0</Text>
                 </View>
             </View>
 
-        
+
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 15 }}>
                 <View>
-                    <Text style={[styles.text, {fontSize: 20, fontWeight: '400'}]}>~{user?.bio}~</Text>
+                    <Text style={[styles.text, { fontSize: 20, fontWeight: '200' }]}>
+                        {
+                            user?.id === currentUser?.id
+                                ? user?.bio || 'Insert your Bio!'
+                                : user?.bio || ''
+                        }</Text>
                 </View>
             </View>
 
-            
-            <View>
-                <Text style={styles.text}>@{user?.username}</Text>
+
+            <View style={styles.fullContainer}>
+                <Text style={[styles.text, { padding: 0, fontWeight: '200' }]}>@{user?.username}</Text>
             </View>
 
-            
+
             <View style={styles.fullContainer}>
-                <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>Account Created</Text>
-                <Text style={[styles.text, { fontWeight: '100' }]}>11/30/24</Text>
+                <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>Account Created:</Text>
+                <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>{user?.createdAt ? user.createdAt.toLocaleDateString("en-US") : "Loading"}</Text>
             </View>
         </View>
     );
@@ -203,13 +206,13 @@ export default ProfileDetails;
 
 const style = StyleSheet.create({
     text: {
-    fontSize: 24,
-    fontWeight: '400',
-    color: 'black',
+        fontSize: 24,
+        fontWeight: '400',
+        color: 'black',
     },
     bioText: {
         fontSize: 16,
         fontWeight: '400',
         color: 'black',
-        }
+    }
 });
