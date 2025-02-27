@@ -1,9 +1,13 @@
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc, getCountFromServer, orderBy } from 'firebase/firestore';
 import db from '@/firestore'; 
 import { getAuth, deleteUser as authDeleteUser  } from 'firebase/auth';
+<<<<<<< Updated upstream
 import { User, userSubcollections as subcollections } from './types';
 import { Timestamp } from 'firebase/firestore';
 
+=======
+import { User, userSubcollections as subcollections, Leaderboard } from './types';
+>>>>>>> Stashed changes
 
 /**
  * Fetch the current user's data.
@@ -123,9 +127,21 @@ export async function getCollectionSize(collectionPath: string) {
   const collectionRef = collection(db, collectionPath);
   const snapshot = await getCountFromServer(collectionRef);
   const size = snapshot.data().count;
-  return size;
+  return size + 1;
 }
 
+export async function rankUsers() {
+  const collectionRef = collection(db, 'leaderboard_entry');
+  const usersSorted = query(collectionRef, orderBy("points", 'desc'));
+  const topPoints = await getDocs(usersSorted);
+  const pleaseGod = topPoints.docs.map(doc => ({ id: doc.id, ...doc.data() } as Leaderboard));
+  const colSize = await getCollectionSize('leaderboard_entry');
+
+  for (var i = 0; i < colSize; i++){
+    const userDocRef = doc(db, 'leaderboard_entry', pleaseGod[i].userId);
+    await updateDoc(userDocRef, {ranking: i+1})
+  }
+}
 
 
 /**

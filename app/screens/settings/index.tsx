@@ -6,13 +6,14 @@ import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors'
 import { Link } from 'expo-router';
 import {changeEmail, singOutUser} from "@/auth";
-import { deleteUser } from '@/data/UserDataService';
+import { deleteUser, rankUsers } from '@/data/UserDataService';
 
 
 import { fetchCurrentUser, writeUserData } from '@/data/UserDataService';
 import { User } from '@/data/types'
 
 const UserSettings = () => {
+    rankUsers();
     const { colorScheme, styles } = useTheme();
     const router = useRouter();
 
