@@ -13,7 +13,7 @@ import { fetchCurrentUser, writeUserData } from '@/data/UserDataService';
 import { User } from '@/data/types'
 
 const UserSettings = () => {
-    rankUsers();
+    
     const { colorScheme, styles } = useTheme();
     const router = useRouter();
 

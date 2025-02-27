@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import FooterBar from '@/components/FooterBar';
 import { useTheme } from '@/hooks/useTheme';
+import { rankUsers } from '@/data/UserDataService';
 
 const Leaderboard = () => {
     const {colorScheme, styles } = useTheme();
@@ -29,7 +30,13 @@ const Leaderboard = () => {
 
             </View>
             <FooterBar />
+            <TouchableOpacity style={styles.lightButton} onPress={rankUsers}>
+                        <Text style={styles.buttonText}>
+                            Update Rank
+                        </Text>
+            </TouchableOpacity>
         </View>
+        
     );
 };
 

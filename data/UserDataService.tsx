@@ -1,13 +1,9 @@
-import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc, getCountFromServer, orderBy } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc, getCountFromServer, orderBy, serverTimestamp } from 'firebase/firestore';
 import db from '@/firestore'; 
 import { getAuth, deleteUser as authDeleteUser  } from 'firebase/auth';
-<<<<<<< Updated upstream
-import { User, userSubcollections as subcollections } from './types';
+import { User, userSubcollections as subcollections, Leaderboard } from './types';
 import { Timestamp } from 'firebase/firestore';
 
-=======
-import { User, userSubcollections as subcollections, Leaderboard } from './types';
->>>>>>> Stashed changes
 
 /**
  * Fetch the current user's data.
@@ -137,9 +133,11 @@ export async function rankUsers() {
   const pleaseGod = topPoints.docs.map(doc => ({ id: doc.id, ...doc.data() } as Leaderboard));
   const colSize = await getCollectionSize('leaderboard_entry');
 
-  for (var i = 0; i < colSize; i++){
-    const userDocRef = doc(db, 'leaderboard_entry', pleaseGod[i].userId);
-    await updateDoc(userDocRef, {ranking: i+1})
+  for (var i = 0; i < colSize-1; i++){
+    const userDocRef = doc(db, 'leaderboard_entry', pleaseGod[i].id);
+    await updateDoc(userDocRef, {ranking: i+1,
+                                 last_updated: serverTimestamp()
+    })
   }
 }
 
