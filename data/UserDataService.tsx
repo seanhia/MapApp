@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc, getCountFromServer, orderBy, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc, getCountFromServer, orderBy, serverTimestamp, limit } from 'firebase/firestore';
 import db from '@/firestore'; 
 import { getAuth, deleteUser as authDeleteUser  } from 'firebase/auth';
 import { User, userSubcollections as subcollections, Leaderboard } from './types';
@@ -125,7 +125,14 @@ export async function getCollectionSize(collectionPath: string) {
   const size = snapshot.data().count;
   return size + 1;
 }
-
+export const getTopFourUsers = async () => {
+  const collectionRef = collection(db, 'leaderboard_entry');
+  const usersSorted = query(collectionRef, orderBy("points", 'desc'), limit(4));
+  const topPoints = await getDocs(usersSorted);
+  const people = topPoints.docs.map(doc => ({ id: doc.id, ...doc.data() } as Leaderboard));
+  return people
+  
+}
 export async function rankUsers() {
   const collectionRef = collection(db, 'leaderboard_entry');
   const usersSorted = query(collectionRef, orderBy("points", 'desc'));

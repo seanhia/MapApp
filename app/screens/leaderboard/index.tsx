@@ -1,29 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import FooterBar from '@/components/FooterBar';
 import { useTheme } from '@/hooks/useTheme';
-import { rankUsers } from '@/data/UserDataService';
+import { rankUsers, getTopFourUsers, fetchUserByUID } from '@/data/UserDataService';
+import { Leaderboard } from '@/data/types';
 
-const Leaderboard = () => {
+const LeaderboardScreen =  () => {
     const {colorScheme, styles } = useTheme();
-    const data = [
-        { id: '1', username: 'user1', score: 150 },
-        { id: '2', username: 'user2', score: 120 },
-        { id: '3', username: 'user3', score: 100 },
-        { id: '4', username: 'user4', score: 90 },
-    ];
+    const [info, setData] = useState<Leaderboard[] | null>(null);
+    const [nameUse, setName] = useState([])
+    // const data = [
+    //     { id: '1', username: 'user1', points: 150 },
+    //     { id: '2', username: 'user2', points: 120 },
+    //     { id: '3', username: 'user3', points: 100 },
+    //     { id: '4', username: 'user4', points: 90 },
+    // ];
+    useEffect(() => {
+        const fetchData = async () => {
+            const topUsers = await getTopFourUsers();
+            for (var i = 0; i < 4; i++) {
+                    const important_data = await fetchUserByUID(topUsers[i].userid)
+                    topUsers.username = important_data?.username;
+            }
+            setData(topUsers);
+        };
+
+
+        fetchData();
+    }, []);
+    
+
 
     return (
         <View style={style.container}>
             <Text style={style.text}>Leaderboard</Text>
             <View style={style.box}>
                 <FlatList
-                    data={data}
+                    data= {info}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
                         <View style={style.row}>
                             <Text style={style.username}>{item.username}</Text>
-                            <Text style={style.score}>{item.score}</Text>
+                            <Text style={style.score}>{item.points}</Text>
                         </View>
                     )}
                 />
@@ -84,4 +102,4 @@ const style = StyleSheet.create({
     },
 });
 
-export default Leaderboard;
+export default LeaderboardScreen;

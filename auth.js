@@ -36,7 +36,8 @@ export const signUpWithEmail = async (email,password, fname, lname, phone, usern
       last_updated: serverTimestamp(),
       points: 0,
       ranking: size,
-      userid: user.uid
+      userid: user.uid,
+      username: username
   });
   console.log(size);
 });

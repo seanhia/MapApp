@@ -107,8 +107,8 @@ export interface Location {
 export interface Leaderboard {
     id: string,
     ranking: number,
-    userId: string,
-    // username: string,
+    userid: string,
+    username: string,
     points: number,
     last_updated: Date,
 }
