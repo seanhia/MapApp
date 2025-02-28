@@ -1,8 +1,9 @@
 //import firestore from '@react-native-firebase/firestore';
-import {getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, serverTimestamp} from 'firebase/firestore';
+import {getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, increment, updateDoc} from 'firebase/firestore';
 import app from './firebase'
 import { query, orderBy, limit } from "firebase/firestore";
 import { haversineDistance } from "./app/utils/geolocation";
+//import { getCityCountry } from "./app/utils/stats";
 
 //const db = firebase.firestore();
 const db = getFirestore(app);
@@ -91,12 +92,17 @@ export const saveLocation = async (
       distanceFromLast,
     });
     console.log(`Saved location. Moved ${distanceFromLast} meters from the last saved location.`);
+    
+    //update total distance traveled for user
+    await updateDoc(userDocRef, {
+      totalDistance: increment(distanceFromLast),
+    });
+    console.log('added ${distanceFromLast} to user ${userId}');
+
   } catch (error) {
     console.error("Error saving location:", error);
     throw error;
   }
-
-
 };
 
 /**
@@ -141,4 +147,20 @@ const getLastLocation = async (userId: string) => {
   }
   return null;
 };
+
+// export async function updateStats(userId: string) {
+//   try{
+//     const {uniqueCities, uniqueCountries} = await getCityCountry(userId);
+
+//     const userStats = doc(db, `users/${userId}/stats/statsDocument`);
+//     await setDoc(userStats, {
+//       uniqueCities,
+//       uniqueCountries,
+//     });
+
+//   console.log("User stats updated");
+//   } catch(error){
+//     console.error("User stats firebase failed", error);
+//   }
+// }
 
