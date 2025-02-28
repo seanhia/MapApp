@@ -117,7 +117,7 @@ const Friends = () => {
     setSearchQuery(query);
     setFilteredUsers(
       allUsers.filter((user) =>
-        user.username.toLowerCase().includes(query.toLowerCase())
+        user?.username?.toLowerCase().includes(query.toLowerCase())
       )
     );
   };

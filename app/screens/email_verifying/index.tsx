@@ -8,10 +8,11 @@ import sharedStyles from '@/constants/sharedStyles'; // Import the shared styles
 import { ImageHeader } from '@/components/ImageHeader';
 import {waitForEmailVerification} from "@/auth";
 import {router} from 'expo-router';
+import { useTheme } from '@/hooks/useTheme';
 
 
 const emailVerifyScreen = () => {
-  
+  const { colorScheme, styles } = useTheme();
   const  checkingEmail = async () => {
   try {
     await waitForEmailVerification();
@@ -23,21 +24,21 @@ const emailVerifyScreen = () => {
   checkingEmail();
 
   return (
-    <View style={sharedStyles('dark').halfContainer}>
+    <View style={styles.fullContainer}>
       <ImageHeader
         image={require('@/assets/images/cloud.png')}
         text='EXPLORE'
       />      
 
       {/* Instructions */}
-      <Text style={styles.instructions}>
+      <Text style={style.instructions}>
         Please go to your email inbox and verify your email
       </Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   instructions: {
     fontSize: 14,
     color: '#6B6B6B',
