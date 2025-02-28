@@ -48,7 +48,8 @@ export const createFriendship = async (userId: string , username: string) => {
             username2: username, 
             createdAt: new Date()
         }
-        const newFriendshipRef = doc(collection(db, 'friendships'));
+        const friendshipId = [currentUser.uid, userId].sort().join("_");
+        const newFriendshipRef = doc(db, 'friendships', friendshipId);
         
         // Write the data into Firestore
         await setDoc(newFriendshipRef, data);

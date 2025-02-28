@@ -9,8 +9,8 @@ import {changeEmail, singOutUser} from "@/auth";
 import { deleteUser } from '@/data/UserDataService';
 
 
-import { fetchCurrentUser, writeUserData } from '@/data/UserDataService';
-import { User } from '@/data/types'
+import { fetchCurrentUser, writeUserData, writeUserLeaderboard , fetchCurrentUserLeaderboard} from '@/data/UserDataService';
+import { Leaderboard, User } from '@/data/types'
 
 const UserSettings = () => {
     
@@ -20,6 +20,7 @@ const UserSettings = () => {
     const [isPrivateAccount, setIsPrivateAccount] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [userLeaderboard, setUserBoard] = useState<Leaderboard | null>(null)
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
     const [eMail, setEmail] = useState('');
@@ -35,6 +36,15 @@ const UserSettings = () => {
                 console.error('Error fetching user:', error);
             }
         };
+        const loadUserLeaderboard = async () => {
+            try {
+                const userboard = await fetchCurrentUserLeaderboard();
+                setUserBoard(userboard);
+            } catch (e) {
+                console.log("Error fetching user leaderboard:", e)
+            }
+        }
+        loadUserLeaderboard();
         loadCurrentUser();
     }, []);
 
@@ -72,8 +82,13 @@ const UserSettings = () => {
             'isPrivate': isPrivateAccount,
             'isDarkMode': isDarkMode,
         };
+        const updatedLeaderboard: Leaderboard = {
+            ...userLeaderboard,
+            username
+        }
         try {
             await writeUserData(updatedUser);
+            await writeUserLeaderboard(updatedLeaderboard)
             alert('Settings updated successfully!');
             console.log(updatedUser)
             console.log(currentUser)

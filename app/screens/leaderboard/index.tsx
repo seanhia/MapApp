@@ -18,10 +18,7 @@ const LeaderboardScreen =  () => {
     useEffect(() => {
         const fetchData = async () => {
             const topUsers = await getTopFourUsers();
-            for (var i = 0; i < 4; i++) {
-                    const important_data = await fetchUserByUID(topUsers[i].userid)
-                    topUsers.username = important_data?.username;
-            }
+            
             setData(topUsers);
         };
 

@@ -29,7 +29,10 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
          const loadCurrentUser = async () => {
              try {
                 const user = await fetchCurrentUser();
-             setCurrentUser(user)
+                setCurrentUser(user)
+                console.log("current user: " )
+                console.log(user?.createdAt);
+
              } catch (error) {
              console.error('Error fetching user')
         }
@@ -196,7 +199,9 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
 
             <View style={styles.fullContainer}>
                 <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>Account Created:</Text>
-                <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>{user?.createdAt ? user.createdAt.toLocaleDateString("en-US") : "Loading"}</Text>
+                <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>
+                    {user?.createdAt ?  new Date((user.createdAt)).toLocaleDateString("en-US") : "Loading"}
+                </Text>
             </View>
         </View>
     );

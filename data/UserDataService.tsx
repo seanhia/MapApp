@@ -35,6 +35,30 @@ export const fetchCurrentUser = async (): Promise<User | null> => {
   return { id: currentUser.uid, ...userData, createdAt: createdAt || new Date()} as User;
 };
 
+
+export const fetchCurrentUserLeaderboard = async (): Promise<Leaderboard | null> => {
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+
+  if (!currentUser) {
+    console.error('No user is currently signed in!');
+    return null;
+  }
+
+  const userDocRef = doc(db, 'leaderboard_entry', currentUser.uid);
+  const userDocSnap = await getDoc(userDocRef);
+
+  if (!userDocSnap.exists()) {
+    console.error('User document does not exist in Firestore!');
+    return null;
+  }
+
+  const userData = userDocSnap.data();
+  
+
+
+  return { id: currentUser.uid, ...userData} as Leaderboard;
+};
 /**
  * Fetch a user's data by their UID.
  * @param {string} id - The UID of the user to fetch.
@@ -66,6 +90,16 @@ export const fetchUserByUID = async (id: string): Promise<User | null> => {
 export const writeUserData = async (user: User): Promise<void> => {
   try {
     const userDocRef = doc(db, 'users', user.id);
+    await setDoc(userDocRef, user, { merge: true });
+    console.log('User data successfully written/updated!');
+  } catch (error) {
+    console.error('Error writing user data:', error);
+  }
+};
+
+export const writeUserLeaderboard = async (user: Leaderboard): Promise<void> => {
+  try {
+    const userDocRef = doc(db, 'leaderboard_entry', user.id);
     await setDoc(userDocRef, user, { merge: true });
     console.log('User data successfully written/updated!');
   } catch (error) {
