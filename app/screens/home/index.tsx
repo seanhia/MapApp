@@ -44,6 +44,7 @@ export default function Home() {
       setMapCenter({ lat: location.coords.latitude, lng: location.coords.longitude });
       fetchWeather(location.coords.latitude, location.coords.longitude);
     }
+    
     if (error) {
       console.error("Error with real-time tracking:", error);
       Alert.alert("Error", error.toString());
