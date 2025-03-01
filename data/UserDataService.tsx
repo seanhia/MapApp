@@ -68,13 +68,22 @@ export const fetchUserByUID = async (id: string): Promise<User | null> => {
   try {
     const userDocRef = doc(db, 'users', id);
     const userDocSnap = await getDoc(userDocRef);
+    console.log("fetching user id: ",userDocSnap.data())
 
     if (!userDocSnap.exists()) {
       console.error(`No user found with UID: ${id}`);
       return null;
     }
 
-    return { id, ...userDocSnap.data() } as User;
+    // Fetch the user's data
+    const userData = userDocSnap.data();
+     // Convert the `createdAt` field if it's a Timestamp, else return as is
+     if (userData.createdAt instanceof Timestamp) {
+      userData.createdAt = userData.createdAt.toDate();
+    }
+
+    return { id, ...userData} as User;
+
   } catch (error) {
     console.error('Error fetching user:', error);
     return null;

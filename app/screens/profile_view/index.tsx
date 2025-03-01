@@ -20,7 +20,7 @@ import ProfilePost from "../user_profile/components/Photos/ProfilePost";
 
 const ProfileView = () => {
   const { colorScheme, styles } = useTheme();
-  const { userId } = useLocalSearchParams(); // Retrieve userId from params
+  const { userId } = useLocalSearchParams(); // Retrieve userId from params //friendship id
   const [user, setUser] = useState<User | null>(null);
   const [loadedPosts, setLoadedPosts] = useState<Post[]>([]);
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true); // Flag to check if more posts are available
@@ -60,8 +60,9 @@ const ProfileView = () => {
       <ScrollView>
         {/* <ProfileHeader /> */}
         {user ? <ProfileDetails user={user} /> : <Text>User not found</Text>}
+        <Text style={[styles.heading, {}]}></Text>
         <ProfilePost
-          posts={loadedPosts}
+        posts={loadedPosts}
           onLoadMore={loadPosts} // Pass loadPosts function to ProfilePost
           hasMorePosts={hasMorePosts} // Pass flag to show/hide Load More button
         />

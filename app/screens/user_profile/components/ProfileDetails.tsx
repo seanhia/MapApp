@@ -30,9 +30,6 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
              try {
                 const user = await fetchCurrentUser();
                 setCurrentUser(user)
-                console.log("current user: " )
-                console.log(user?.createdAt);
-
              } catch (error) {
              console.error('Error fetching user')
         }
@@ -43,9 +40,11 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
                 if (user) {
                     const count = await fetchFriendCount(user);
                     setFriendCount(count);
+                    console.log(user?.createdAt);
+
                 }
             } catch (error) {
-                console.error('Error fetching friends or users:', error);
+                console.error('Error fetching user:', error);
             }
         };
 

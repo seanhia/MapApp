@@ -16,23 +16,30 @@ export const createFriendship = async (userId: string , username: string) => {
         if (!user) throw new Error('Unable to fetch the current user details.');
 
 
-        const friendshipsRef = collection(db, 'friendships');
 
         // Check if a friendship already exists between the two users
         const existingFriendshipQuery = query(
-            friendshipsRef, 
+            collection(db, 'friendships'),
             where('status', 'in', ['approved', 'pending', 'rejected']),
             where('user1', 'in', [currentUser.uid, userId]),
             where('user2', 'in', [currentUser.uid, userId])
         ); 
-
+                                                                                                                      
         const existingFriendshipSnapshot = await getDocs(existingFriendshipQuery);
 
         if (!existingFriendshipSnapshot.empty) {
             const friendRef = existingFriendshipSnapshot.docs[0]
-            alert('Friendship already exists')
-            console.log('Friendship already exists:', friendRef.id);
-            return;
+            if (friendRef.data().status === 'approved') {
+                alert('You are already friends!')
+                console.log('You are already friends:', friendRef.id);
+                return;
+            }
+            if (friendRef.data().status === 'pending') {
+                alert('Friend request already sent!')
+                console.log('Friend request already sent:', friendRef.id);
+                return;
+            }
+            return; 
         }
         if (currentUser.uid === userId) {
             alert('You cannot add yourself as a friend!');
