@@ -1,7 +1,10 @@
 import React from 'react';
 import { useColorScheme, FlatList, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
-import { Friend } from "@/data/types"
+import { Friend, User} from "@/data/types"
+import { useProfileImage } from '@/hooks/useProfileImage';
+import { fetchCurrentUser, fetchUserByUID } from '@/data/UserDataService';
+import { useState, useEffect } from 'react';
 
 
 interface FriendListProps {
@@ -19,9 +22,11 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfri
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <ScrollView contentContainerStyle={styles.buttonContainer}>
-          <Image source={require('@/assets/images/cloud.png')} // Placeholder Profile Picture 
-            style={styles.profilePicture} />
-          <Text style={styles.boldText}>@{item.friend_username}</Text>
+         <Image
+              style={styles.profilePicture}
+              source={item.friendProfilePhoto ? { uri: item.friendProfilePhoto } : require('@/assets/images/cloud.png')}
+            />
+          <Text style={styles.boldText}>@{item.friendUsername}</Text>
 
             <TouchableOpacity 
               style={styles.sideButton}
@@ -42,3 +47,7 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfri
 };
 
 export default FriendList;
+// function useState<T>(arg0: null): [any, any] {
+//   throw new Error('Function not implemented.');
+// }
+

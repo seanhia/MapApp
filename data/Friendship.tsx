@@ -3,8 +3,10 @@ import { doc, getDoc, collection, setDoc, getDocs, query, where, updateDoc, dele
 import db from '@/firestore';
 import { getAuth } from 'firebase/auth';
 import { fetchUserByUID } from '@/data/UserDataService'
+import { User, status } from '@/data/types';
+import convertToDate from '@/app/utils/convertToDate';
 
-export const createFriendship = async (userId: string , username: string) => {
+export const createFriendship = async (friend: User) => {
     try {
         // Auth instance to get the current user's ID (optional)
         const auth = getAuth();
@@ -20,28 +22,28 @@ export const createFriendship = async (userId: string , username: string) => {
         // Check if a friendship already exists between the two users
         const existingFriendshipQuery = query(
             collection(db, 'friendships'),
-            where('status', 'in', ['approved', 'pending', 'rejected']),
-            where('user1', 'in', [currentUser.uid, userId]),
-            where('user2', 'in', [currentUser.uid, userId])
+            where('status', 'in', status),
+            where('user1', 'in', [currentUser.uid, friend.id]),
+            where('user2', 'in', [currentUser.uid, friend.id])
         ); 
                                                                                                                       
         const existingFriendshipSnapshot = await getDocs(existingFriendshipQuery);
 
         if (!existingFriendshipSnapshot.empty) {
             const friendRef = existingFriendshipSnapshot.docs[0]
-            if (friendRef.data().status === 'approved') {
+            if (friendRef.data().status === status[1]) {
                 alert('You are already friends!')
                 console.log('You are already friends:', friendRef.id);
                 return;
             }
-            if (friendRef.data().status === 'pending') {
+            if (friendRef.data().status === status[2]) {
                 alert('Friend request already sent!')
                 console.log('Friend request already sent:', friendRef.id);
                 return;
             }
             return; 
         }
-        if (currentUser.uid === userId) {
+        if (currentUser.uid === friend.id) {
             alert('You cannot add yourself as a friend!');
             console.error('You cannot add yourself as a friend!');
             return;
@@ -49,13 +51,13 @@ export const createFriendship = async (userId: string , username: string) => {
         // Data for new frienship document 
         const data = {
             user1: currentUser.uid, //currentUser.uid,
-            user2: userId,
+            user2: friend.id,
             status: 'pending', // pending, approved, rejected
             username1: user.username || null, 
-            username2: username, 
-            createdAt: new Date()
+            username2: friend.username, 
+            createdAt: convertToDate(new Date()), // Use the current date and time
         }
-        const friendshipId = [currentUser.uid, userId].sort().join("_");
+        const friendshipId = [currentUser.uid, friend.id].sort().join("_");
         const newFriendshipRef = doc(db, 'friendships', friendshipId);
         
         // Write the data into Firestore
@@ -70,7 +72,7 @@ export const createFriendship = async (userId: string , username: string) => {
 
 export const AcceptFriendship = async (id: string) => {
     const data = {
-        status: 'approved',
+        status: status[1], // approved
     };
 
     try {
@@ -94,7 +96,7 @@ export const DeleteFriendship = async (id: string) => {
         const friendshipDoc = doc(db, 'friendships', id);
         
         await deleteDoc(friendshipDoc);
-        console.log('Friendship denied!'); 
+        console.log('Friendship successfully delelted!'); 
 
     } catch (error) {
         console.error('Error denying friendship:', error);

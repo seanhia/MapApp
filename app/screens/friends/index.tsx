@@ -105,11 +105,11 @@ const Friends = () => {
     ////
     console.log(
       "Attempting to view the following users profile",
-      friendship.friend_id
+      friendship.friendId
     );
     router.push({
       pathname: "/screens/profile_view",
-      params: { userId: friendship.friend_id }, // Pass friend_id as a parameter
+      params: { userId: friendship.friendId }, // Pass friend_id as a parameter
     });
   };
 

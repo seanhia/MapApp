@@ -18,9 +18,17 @@ export const userSubcollections = ['posts', 'locations'];
 
 export interface Friend {
     id: string,
-    friend_id: string,
-    friend_username: string,
+    friendId: string,
+    friendUsername: string,
+    createdAt: Date,
+    status: string, // pending, approved, rejected
+    friendProfilePhoto?: string,
 };
+
+export const status = {
+    1: "approved", 
+    2: "pending", 
+    3: "rejected"};
 
 export interface Post {
     id: string,
@@ -28,7 +36,7 @@ export interface Post {
     content: string,
     published: boolean, 
     authorUid: string, 
-    images?: ImageSourcePropType[], //at most 5?
+    images?: URL [] | null,
     createdAt: Timestamp,
     rating: Rating,
     likes?: User[], 

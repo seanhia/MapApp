@@ -20,7 +20,7 @@ const UserList: React.FC<UserListProps> = ({ users, visible }) => {
       renderItem={({ item }) => (
         <TouchableOpacity
         style={styles.lightButton}
-        onPress={() => createFriendship(item.id, item.username)} // Use dynamic user ID and username
+        onPress={() => createFriendship(item)} // Use dynamic user ID and username
       >
         <Text style={{fontWeight: 'bold'}}>Add Friend</Text>
         <Text style={{fontSize:12}}>{item.username}</Text> {/* Display the username */}

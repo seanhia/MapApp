@@ -1,9 +1,16 @@
- import { getDocs, query, where, collection, count } from 'firebase/firestore';
- import db from '@/firestore';
- import { fetchCurrentUser } from './UserDataService';
- import { User } from '@/data/types'
- import { Friend } from '@/data/types'
+import { getDocs, query, where, collection } from 'firebase/firestore';
+import db from '@/firestore';
+import { fetchCurrentUser, fetchUserByUID } from './UserDataService';
+import { User, Friend } from '@/data/types'
+import convertToDate from '@/app/utils/convertToDate';
+import { useProfileImage } from '@/hooks/useProfileImage';
 
+/**
+    * Fetches the current user's "approved" friends from Firestore.
+    * @returns {Promise<Friend[]>} A promise that resolves to an array of friends.
+    * @throws {Error} If no user is currently signed in or if there is an error fetching friends.
+    * First checks if the user is signed in, then queries the 'friendships' collection for approved friendships.
+ */
 export const FriendQuery = async () => {
     try {
         const currentUser = await fetchCurrentUser();
@@ -19,8 +26,16 @@ export const FriendQuery = async () => {
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(approvedQ1), getDocs(approvedQ2)]);
 
         const friends: Friend[] = [];
-        querySnapshot1.forEach((doc) => friends.push({ id: doc.id, friend_id: doc.data().user2, friend_username: doc.data().username2 }));
-        querySnapshot2.forEach((doc) => friends.push({ id: doc.id, friend_id: doc.data().user1, friend_username: doc.data().username1 }));
+        querySnapshot1.forEach((doc) => friends.push({ 
+            id: doc.id, friendId: doc.data().user2, friendUsername: doc.data().username2, 
+            createdAt: doc.data().createdAt, status: doc.data().status
+            
+        }));
+        querySnapshot2.forEach((doc) => friends.push({ 
+            id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1,
+            createdAt: convertToDate(doc.data().createdAt), status: doc.data().status
+        }));
+        console.log('Friends:', friends);
 
         return friends;
 
@@ -44,7 +59,10 @@ export const PendingQuery = async () => {
     const [pendingSnapshot1] = await Promise.all([getDocs(pendingQ1)]);
 
     const pending: Friend[] = [];
-    pendingSnapshot1.forEach((doc) => pending.push({ id: doc.id, friend_id: doc.data().user1, friend_username: doc.data().username1 }));
+    pendingSnapshot1.forEach((doc) => pending.push({ 
+        id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1, 
+        createdAt: doc.data().createdAt, status: doc.data().status
+    }));
     
     return pending; 
     
@@ -55,17 +73,17 @@ export const PendingQuery = async () => {
 };
 
 
-export const fetchFriendCount = async (user: User | null): Promise<string> => {
+export const fetchFriendCount = async (friend: User | null): Promise<string> => {
 
     try {
         // const currentUser = await fetchCurrentUser();
-        if (!user) {
+        if (!friend) {
             throw new Error('No user is currently signed in!');
         }  
        
         const friendshipsRef = collection(db, 'friendships');
-        const countQuery1 = query(friendshipsRef, where('status', '==', 'approved'), where('user1', '==', user.id));
-        const countQuery2 = query(friendshipsRef, where('status', '==', 'approved'), where('user2', '==', user.id));
+        const countQuery1 = query(friendshipsRef, where('status', '==', 'approved'), where('user1', '==', friend.id));
+        const countQuery2 = query(friendshipsRef, where('status', '==', 'approved'), where('user2', '==', friend.id));
 
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(countQuery1), getDocs(countQuery2)]);
         const friendCount = querySnapshot1.size + querySnapshot2.size;
