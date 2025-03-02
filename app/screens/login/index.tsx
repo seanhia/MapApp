@@ -1,7 +1,7 @@
 import app, {auth} from "@/firebase";
 import {sendEmailVerification} from 'firebase/auth';
 import { useState} from "react";
-import { Text, View, StyleSheet, KeyboardAvoidingView, Button, ActivityIndicator, TouchableOpacity, Image } from "react-native";
+import { Text, View, KeyboardAvoidingView, Button, ActivityIndicator, TouchableOpacity, Image } from "react-native";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { Link , router} from 'expo-router';
 import { FirebaseError } from 'firebase/app'
@@ -9,6 +9,7 @@ import {signUpWithEmail, signInWithEmail} from "@/auth";
 import { useTheme } from '@/hooks/useTheme'; 
 import { Colors } from '@/constants/Colors';
 import { ImageHeader } from '@/components/ImageHeader'
+import Splash from "@/app/SplashScreen";
 
 
 export default function Login() {
@@ -16,7 +17,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-
+  
 
   const signIn = async () => {
     setLoading(true);
@@ -38,15 +39,12 @@ export default function Login() {
   };
 
   return (
+    // loading ? <Splash /> : // Test Splash Screen 
     <GestureHandlerRootView style={{ flex: 1 }}>
     <View style={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
       <View
         style={styles.centerContainer}
       >
-        <Link style={{alignSelf: 'center'}} href="/screens/home">
-          <Text style={{ color: Colors.light.tabIconDefault}}>Homepage (Temporary)</Text>
-        </Link>
-
         <ImageHeader 
           image={require('@/assets/images/cloud.png')}
           text='EXPLORE'

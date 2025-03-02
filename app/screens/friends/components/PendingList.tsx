@@ -26,7 +26,7 @@ interface PendingListProps {
                 <View style={styles.buttonContainer}>
                     <Image source={require('@/assets/images/cloud.png')}
                     style={styles.profilePicture} />
-                    <Text style={styles.boldText}>@{item.friend_username}</Text>
+                    <Text style={styles.boldText}>@{item.friendUsername}</Text>
                         <TouchableOpacity
                             style={styles.sideButton}
                             onPress={() => onAccept(item)}
