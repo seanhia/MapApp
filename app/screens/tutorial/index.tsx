@@ -13,6 +13,7 @@ import { useRouter } from 'expo-router';
 
 import slides from './TutorialSlides' // page info for each onboarding swipe 
 import { useTheme } from '@/hooks/useTheme';
+import LottieView from 'lottie-react-native';
 
 
 const Tutorial = ({ onComplete }: { onComplete: () => void }) => {
@@ -26,6 +27,12 @@ const Tutorial = ({ onComplete }: { onComplete: () => void }) => {
     subtitle: slide.subtitle,
     image: <Image source={slide.image} 
         style={{height: 200, width: 220, marginBottom: 500, justifyContent: 'space-evenly',  marginVertical: 200}}/>,
+    animation: 
+      <LottieView 
+        source={slide.animation}
+        autoPlay
+        loop={false}
+      />
   }));
 
   return (

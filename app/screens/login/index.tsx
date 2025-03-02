@@ -1,6 +1,6 @@
 import app, {auth} from "@/firebase";
 import {sendEmailVerification} from 'firebase/auth';
-import { useState} from "react";
+import { useEffect, useState} from "react";
 import { Text, View, KeyboardAvoidingView, Button, ActivityIndicator, TouchableOpacity, Image } from "react-native";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { Link , router} from 'expo-router';
@@ -9,22 +9,25 @@ import {signUpWithEmail, signInWithEmail} from "@/auth";
 import { useTheme } from '@/hooks/useTheme'; 
 import { Colors } from '@/constants/Colors';
 import { ImageHeader } from '@/components/ImageHeader'
-import Splash from "@/app/SplashScreen";
 
 
 export default function Login() {
   const { colorScheme, styles } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
   
 
   const signIn = async () => {
     setLoading(true);
+    setError(null);
     try {
       const user = await signInWithEmail(email, password);
-      if (user.emailVerified) {
-        router.replace('/screens/home');
+      if (user?.emailVerified) {
+        router.push('/screens/home');
+      
       } else {
         sendEmailVerification(user);
         router.replace('/screens/email_verifying');
@@ -38,8 +41,16 @@ export default function Login() {
     }
   };
 
+  // Redirect if the user is already logged in (auth.currentUser)
+  useEffect(() => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      router.push('/screens/home'); // Automatically redirect logged-in users to home
+    }
+  }, []);
+
   return (
-    // loading ? <Splash /> : // Test Splash Screen 
+    // loading ? <SplashScreenView setIsLoading={setLoading} /> : // Test Splash Screen 
     <GestureHandlerRootView style={{ flex: 1 }}>
     <View style={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
       <View
