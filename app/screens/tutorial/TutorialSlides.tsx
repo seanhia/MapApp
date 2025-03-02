@@ -1,3 +1,4 @@
+import LocationAnim from '@/components/LocationAnim';
 const slides = [
     {
       // id: '1',
@@ -10,6 +11,7 @@ const slides = [
       title: 'View Your EXPLORE Map',
       subtitle: 'See your travel history uncloud as you explore new locations.',
       image: require('../../../assets/images/location.png'),
+      animation: require('@/assets/animation/location-timeline.json') || null,
     },
     {
       // id: '3',

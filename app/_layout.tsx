@@ -88,10 +88,14 @@ export default function RootLayout() {
       }}
     >
       <Stack.Screen
+        name="screens/index"
+        options={{ title: "", headerShown: false }}
+      />
+      <Stack.Screen
         name="screens/login/index"
         options={{ title: "Login", headerShown: false }}
       />
-      <Stack.Screen name="screens/sign_up/index" options={{ title: "" }} />
+      <Stack.Screen name="screens/sign_up/index" options={{ title: "", headerShown: false }} />
       <Stack.Screen name="screens/tutorial/index" options={{ title: "" }} />
       <Stack.Screen
         name="screens/forgot_password/index"
