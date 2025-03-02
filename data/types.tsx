@@ -25,10 +25,11 @@ export interface Friend {
     friendProfilePhoto?: string,
 };
 
-export const status = {
-    1: "approved", 
-    2: "pending", 
-    3: "rejected"};
+export const status = [
+    'pending',
+    'approved',
+    'rejected'
+]
 
 export interface Post {
     id: string,

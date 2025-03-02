@@ -35,7 +35,12 @@ export const fetchCurrentUser = async (): Promise<User | null> => {
   return { id: currentUser.uid, ...userData, createdAt: createdAt || new Date()} as User;
 };
 
-
+/**
+   * Fetch the current user's leaderboard data.
+   * @returns {Promise<Leaderboard | null>} Leaderboard data or null if the user doesn't exist.
+   * @throws {Error} If no user is currently signed in or if the user document does not exist.
+   * @description This function retrieves the current user's leaderboard data from Firestore.
+   */
 export const fetchCurrentUserLeaderboard = async (): Promise<Leaderboard | null> => {
   const auth = getAuth();
   const currentUser = auth.currentUser;
@@ -52,13 +57,11 @@ export const fetchCurrentUserLeaderboard = async (): Promise<Leaderboard | null>
     console.error('User document does not exist in Firestore!');
     return null;
   }
-
   const userData = userDocSnap.data();
-  
-
 
   return { id: currentUser.uid, ...userData} as Leaderboard;
 };
+
 /**
  * Fetch a user's data by their UID.
  * @param {string} id - The UID of the user to fetch.

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';  //install this
 
-import { fetchFriendCount } from '@/data/FriendshipQuery';
+import { fetchFriendCount } from '@/data/Friendship';
 import { User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme';
 import { useProfileImage } from '@/hooks/useProfileImage';

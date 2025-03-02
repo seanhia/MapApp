@@ -12,7 +12,7 @@ import FooterBar from "@/components/FooterBar";
 import { User, Friend } from "@/data/types";
 
 import { fetchAllUsers } from "@/data/UserDataService";
-import { PendingQuery, FriendQuery } from "@/data/FriendshipQuery";
+import { PendingQuery, FriendQuery } from "@/data/Friendship";
 import { AcceptFriendship, DeleteFriendship } from "@/data/Friendship";
 
 import sharedStyles from "@/constants/sharedStyles";
@@ -126,13 +126,13 @@ const Friends = () => {
     <View style={styles.fullContainer}>
       <SearchBar value={searchQuery} onChange={handleSearch} />
       <UserList users={filteredUsers} visible={!!searchQuery} />
-      <Text style={styles.header}>Friends:</Text>
+      <Text style={[styles.header, {marginTop: 90}]}>Friends</Text>
       <FriendList
         friends={friendsList}
         onViewProfile={handleViewProfile} // Placeholder
         onUnfriend={handleDeny} // Delete Friendship
       />
-      <Text style={styles.header}>Pending Requests:</Text>
+      <Text style={styles.header}>Pending Requests</Text>
       <PendingList
         pending={pendingRequests}
         onAccept={handleAccept}
