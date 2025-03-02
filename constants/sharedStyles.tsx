@@ -176,6 +176,16 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       borderColor: "#ddd",
       borderWidth: 1,
     },
+    searchBarContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: 10,
+      // zIndex: 100, 
+      backgroundColor:
+        theme === "dark" ? Colors.dark.background : Colors.light.background,
+      borderRadius: 8,
+    },
 
     /** Buttons  */
     button: {
@@ -326,6 +336,40 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     photoList: {
       marginTop: 20, 
     },
+
+    /** Overlay */
+    overlay: {
+      position: 'absolute', // ✅ Makes it overlay other components
+      top: 10,             // Adjust to position at the top
+      left: 20,            // Aligns to the left
+      right: 20,           // Aligns to the right
+      backgroundColor: theme === "dark" ? Colors.dark.background : Colors.light.background,
+      zIndex: 10,        // ✅ Keeps it on top of other elements
+      borderRadius: 10,
+      padding: 0,
+      elevation: 3,       // ✅ Adds shadow for better visibility on Android
+    },
+    overlayUserItem: {
+      padding: 10,
+      borderBottomWidth: 1,
+      color: theme === "dark" ? Colors.dark.background : Colors.light.background,
+    },
+    userListContainer: {
+      position: 'absolute',
+      top: 80, // Appears below the search bar
+      left: 20,
+      right: 20,
+      backgroundColor: theme === "dark" ? Colors.light.tint : Colors.light.tint,
+      borderRadius: 10,
+      padding: 10,
+      elevation: 5,
+      shadowColor: '#fff',
+      // shadowOffset: { width: 0, height: 1},
+      shadowOpacity: .8,
+      // shadowRadius: 3,
+      zIndex: 5, // Lower than searchBar, but above the main content
+    },
+    
 
 
   });

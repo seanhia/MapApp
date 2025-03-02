@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, Text, View,  } from 'react-native';
+import { TextInput, Text, View, StyleSheet } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 
 interface SearchBarProps {
@@ -11,8 +11,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
   const { colorScheme, styles } = useTheme();
   
   return (
-    <View>
-      <Text style={styles.topMargin}></Text>
+    <View style={[styles.overlay]}>
       <TextInput
         style={styles.placeHolderInput}
         placeholder="Search users..."
@@ -22,6 +21,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
     </View>
   );
 };
+
 
 
 export default SearchBar;
