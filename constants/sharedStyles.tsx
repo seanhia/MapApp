@@ -86,6 +86,17 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
         theme === "dark" ? Colors.dark.placeHolder : Colors.light.placeHolder,
       marginBottom: 20,
     },
+    placeHolderInputPhoto: {
+      width: "100%",
+      height: 65,
+      backgroundColor: theme === "dark" ? Colors.dark.tint : Colors.light.tint,
+      borderRadius: 25,
+      paddingHorizontal: 20,
+      fontSize: 16,
+      color:
+        theme === "dark" ? Colors.dark.placeHolder : Colors.light.placeHolder,
+      marginBottom: 20,
+    },
     item: {
       padding: 10,
       backgroundColor: theme === "dark" ? Colors.dark.tint : Colors.light.tint,
@@ -288,8 +299,8 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       alignItems: "center",
     },
     modalView: {
-      width: "50%",
-      height: "50%",
+      width: "55%",
+      height: "55%",
       margin: 20,
       backgroundColor: "white",
       borderRadius: 20,

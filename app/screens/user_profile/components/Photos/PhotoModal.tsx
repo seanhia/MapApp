@@ -50,13 +50,13 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ visible, onClose, onSubmit }) =
                     <View style={styles.centered}>
                         <Text style={styles.title}>Photo Details</Text>
                         <TextInput
-                        style ={styles.placeHolderInput}
+                        style ={styles.placeHolderInputPhoto}
                         placeholder="Enter location"
                         value={location}
                         onChangeText={setLocation}
                         />
                         <TextInput
-                        style={styles.placeHolderInput}
+                        style={styles.placeHolderInputPhoto}
                         placeholder="Enter review"
                         multiline
                         value={review}
@@ -66,7 +66,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ visible, onClose, onSubmit }) =
                         <Rating style={styles.rating}
                         type ="star"
                         ratingCount={5}
-                        imageSize={30}
+                        imageSize={25}
                         startingValue={rating}
                         onFinishRating={setRating}
                         />

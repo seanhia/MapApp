@@ -1,6 +1,6 @@
 import { Post } from '@/data/types'
 import db from '@/firestore';
-import { doc, getDocs, collection, query, limit, orderBy, startAfter} from 'firebase/firestore';
+//import { doc, getDocs, collection, query, limit, orderBy, startAfter} from 'firebase/firestore';
 
 
 /**
@@ -8,7 +8,7 @@ import { doc, getDocs, collection, query, limit, orderBy, startAfter} from 'fire
  * @param authorId - The ID of the author.
  * @param loadedPosts - Array of posts already loaded to avoid duplicates.
  * @returns Updated list of posts including the newly fetched one.
- */
+
 export const fetchPostbyAuthor = async (
     lastPostId: string, 
     authorId: string, 
@@ -51,5 +51,5 @@ export const fetchPostbyAuthor = async (
     } 
 };
 
-
+ */
 
