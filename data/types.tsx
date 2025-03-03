@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore";
+import { Timestamp, FieldValue } from "firebase/firestore";
 import { ImageSourcePropType } from "react-native";
 
 export interface User {
@@ -33,11 +33,11 @@ export const status = [
 
 export interface Post {
     id: string,
-    title: string,
-    content: string,
+    location: string,
+    review: string,
     published: boolean, 
     authorUid: string, 
-    images?: URL [] | null,
+    images?: string,
     createdAt: Timestamp,
     rating: Rating,
     likes?: User[], 
