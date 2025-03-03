@@ -1,7 +1,52 @@
 import { Post } from '@/data/types'
 import db from '@/firestore';
-//import { doc, getDocs, collection, query, limit, orderBy, startAfter} from 'firebase/firestore';
+import {addDoc, doc, getDocs, collection, query, limit, orderBy, startAfter, serverTimestamp} from 'firebase/firestore';
+import { getAuth, deleteUser as authDeleteUser } from 'firebase/auth';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { auth, storage } from '@/firebase';
 
+/**
+ * Sa
+ * 
+ */
+
+export const savePost = async (
+    userId: string, 
+    image: string,
+    location: string, 
+    review: string, 
+    rating: number,
+): Promise<void> => {
+    if (!userId){
+        throw new Error("User ID is required to savepost.");
+    }
+    try {
+        const response = await fetch(image);
+        const blob = await response.blob();
+
+        const storageRef = ref(storage, `user_posts/${userId}`);
+        await uploadBytes(storageRef, blob);
+
+        const downloadURL = await getDownloadURL(storageRef);
+
+        const userDocRef = doc(db, "users", userId); // reference to user's document 
+        const postRef = collection(userDocRef, "posts"); //subcollection
+
+        await addDoc(postRef,{
+            location, 
+            review, 
+            published: true,
+            authorUid: userId,
+            image: downloadURL,
+            createdAt: serverTimestamp(),
+            rating,
+        });
+        console.log(`Saved Post.`)
+    } catch(error){
+        console.error("Error saving post: ", error);
+        throw error;
+    }
+};
 
 /**
  * Fetch a post that isn't already in the array of loaded posts.
