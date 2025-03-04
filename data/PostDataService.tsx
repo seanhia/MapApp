@@ -24,7 +24,8 @@ export const savePost = async (
         const response = await fetch(image);
         const blob = await response.blob();
 
-        const storageRef = ref(storage, `user_posts/${userId}`);
+        const fileDate = Date.now();
+        const storageRef = ref(storage, `user_posts/${userId}/${fileDate}`);
         await uploadBytes(storageRef, blob);
 
         const downloadURL = await getDownloadURL(storageRef);
