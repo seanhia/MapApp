@@ -39,7 +39,8 @@ const userProfile = () => {
           <ProfileDetails 
             user={currentUser} />
 
-          <UserPhotos/>
+          <UserPhotos
+          user={currentUser}/>
 
           <ProfileStatistics />
 

@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image } from 'react-native';
+import { View, Text, FlatList, Image, Alert } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import UploadPhoto from './UploadPhoto';
 import PhotoModal from './PhotoModal';
-import ProfilePost from './ProfilePost';
 import { User, Post } from '@/data/types'
 import { fetchCurrentUser } from '@/data/UserDataService';
-import { fetchPostbyAuthor } from '@/data/PostDataService';
 import { Rating } from 'react-native-ratings';
+import { savePost } from '@/data/PostDataService';
 
 interface PhotoDetails {
-    imageUri: string | null;
+    imageUri: string | '';
     location: string;
     review: string;
     rating: number;
 }
 
+interface UserPhotosProps{
+    user: User | null ;
+}
 
-const UserPhotos = () => {
+
+const UserPhotos: React.FC<UserPhotosProps> = ({ user }) => {
 
     const { colorScheme, styles } = useTheme();
     const [userImage, setUserImage] = useState<string | null>(null);
@@ -38,13 +41,22 @@ const UserPhotos = () => {
     };
 
 
-    const handleModalSubmit = (location: string, review: string, rating: number) => {
+    const handleModalSubmit = async (location: string, review: string, rating: number) => {
+        if (!userImage ){
+            console.error("No image selected!");
+            return;
+        }
+        if (!user || !user.id) {
+            console.error("User ID is undefined. Cannot save post.");
+            return;
+        }
         const newPhotoDetail = { location, review, rating, imageUri: userImage };
         setPhotoDetails([...photoDetails, newPhotoDetail]);
+        await savePost(user.id, userImage, location, review, rating);
         setUserImage(null);
         setModalVisible(false); // Close the modal after submission
     };
-
+/** 
     const loadPosts = async () => {
         try {
             // Fetch posts with the lastPostId (which is a string)
@@ -59,6 +71,7 @@ const UserPhotos = () => {
             console.error('Error loading posts');
         }
     };
+    */
 
     useEffect(() => {
         const loadCurrentUser = async () => {
@@ -72,7 +85,7 @@ const UserPhotos = () => {
         }
 
         loadCurrentUser();
-        loadPosts();
+        //loadPosts();
     }, []);
     // Log the updated posts when the state changes
     useEffect(() => {
