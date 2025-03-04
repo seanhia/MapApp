@@ -22,11 +22,13 @@ const UserList: React.FC<UserListProps> = ({ users, visible }) => {
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <TouchableOpacity
-        style={styles.lightButton}
+        style={styles.addFriendButton}
         onPress={() => createFriendship(item)} // Use dynamic user ID and username
       >
-        <Text style={{fontWeight: 'bold', color: 'lightblue'}}>Add Friend</Text>
-        <Text style={{fontSize:12, color: 'white'}}>{item.username}</Text> {/* Display the username */}
+        <Text style={{fontWeight: 'bold', color: 'black'}}>Add Friend</Text>
+        <Text style={[styles.buttonText, {fontSize: 12}]}>
+          {item.username}
+        </Text> {/* Display the username */}
       </TouchableOpacity>
       
       )}

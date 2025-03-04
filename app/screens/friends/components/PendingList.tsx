@@ -20,6 +20,7 @@ interface PendingListProps {
     
     return (
         <FlatList
+            style={{marginBottom: 90}}
             data={pending}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
@@ -40,8 +41,10 @@ interface PendingListProps {
                                 <Text style={styles.buttonText}>Deny</Text>
                             </TouchableOpacity>
                 </View>
-            )}
+                
+            )}  
         />
+        
     );
 };
 

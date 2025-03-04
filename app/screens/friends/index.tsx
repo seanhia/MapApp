@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, useColorScheme } from "react-native";
+import React, { useEffect, useState, useRef, useCallback} from "react";
+import { View, SafeAreaView, Text, TextInput, useColorScheme, Alert } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link, router } from "expo-router";
 
@@ -16,14 +16,15 @@ import { PendingQuery, FriendQuery } from "@/data/Friendship";
 import { AcceptFriendship, DeleteFriendship } from "@/data/Friendship";
 
 import sharedStyles from "@/constants/sharedStyles";
+import { ScrollView } from "react-native-gesture-handler";
 
-/**
- * Friends Screen
- * --------------------
- * This component handles the display and management of user friendships,
- * including approved friends, pending requests, and search functionality.
- *
- */
+// /**
+//  * Friends Screen
+//  * --------------------
+//  * This component handles the display and management of user friendships,
+//  * including approved friends, pending requests, and search functionality.
+//  *
+//  */
 
 const Friends = () => {
   const colorScheme = useColorScheme();
@@ -33,7 +34,10 @@ const Friends = () => {
   const [pendingRequests, setPendingRequests] = useState<Friend[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+
   const [searchQuery, setSearchQuery] = useState("");
+  // const [isSearchActive, setIsSearchActive] = useState(false);
+  // const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     const auth = getAuth();
@@ -52,6 +56,7 @@ const Friends = () => {
           const users = await fetchAllUsers();
           setAllUsers(users);
           setFilteredUsers(users);
+
         } catch (error) {
           console.error("Error fetching friends or users:", error);
         }
@@ -59,9 +64,11 @@ const Friends = () => {
         console.error("No user is logged in!");
       }
     });
-    return () => unsubscribe();
-  }, []);
+    return () => unsubscribe(); // Cleanup subscription on unmount
+  }, []); // Empty dependency
 
+
+  // Updating the database and state 
   const handleAccept = async (friendship: Friend) => {
     console.log("Accepted friend request from friendshipId:", friendship.id);
     try {
@@ -71,7 +78,7 @@ const Friends = () => {
       setFriendsList([...friendsList, friendship]);
       setPendingRequests((oldRequest) => {
         return oldRequest.filter(
-          (pendingRequests) => pendingRequests != friendship
+          (pendingRequests) => pendingRequests.id != friendship.id
         );
       });
     } catch (error) {
@@ -96,13 +103,10 @@ const Friends = () => {
           (pendingRequests) => pendingRequests != friendship
         );
       });
-      // } catch (error) {
-      //   console.error('Error handling friend denial:', error);
     }
   };
 
   const handleViewProfile = async (friendship: Friend) => {
-    ////
     console.log(
       "Attempting to view the following users profile",
       friendship.friendId
@@ -122,25 +126,55 @@ const Friends = () => {
     );
   };
 
+  // const searchText = useCallback(
+  //   (text: string) => {
+  //     if (!isSearchActive) {
+  //       setIsSearchActive(true);
+  //     }
+  //     const page = 1;
+  //     const limit = 3;
+  //     const filtered = allUsers.filter((user) =>
+  //       user?.username?.toLowerCase().includes(text.toLowerCase())
+  //     );
+  //     setFilteredUsers(filtered);
+  //     if (inputRef.current) {
+  //       inputRef.current.blur();
+  //     }
+  //   },
+  //   [allUsers, isSearchActive],
+  // );
+
+  // const onTextClear = useCallback(() => {
+  //   if (isSearchActive) {
+  //     setIsSearchActive(false);
+  //   }
+  // }, [isSearchActive]);
+
   return (
     <View style={styles.fullContainer}>
-      <SearchBar value={searchQuery} onChange={handleSearch} />
+      <SearchBar
+        value={searchQuery} 
+        onChange={handleSearch}
+        // inputRef={inputRef} 
+        />
       <UserList users={filteredUsers} visible={!!searchQuery} />
-      <Text style={[styles.header, {marginTop: 90}]}>Friends</Text>
-      <FriendList
-        friends={friendsList}
-        onViewProfile={handleViewProfile} // Placeholder
-        onUnfriend={handleDeny} // Delete Friendship
-      />
-      <Text style={styles.header}>Pending Requests</Text>
-      <PendingList
-        pending={pendingRequests}
-        onAccept={handleAccept}
-        onDeny={handleDeny}
-      />
-      <View>
+      <ScrollView>
+        <Text style={[styles.header, {marginTop: 90}]}>Friends</Text>
+        <FriendList
+          friends={friendsList}
+          onViewProfile={handleViewProfile} // Placeholder
+          onUnfriend={handleDeny} // Delete Friendship
+        />
+        <Text style={styles.header}>Pending Requests</Text>
+        <PendingList
+          pending={pendingRequests}
+          onAccept={handleAccept}
+          onDeny={handleDeny}
+        />
+      </ScrollView>
+      <SafeAreaView>
         <FooterBar />
-      </View>
+      </SafeAreaView>
     </View>
   );
 };

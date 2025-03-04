@@ -18,6 +18,11 @@ type colorSchemeName = "light" | "dark" | null | undefined;
 const sharedStyles = (colorScheme: colorSchemeName) => {
   const theme = colorScheme || "light";
   return StyleSheet.create({
+    /** Colors */
+    background: {
+      backgroundColor:
+        theme === "dark" ? Colors.dark.background : Colors.light.background
+    },
     /** Spacing */
     topMargin: {
       padding: 10,
@@ -212,10 +217,10 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       height: 50,
       backgroundColor:
         theme === "dark" ? Colors.dark.button : Colors.light.button,
-      borderRadius: 25,
-      justifyContent: "center",
-      alignItems: "center",
-      marginBottom: 10,
+        borderRadius: 25,
+        justifyContent: "center",
+        alignItems: "center",
+        marginBottom: 10,
     },
     sideButton: {
       width: "50%",
@@ -230,6 +235,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     footerButton: {
       padding: 10,
       alignItems: "center",
+      
       color:
         theme === "dark" ? Colors.dark.background : Colors.light.background,
     },
@@ -239,6 +245,14 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       backgroundColor: Colors.light.tint,
       borderRadius: 8, // Rounded corners
       alignItems: "center", // Center text
+    },
+    addFriendButton: {
+      width: '100%',
+      backgroundColor: theme === "dark" ? Colors.dark.button : 'white',
+      borderRadius: 25,
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: 10,
     },
 
     /** Images  */
