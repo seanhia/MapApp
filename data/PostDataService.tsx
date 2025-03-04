@@ -1,6 +1,6 @@
 import { Post } from '@/data/types'
 import db from '@/firestore';
-import {addDoc, doc, getDocs, collection, query, limit, orderBy, startAfter, serverTimestamp} from 'firebase/firestore';
+import { addDoc, doc, getDocs, collection, query, limit, orderBy, startAfter, serverTimestamp, getDoc } from 'firebase/firestore';
 import { getAuth, deleteUser as authDeleteUser } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { auth, storage } from '@/firebase';
@@ -11,13 +11,13 @@ import { auth, storage } from '@/firebase';
  */
 
 export const savePost = async (
-    userId: string, 
+    userId: string,
     image: string,
-    location: string, 
-    review: string, 
+    location: string,
+    review: string,
     rating: number,
 ): Promise<void> => {
-    if (!userId){
+    if (!userId) {
         throw new Error("User ID is required to savepost.");
     }
     try {
@@ -33,9 +33,9 @@ export const savePost = async (
         const userDocRef = doc(db, "users", userId); // reference to user's document 
         const postRef = collection(userDocRef, "posts"); //subcollection
 
-        await addDoc(postRef,{
-            location, 
-            review, 
+        await addDoc(postRef, {
+            location,
+            review,
             published: true,
             authorUid: userId,
             image: downloadURL,
@@ -43,12 +43,33 @@ export const savePost = async (
             rating,
         });
         console.log(`Saved Post.`)
-    } catch(error){
+    } catch (error) {
         console.error("Error saving post: ", error);
         throw error;
     }
 };
 
+export const loadPosts = async (userId: string): Promise<Post[]> => {
+    if (!userId) {
+        throw new Error("User ID is required to load post.");
+    }
+    try {
+        const userDocRef = doc(db, "users", userId);
+        const postsRef = collection(userDocRef, "posts");
+        const postDocSnap = await getDocs(postsRef);
+        console.log("Fetching from Firestore path:", postsRef.path);
+
+        const postData: Post[] = postDocSnap.docs.map((doc) =>
+            ({ id: doc.id, ...doc.data(), })) as Post[];
+
+        return postData
+
+    } catch (error) {
+        console.error("Error loading posts :", error);
+        throw error;
+    }
+
+};
 /**
  * Fetch a post that isn't already in the array of loaded posts.
  * @param authorId - The ID of the author.
