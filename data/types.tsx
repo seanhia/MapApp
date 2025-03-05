@@ -37,7 +37,7 @@ export interface Post {
     review: string,
     published: boolean, 
     authorUid: string, 
-    images?: string,
+    image?: string,
     createdAt: Timestamp,
     rating: Rating,
     likes?: User[], 

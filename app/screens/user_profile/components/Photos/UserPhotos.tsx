@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, Alert } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import UploadPhoto from './UploadPhoto';
 import PhotoModal from './PhotoModal';
 import { User, Post } from '@/data/types'
-import { fetchCurrentUser } from '@/data/UserDataService';
-import { Rating } from 'react-native-ratings';
 import { savePost } from '@/data/PostDataService';
-
-interface PhotoDetails {
-    imageUri: string | '';
-    location: string;
-    review: string;
-    rating: number;
-}
+import { loadPosts } from '@/data/PostDataService';
 
 interface UserPhotosProps{
     user: User | null ;
@@ -25,13 +17,7 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ user }) => {
     const { colorScheme, styles } = useTheme();
     const [userImage, setUserImage] = useState<string | null>(null);
     const [modalVisible, setModalVisible] = useState(false);
-    const [photoDetails, setPhotoDetails] = useState<any[]>([]);
-    const [loadedPosts, setLoadedPosts] = useState<Post[]>([]);
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
-    const [hasMorePosts, setHasMorePosts] = useState<boolean>(true); // Flag to check if more posts are available
-    const [lastPostId, setLastPostId] = useState<string>(''); // Track the last post ID for pagination
-    const [isLoading, setIsLoading] = useState(false);
-    const [loadingInitialPosts, setLoadingInitialPosts] = useState(true);
+    const [posts, setPosts] = useState<Post[]>([]);
 
 
 
@@ -50,67 +36,34 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ user }) => {
             console.error("User ID is undefined. Cannot save post.");
             return;
         }
-        const newPhotoDetail = { location, review, rating, imageUri: userImage };
-        setPhotoDetails([...photoDetails, newPhotoDetail]);
         await savePost(user.id, userImage, location, review, rating);
         setUserImage(null);
         setModalVisible(false); // Close the modal after submission
     };
-/** 
-    const loadPosts = async () => {
-        try {
-            // Fetch posts with the lastPostId (which is a string)
-            const posts = await fetchPostbyAuthor(lastPostId, 'z926xE2jufbFT4XfiqEmavt1fxL2', loadedPosts);  // Static User ID 
-            if (posts && posts.length > 0) {
-                setLoadedPosts((prevPosts) => [...prevPosts, ...posts]);
-                setLastPostId(posts[posts.length - 1].id); // Set last post ID for next batch
-            } else {
-                setHasMorePosts(false); // No more posts to load
-            }
-        } catch (error) {
-            console.error('Error loading posts');
-        }
-    };
-    */
 
-    useEffect(() => {
-        const loadCurrentUser = async () => {
+   
+    useEffect (() => {
+        if (!user || !user.id) {
+            console.error("User ID is undefined. Cannot fetch posts.");
+            return;
+        }
+        const fetchPosts = async () => {
             try {
-                const user = await fetchCurrentUser();
-                setCurrentUser(user)
-                console.log(user)
+                const unsubscribe = await loadPosts(user.id, (newPosts) => {
+                    setPosts(newPosts); 
+                });
+                
+                return () => {
+                    unsubscribe();
+                };
             } catch (error) {
-                // console.error('Error fetching user')
+                console.error("Error fetching posts:", error); 
             }
-        }
+        };
+    
+        fetchPosts(); 
 
-        loadCurrentUser();
-        //loadPosts();
-    }, []);
-    // Log the updated posts when the state changes
-    useEffect(() => {
-        console.log('Loaded Posts:', loadedPosts);
-    }, [loadedPosts]); // This will log the posts whenever the loadedPosts state changes
-
-    const renderPhoto = ({ item }: { item: PhotoDetails }) => (
-        <View style={styles.photoItemContainer}>
-            {item.imageUri && (<Image source={{ uri: item.imageUri }} style={styles.photoImage} />)}
-            <View style={styles.photoDetails}>
-                <Text style={styles.boldText}>{item.location}</Text>
-                <Text style={styles.text}>Rating:
-                <Rating style={styles.rating}
-                    type="star"
-                    ratingCount={5}
-                    imageSize={15}
-                    readonly={true} 
-                    startingValue={item.rating}/> 
-
-                </Text>
-                <Text style={styles.text}>Review: {item.review}</Text>
-            </View>
-        </View>
-    )
-
+    },[user]); // re-runs whenever user changes 
 
 
     return (
@@ -124,15 +77,14 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ user }) => {
                 onClose={() => setModalVisible(false)}
                 onSubmit={handleModalSubmit}
             />
-            <View style={styles.postContainer}>
-
-                <FlatList
-                    data={photoDetails}
-                    renderItem={renderPhoto}
-                    keyExtractor={(item, index) => index.toString()} //replace with database id
-                    numColumns={3}
-                    style={styles.photoList}
-                />
+            <View >
+            {posts.map((post) => (
+                        <View key={post.id} style={styles.postContainer}>
+                            <Text>{post.location}</Text>
+                            <Text>{post.review}</Text>
+                            <Image source={{ uri: post.image }} style={{ width: 100, height: 100 }} />
+                        </View>
+                    ))}
 
             </View>
 
