@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 interface NotificationsScreenProps {
-  onClose: () => void; // Explicitly defining the prop type
+  onClose: () => void; 
 }
 
 const NotificationsScreen: React.FC<NotificationsScreenProps> = ({ onClose }) => {
@@ -10,7 +10,7 @@ const NotificationsScreen: React.FC<NotificationsScreenProps> = ({ onClose }) =>
     <View style={styles.container}>
       <Text style={styles.text}>Your Notifications</Text>
 
-      {/* Close Button */}
+
       <TouchableOpacity onPress={onClose} style={styles.closeButton}>
         <Text style={styles.closeButtonText}>Close</Text>
       </TouchableOpacity>
