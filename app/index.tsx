@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Login from "@/app/screens/login/index";
-import SplashScreenView from "@/app/SplashScreen";
+import SplashScreenView from "@/components/SplashScreen";
 import { View, Animated } from "react-native";
 
 export default function Index() {

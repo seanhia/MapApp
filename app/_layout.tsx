@@ -35,6 +35,7 @@ export default function RootLayout() {
     "forgot_password",
     "index",
     "email_verifying",
+    "splash_screen"
   ];
 
   useEffect(() => {
@@ -53,6 +54,7 @@ export default function RootLayout() {
     if (initializing || !navigationRef.isReady()) return;
 
     const currentPage = segments.length > 1 ? segments[1] : segments[0]; // nested routes
+    // console.log(segments)
 
     if (currentPage) {
       const isAuthPage = publicRoutes.includes(currentPage);
@@ -78,7 +80,6 @@ export default function RootLayout() {
     );
 
   return (
-    // <Stack/>
     // // <ThemeProvider >
     <Stack // Transition between screens where each new screen is placed on top of a stack
       screenOptions={{
@@ -88,7 +89,11 @@ export default function RootLayout() {
       }}
     >
       <Stack.Screen
-        name="screens/index"
+        name="index"
+        options={{ title: "", headerShown: false }}
+      />
+      <Stack.Screen
+        name="splash_screen"
         options={{ title: "", headerShown: false }}
       />
       <Stack.Screen
