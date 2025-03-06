@@ -101,17 +101,14 @@ export default function RootLayout() {
         options={{ title: "", headerShown: false }}
         />
       <Stack.Screen 
-        name="screens/tutorial/index" 
+        name="screens/tutorial" 
         options={{ title: "" }} 
         />
       <Stack.Screen
         name="screens/forgot_password/index"
         options={{ title: "" }}
         />
-      <Stack.Screen
-        name="splash_screen"
-        options={{ title: "", headerShown: false }}
-        />
+    
       <Stack.Screen
         name="screens/home/index"
         options={{ title: "", headerShown: false }}
