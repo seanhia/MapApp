@@ -411,6 +411,19 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       // shadowRadius: 3,
       zIndex: 5, // Lower than searchBar, but above the main content
     },
+
+    //notif
+    sidebar: {
+      position: 'absolute', 
+    top: 0,               
+    bottom: 0,             
+    right: 0,              
+    width: '33%',         
+    backgroundColor: '#f0f0f0',
+    padding: 20,
+    zIndex: 10,            
+    },
+  
     
 
 

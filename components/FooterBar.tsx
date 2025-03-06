@@ -1,7 +1,8 @@
-import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import { useRouter } from 'expo-router';
+import NotificationsScreen from '@/app/screens/notifications';
 
 interface FooterBarProps {
   // Replace `any` with the type of your router if applicable
@@ -10,6 +11,7 @@ interface FooterBarProps {
 const FooterBar: React.FC<FooterBarProps> = ( ) => {
   const { colorScheme, styles } = useTheme();
   const router = useRouter();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   
   return (
     
@@ -38,9 +40,23 @@ const FooterBar: React.FC<FooterBarProps> = ( ) => {
       >
         <Text style={styles.buttonText}>Profile</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.footerButton}
+        onPress={() => setSidebarOpen(true)}>
+        <Text style={styles.buttonText}>Notifications</Text>
+      </TouchableOpacity>
+
+      {isSidebarOpen && (
+        <View style={[styles.sidebar, {position:'absolute'}]}>
+          <NotificationsScreen onClose={() => setSidebarOpen(false)} />
+        </View>
+      )}
     </View>
   );
 };
 
 
 export default FooterBar;
+
+
+ 
