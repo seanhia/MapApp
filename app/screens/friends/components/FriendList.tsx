@@ -1,10 +1,11 @@
 import React from 'react';
-import { useColorScheme, FlatList, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { FlatList, Text, ScrollView, TouchableOpacity, Image, View } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
-import { Friend, User} from "@/data/types"
+import { Friend } from "@/data/types"
+import menu from "@/assets/images/favicon.png"
 import { useProfileImage } from '@/hooks/useProfileImage';
-import { fetchCurrentUser, fetchUserByUID } from '@/data/UserDataService';
-import { useState, useEffect } from 'react';
+import { Button } from 'react-native-paper'
+
 
 
 interface FriendListProps {
@@ -21,24 +22,33 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfri
       data={friends}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <ScrollView contentContainerStyle={styles.buttonContainer}>
-         <Image
-              style={styles.profilePicture}
-              source={item.friendProfilePhoto ? { uri: item.friendProfilePhoto } : require('@/assets/images/cloud.png')}
-            />
-          <Text style={styles.boldText}>@{item.friendUsername}</Text>
-
+        <ScrollView contentContainerStyle={styles.listContainer}>
+          <View style={styles.leftContainer}>
+            <Image
+                  style={styles.profilePicture}
+                  source={item.friendProfilePhoto ? { uri: item.friendProfilePhoto } : require('@/assets/images/cloud.png')}
+                />
             <TouchableOpacity 
+              onPress={() => onViewProfile(item)}>
+                <Text style={styles.boldText}>@{item.friendUsername}</Text>
+              </TouchableOpacity>
+              </View>
+
+            {/* <TouchableOpacity 
               style={styles.sideButton}
               onPress={() => onViewProfile(item)}>
               <Text style={styles.buttonText}>View Profile</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            
 
-            <TouchableOpacity 
-              style={styles.sideButton}
+            <Button 
+              icon="menu"
+              children
+              style={styles.leftContainer}
               onPress={() => onUnfriend(item)}>
-              <Text style={styles.buttonText}>Unfriend</Text>
-            </TouchableOpacity>
+              {/* <Image source={menu}></Image> */}
+              {/* <Text style={styles.buttonText}>Unfriend</Text> */}
+            </Button>
 
         </ScrollView>
       )}
