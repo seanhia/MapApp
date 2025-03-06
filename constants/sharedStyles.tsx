@@ -172,7 +172,20 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       alignSelf: "center",
       marginTop: 20,
     },
-    lowerContainer: {
+    listContainer: {
+      width: "85%",
+      flexDirection: "row",
+      justifyContent: "space-between", // Ensures elements are spread apart
+      alignItems: "center", // Aligns items vertically
+      alignSelf: "center",
+      paddingVertical: 10,
+      marginVertical: 5,
+    },
+    leftContainer: {
+      flexDirection: "row",
+      alignItems: "center", // Aligns items vertically
+    },
+    Container: {
       flexDirection: "row",
       justifyContent: "flex-start",
       marginTop: 10,
@@ -247,12 +260,14 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       alignItems: "center", // Center text
     },
     addFriendButton: {
-      width: '100%',
+      width: 100,
+      height: 30,
       backgroundColor: theme === "dark" ? Colors.dark.button : 'white',
-      borderRadius: 25,
-      justifyContent: "center",
+      borderRadius: 8,
+      justifyContent: "flex-end",
       alignItems: "center",
       marginBottom: 10,
+      paddingVertical: 8, 
     },
 
     /** Images  */

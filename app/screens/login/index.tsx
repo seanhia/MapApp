@@ -1,7 +1,7 @@
 import app, {auth} from "@/firebase";
 import {sendEmailVerification} from 'firebase/auth';
 import { useEffect, useState} from "react";
-import { Text, View, KeyboardAvoidingView, Button, ActivityIndicator, TouchableOpacity, Image } from "react-native";
+import { Text, View, KeyboardAvoidingView, Button, ActivityIndicator, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { Link , router} from 'expo-router';
 import { FirebaseError } from 'firebase/app'
@@ -9,6 +9,7 @@ import {signUpWithEmail, signInWithEmail} from "@/auth";
 import { useTheme } from '@/hooks/useTheme'; 
 import { Colors } from '@/constants/Colors';
 import { ImageHeader } from '@/components/ImageHeader'
+import Tutorial from "../tutorial";
 
 
 export default function Login() {
@@ -90,7 +91,7 @@ export default function Login() {
                 
                       </Text>
                       <Link style={{fontSize: 20, alignSelf: 'center', marginBottom: 85, color: Colors.light.tabIconDefault}} href="/screens/sign_up">Don't have an account? Sign Up ⇨ </Link>
-                      <View style={styles.lowerContainer}>
+                      <View style={style.lowerContainer}>
                         <Image style={styles.profilePicture} source={require('@/assets/images/cloud.png')} />
                         <Link style={styles.tutorial} href="/screens/tutorial">Tutorial?</Link>
                       </View>
@@ -104,6 +105,16 @@ export default function Login() {
     </GestureHandlerRootView>
   );
 }
+
+const style = StyleSheet.create({
+  
+  lowerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '80%',
+  },
+});
 
 
 
