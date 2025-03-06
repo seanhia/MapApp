@@ -24,12 +24,14 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfri
       renderItem={({ item }) => (
         <ScrollView contentContainerStyle={styles.listContainer}>
           <View style={styles.leftContainer}>
-            <Image
+  
+            <TouchableOpacity 
+              style={styles.leftContainer}
+              onPress={() => onViewProfile(item)}>
+                 <Image
                   style={styles.profilePicture}
                   source={item.friendProfilePhoto ? { uri: item.friendProfilePhoto } : require('@/assets/images/cloud.png')}
                 />
-            <TouchableOpacity 
-              onPress={() => onViewProfile(item)}>
                 <Text style={styles.boldText}>@{item.friendUsername}</Text>
               </TouchableOpacity>
               </View>
