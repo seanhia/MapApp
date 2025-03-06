@@ -146,12 +146,14 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     },
     fullContainer: {
       //Horizonatal Full Page
-      flex: 1,
+      flex:1,
       flexDirection: "column",
       justifyContent: "space-evenly",
       backgroundColor:
         theme === "dark" ? Colors.dark.background : Colors.light.background,
     },
+    
+    
     halfContainer: {
       //Vertical Half Page
       marginHorizontal: 40,

@@ -6,18 +6,20 @@ import PhotoModal from './PhotoModal';
 import { User, Post } from '@/data/types'
 import { savePost } from '@/data/PostDataService';
 import { loadPosts } from '@/data/PostDataService';
+import ProfilePost from './ProfilePost';
 
 interface UserPhotosProps{
     user: User | null ;
 }
 
 
-const UserPhotos: React.FC<UserPhotosProps> = ({ user }) => {
+const UserPhotos: React.FC<UserPhotosProps> = ({ user}) => {
 
     const { colorScheme, styles } = useTheme();
     const [userImage, setUserImage] = useState<string | null>(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [posts, setPosts] = useState<Post[]>([]);
+
 
 
 
@@ -77,17 +79,8 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ user }) => {
                 onClose={() => setModalVisible(false)}
                 onSubmit={handleModalSubmit}
             />
-            <View >
-            {posts.map((post) => (
-                        <View key={post.id} style={styles.postContainer}>
-                            <Text>{post.location}</Text>
-                            <Text>{post.review}</Text>
-                            <Image source={{ uri: post.image }} style={{ width: 100, height: 100 }} />
-                        </View>
-                    ))}
-
-            </View>
-
+            <ProfilePost
+            posts={posts}/>
         </View>
 
 

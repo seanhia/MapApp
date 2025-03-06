@@ -1,18 +1,16 @@
 import { Post } from '@/data/types'; 
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
-import { Colors} from '@/constants/Colors'
 import {Posts}  from '@/constants/posts'
 import { Timestamp } from 'firebase/firestore';
 
 interface ProfilePostProp {
     posts: Post[];
-    onLoadMore: () => void; // Function to trigger loading more posts
-    hasMorePosts: boolean; 
+  
 
 };
 
-const ProfilePost:  React.FC<ProfilePostProp> = ({posts, onLoadMore, hasMorePosts}) => {
+const ProfilePost:  React.FC<ProfilePostProp> = ({posts }) => {
     const { colorScheme, styles } = useTheme();
 
     /**
@@ -45,18 +43,18 @@ const ProfilePost:  React.FC<ProfilePostProp> = ({posts, onLoadMore, hasMorePost
                   
                 <View key={post.id} style={styles.postContainer}>
                    {/* Post Image (if available) */}
-                   {post.images && post.images.length > 0 && (
+                   
                     <Image 
-                      source={typeof post.images?.[0] === 'string' ? { uri: post.images[0] } : post.images?.[0]} 
+                     source={{ uri: post.image }}
                       style={styles.imagePost} 
                       resizeMode="cover"
                     />
-                  )}
+                
                    {/* Post Title */}
-                  <Text style={[styles.postTitle]}>{post.title}</Text>
+                  <Text style={[styles.postTitle]}>{post.location}</Text>
 
                   {/* Post Content */}
-                  <Text style={styles.text}>{post.content}</Text>
+                  <Text style={styles.text}>{post.review}</Text>
 
                   {/* Timestamp Formatting */}
                   <Text style={styles.text}>
@@ -70,19 +68,7 @@ const ProfilePost:  React.FC<ProfilePostProp> = ({posts, onLoadMore, hasMorePost
               ))
             )}
           </ScrollView>
-    
-          {/* Load more button */}
-          {hasMorePosts && (
-            <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
-            <TouchableOpacity 
-            style={[styles.smallButton]}
-            onPress={onLoadMore}>
-                <Text style={[styles.buttonText, {fontWeight: 'bold'}]}>
-                    Load More
-                </Text>
-            </TouchableOpacity>
-            </View>
-          )}
+  
         </View>
       );
     };
