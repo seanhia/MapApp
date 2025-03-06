@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, Image } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import { createFriendship } from '@/data/Friendship';
 import { User } from '@/data/types';
@@ -21,15 +21,29 @@ const UserList: React.FC<UserListProps> = ({ users, visible }) => {
       data={users}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <TouchableOpacity
-        style={styles.addFriendButton}
-        onPress={() => createFriendship(item)} // Use dynamic user ID and username
-      >
-        <Text style={{fontWeight: 'bold', color: 'black'}}>Add Friend</Text>
-        <Text style={[styles.buttonText, {fontSize: 12}]}>
+
+        <View style={styles.listContainer}>
+          <View style={styles.leftContainer}>
+          <Image
+              style={{width: 70, height: 70, margin: 10, borderRadius: 50}}
+               source={require('@/assets/images/profile-pic.jpg')}
+            />
+          <Text style={[styles.text, {fontWeight: 'bold'}]}>
           {item.username}
-        </Text> {/* Display the username */}
-      </TouchableOpacity>
+          </Text>
+          </View>
+          <TouchableOpacity
+          style={styles.addFriendButton}
+          onPress={() => createFriendship(item)} // Use dynamic user ID and username
+            >
+          <Text 
+            style={{fontWeight: 'bold', color: 'black', }}>
+            Add Friend
+          </Text>
+
+        </TouchableOpacity>
+      
+      </View>
       
       )}
     />

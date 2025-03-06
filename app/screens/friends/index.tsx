@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback} from "react";
 import { View, SafeAreaView, Text, TextInput, useColorScheme, Alert } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link, router } from "expo-router";
+import { Divider } from 'react-native-paper';
 
 import SearchBar from "./components/SearchBar";
 import UserList from "./components/UserList";
@@ -165,12 +166,15 @@ const Friends = () => {
           onViewProfile={handleViewProfile} // Placeholder
           onUnfriend={handleDeny} // Delete Friendship
         />
+        <Divider/>
         <Text style={styles.header}>Pending Requests</Text>
+        
         <PendingList
           pending={pendingRequests}
           onAccept={handleAccept}
           onDeny={handleDeny}
         />
+        
       </ScrollView>
       <SafeAreaView>
         <FooterBar />
