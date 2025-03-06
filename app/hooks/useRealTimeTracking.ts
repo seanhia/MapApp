@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { haversineDistance } from "../utils/geolocation";
 import * as Location from 'expo-location';
-import { saveLocation, fetchLocations } from "../../firestore";
+import { saveLocation } from "../../firestore";
 
 
 export interface GeoPosition {

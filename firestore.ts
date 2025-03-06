@@ -1,9 +1,8 @@
 //import firestore from '@react-native-firebase/firestore';
-import {getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, increment, updateDoc} from 'firebase/firestore';
+import {getFirestore, addDoc, collection, getDocs, getDoc, setDoc, doc, deleteDoc, increment, updateDoc} from 'firebase/firestore';
 import app from './firebase'
 import { query, orderBy, limit } from "firebase/firestore";
-import { haversineDistance } from "./app/utils/geolocation";
-//import { getCityCountry } from "./app/utils/stats";
+import { haversineDistance, getCityCountry } from "./app/utils/geolocation";
 
 //const db = firebase.firestore();
 const db = getFirestore(app);
@@ -148,19 +147,30 @@ const getLastLocation = async (userId: string) => {
   return null;
 };
 
-// export async function updateStats(userId: string) {
-//   try{
-//     const {uniqueCities, uniqueCountries} = await getCityCountry(userId);
+export async function saveStats(userId: string) {
+  const CityCountry = await getCityCountry();
+  if (!CityCountry) return;
 
-//     const userStats = doc(db, `users/${userId}/stats/statsDocument`);
-//     await setDoc(userStats, {
-//       uniqueCities,
-//       uniqueCountries,
-//     });
+  const CityCountryRef = collection(db, `users/${userId}/stats`);
+  const statsDocRef = doc(CityCountryRef, `${CityCountry.city}_${CityCountry.country}`);
+  await setDoc(statsDocRef, {
+    cities: CityCountry.city,
+    countries: CityCountry.country,
+  }, {merge: true});
+  console.log(`City: ${CityCountry.city}, Country: ${CityCountry.country}`);
+}
 
-//   console.log("User stats updated");
-//   } catch(error){
-//     console.error("User stats firebase failed", error);
-//   }
-// }
+export async function getStats(userId: string) {
+  const userLocationRef = doc(db, `users/${userId}/locations`); // access location data from user
+  const locationSnapshot = await getDoc(userLocationRef); // get location doc
+
+  if (locationSnapshot.exists()) {
+    return locationSnapshot.data();
+  }
+
+return {
+  cities: [],
+  countries: []
+};
+}
 
