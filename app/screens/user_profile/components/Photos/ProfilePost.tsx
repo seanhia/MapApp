@@ -1,9 +1,8 @@
 import { Post } from '@/data/types'; 
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
-import {Posts}  from '@/constants/posts'
 import { Timestamp } from 'firebase/firestore';
-
+import { Rating } from 'react-native-ratings'; 
 interface ProfilePostProp {
     posts: Post[];
   
@@ -55,6 +54,13 @@ const ProfilePost:  React.FC<ProfilePostProp> = ({posts }) => {
 
                   {/* Post Content */}
                   <Text style={styles.text}>{post.review}</Text>
+                  <Text style={styles.text}>Rating:</Text>
+                  <Rating style={styles.rating}
+                        type ="star"
+                        ratingCount={5}
+                        imageSize={25}
+                        startingValue={post.rating}
+                        />
 
                   {/* Timestamp Formatting */}
                   <Text style={styles.text}>

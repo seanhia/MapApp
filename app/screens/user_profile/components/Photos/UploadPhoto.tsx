@@ -139,7 +139,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({onImageSelect}) => {
                 <Pressable
                     style={styles.sideButton}
                     onPress={() => setModalVisible(true)}>
-                    <Text style={styles.buttonText}>Upload Photo</Text>
+                    <Text style={[styles.buttonText, {alignItems:'center',  marginBottom: 0, paddingBottom: 0 }]}>Upload Photo</Text>
 
                 </Pressable>
             </TouchableOpacity>

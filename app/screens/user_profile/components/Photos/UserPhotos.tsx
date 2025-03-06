@@ -80,7 +80,8 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ user}) => {
                 onSubmit={handleModalSubmit}
             />
             <ProfilePost
-            posts={posts}/>
+            posts={posts}
+            />
         </View>
 
 
