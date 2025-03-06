@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Alert, Text, Image, TouchableOpacity } from 'react-native';
 import MapComponent from '@/components/MapComponent';

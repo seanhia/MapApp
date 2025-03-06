@@ -1,6 +1,7 @@
 import React from "react";
 import { getAuth } from "firebase/auth";
 import useRealTimeTracking from "@/app/hooks/useRealTimeTracking";
+import { View, Text } from 'react-native';
 
 const RealTimeTracker: React.FC = () => {
   const auth = getAuth(); // initialize Firebase Auth
@@ -17,16 +18,14 @@ const RealTimeTracker: React.FC = () => {
   const [location, error] = useRealTimeTracking(userId, 100); 
 
   return (
-    <div>
+    <View>
       {error && <p>Error: {error}</p>}
       {location ? (
-        <p>
-          Current Location: {location.coords.latitude}, {location.coords.longitude}
-        </p>
+          <Text>Current Location: {location.coords.latitude}, {location.coords.longitude}</Text>
       ) : (
-        <p>Tracking location...</p>
+        <Text>Tracking location...</Text>
       )}
-    </div>
+    </View>
   );
 };
 

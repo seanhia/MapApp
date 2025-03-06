@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GoogleMap, LoadScriptNext, Marker, useLoadScript } from "@react-google-maps/api";
+import { View, Text } from 'react-native';
 
 const googleMapsAPIKey = "AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c"; // Replace with your actual API key
 
@@ -136,10 +137,10 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId,weathe
     mapId: mapId, // Applying custom map style
   };
 
-  if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded) return <Text>Loading...</Text>;
 
   return (
-    <div style={{ position: "absolute", width: "100%", height: "90%" }}>
+    <View style={{ position: "absolute", width: "100%", height: "90%" }}>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={initialCenter}
@@ -151,7 +152,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId,weathe
       </GoogleMap>
 
       {/* overlay with circular cutout */}
-      <div
+      <View
         style={{
           position: "absolute",
           top: 0,
@@ -165,7 +166,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId,weathe
           WebkitMaskImage: `radial-gradient(circle ${radiusInPixels}px at ${cutoutPosition.x} ${cutoutPosition.y}, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 60%)`,  // For Safari compatibility
         }}
       />
-    </div>
+    </View>
   );
 };
 
