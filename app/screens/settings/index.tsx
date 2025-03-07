@@ -9,8 +9,9 @@ import {changeEmail, singOutUser} from "@/auth";
 import { deleteUser } from '@/data/UserDataService';
 
 
-import { fetchCurrentUser, writeUserData, writeUserLeaderboard , fetchCurrentUserLeaderboard} from '@/data/UserDataService';
-import { Leaderboard, User } from '@/data/types'
+import { fetchCurrentUser, writeData , fetchCurrentUserLeaderboard} from '@/data/UserDataService';
+import { Leaderboard, User, Friend } from '@/data/types'
+import { updateFriendshipUsername } from '@/data/Friendship';
 
 const UserSettings = () => {
     
@@ -24,7 +25,6 @@ const UserSettings = () => {
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
     const [eMail, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
 
     useEffect(() => {
@@ -39,6 +39,7 @@ const UserSettings = () => {
         const loadUserLeaderboard = async () => {
             try {
                 const userboard = await fetchCurrentUserLeaderboard();
+                console.log(userboard)
                 setUserBoard(userboard);
             } catch (e) {
                 console.log("Error fetching user leaderboard:", e)
@@ -54,7 +55,7 @@ const UserSettings = () => {
             setBio(currentUser.bio || '');
             setEmail(currentUser.eMail || '');
             setPhoneNumber(currentUser.phoneNumber || '');
-            setIsPrivateAccount(currentUser.isPrivate || false);
+            setIsPrivateAccount(currentUser.isPrivate || true);
             setIsDarkMode(currentUser.isDarkMode || false);
         }
     }, [currentUser]);
@@ -86,12 +87,15 @@ const UserSettings = () => {
             ...userLeaderboard,
             username
         }
+
         try {
-            await writeUserData(updatedUser);
-            await writeUserLeaderboard(updatedLeaderboard)
+            await writeData(updatedUser);
+            await writeData(updatedLeaderboard); 
+            await updateFriendshipUsername(updatedUser)
+            // await updateFriendship();
             alert('Settings updated successfully!');
-            console.log(updatedUser)
-            console.log(currentUser)
+            console.log("Updated User:", updatedUser)
+            console.log("Updated Leaderboard", updatedLeaderboard)
         } catch (error) {
             console.error('Failed to update settings:', error);
             alert('Error updating settings. Please try again.');

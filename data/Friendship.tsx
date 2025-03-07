@@ -5,6 +5,9 @@ import { User, status, Friend } from '@/data/types';
 import convertToDate from '@/app/utils/convertToDate';
 
 
+const collection_name = 'Friendships'
+const friendshipsRef = collection(db, collection_name)
+
 {/** CREATE */}
 
 export const createFriendship = async (friend: User) => {
@@ -46,7 +49,7 @@ export const createFriendship = async (friend: User) => {
 const existingFriendshipQuery = async (currentUser: User, friend: User) => {
     // Check if a friendship already exists between the two users
     const existingFriendshipQuery = query(
-        collection(db, 'friendships'),
+        friendshipsRef,
         where('status', 'in', status),
         where('user1', 'in', [currentUser.id, friend.id]),
         where('user2', 'in', [currentUser.id, friend.id])
@@ -78,6 +81,34 @@ const existingFriendshipQuery = async (currentUser: User, friend: User) => {
 
 {/** READ (GET | LIST) --> QUERY */}
 
+/**
+ * Query to fetch all the 'friendships' documents a user is apart of
+ * @param user 
+ * @return 
+ */
+export const FriendshipQuery = async (user: User) => {
+    try {
+         // Query friendships where the user is either user1 or user2
+         const q = query(friendshipsRef, where('user1Id', '==', user.id));
+         const q2 = query(friendshipsRef, where('user2Id', '==', user.id));
+ 
+         // Fetch documents for both cases
+         const querySnapshot1 = await getDocs(q);
+         const querySnapshot2 = await getDocs(q2);
+ 
+         // Merge results
+         const allFriendships = [...querySnapshot1.docs, ...querySnapshot2.docs];
+         return allFriendships 
+    } catch (e) {
+        console.error("Could not fetch snapshot of all Users 'Frienships' docs ")
+        return []
+    }
+}
+
+/**
+ * Based on the current user, fetch all the 'approved' friendship documents associated with the user 
+ * @returns Friend[] | [] 
+ */
 export const FriendQuery = async () => {
     try {
         const currentUser = await fetchCurrentUser();
@@ -112,6 +143,11 @@ export const FriendQuery = async () => {
     }
 };
 
+/**
+ *
+ * Based on the current user, fetch all the 'pending' friendship documents associated with the user
+ * @return Friend[] | []
+ */
 export const PendingQuery = async () => {
     try {
         const currentUser = await fetchCurrentUser();
@@ -139,6 +175,11 @@ export const PendingQuery = async () => {
     }
 };
 
+/**
+ * Queires the approved friendship documents associated with the User and returns the sum = Friend count 
+ * @param friend 
+ * @returns string  
+ */
 export const fetchFriendCount = async (friend: User | null): Promise<string> => {
 
     try {
@@ -176,6 +217,35 @@ export const AcceptFriendship = async (id: string) => {
     } catch (error) {
         console.error('Error accepting friendship:', error);
     }  
+};
+
+/**
+ * Update friendship username of the user in each document they appear in
+ * @props User
+ * 
+ */
+export const updateFriendshipUsername = async (user: User) => {
+    try {
+        const allFriendships = await FriendshipQuery(user)
+   
+        for (const docSnap of allFriendships) {
+            const friendshipDocRef = doc(db, collection_name, docSnap.id)
+            const friendshipData = docSnap.data(); 
+
+            const updatedFrienship = {
+                ...friendshipData, 
+                username1: friendshipData.User.user1 === user.id ? user.username : friendshipData.User.username1,
+                username2: friendshipData.User.user2 === user.id ? user.username : friendshipData.User.username2 
+            };
+
+            await updateDoc(friendshipDocRef, updatedFrienship);
+        } 
+
+        console.log(`Successfully updated ${allFriendships.length} friendships for user ${user.id}`);
+    
+    } catch (error) {
+       console.error('Error updating friendship documents:', error);
+    }
 };
 
 

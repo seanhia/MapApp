@@ -6,6 +6,33 @@ import { Timestamp } from 'firebase/firestore';
 
 
 /**
+ * Type guard to check if data is of type User
+ */
+const isUser = (data: any): data is User => {
+  return (
+    typeof data === 'object' 
+    && data !== null 
+    && 'id' in data 
+    && 'username' in data
+    && 'firstName' in data
+  );
+};
+
+/**
+* Type guard to check if data is of type Leaderboard
+*/
+const isLeaderboard = (data: any): data is Leaderboard => {
+  return (
+    typeof data === 'object' 
+    && data !== null
+    && 'id' in data 
+    && 'points' in data
+    && 'ranking' in data 
+  );
+};
+
+
+/**
  * Fetch the current user's data.
  * @returns {Promise<User | null>} User data or null if the user doesn't exist.
  */
@@ -95,29 +122,32 @@ export const fetchUserByUID = async (id: string): Promise<User | null> => {
 
 
 /**
- * Write or update user data in Firestore.
- * @param {User} user - The user data to write.
+ * Write or update data in Firestore.
+ * @param {User | Leaderboard} user - The data to write.
  * @returns {Promise<void>}
  */
-export const writeUserData = async (user: User): Promise<void> => {
+export const writeData = async (data: User | Leaderboard): Promise<void> => {
+  var collection_name = ''
   try {
-    const userDocRef = doc(db, 'users', user.id);
-    await setDoc(userDocRef, user, { merge: true });
-    console.log('User data successfully written/updated!');
+    
+
+    if (isUser(data)){
+      collection_name = 'users'
+    } else if (isLeaderboard(data)) {
+      collection_name = 'leaderboard_entry'
+    } else {
+      throw new Error('Invalid data type. Expected User or Leaderboard.');
+    }
+    console.log('Detected data type:', collection_name);
+
+    const docRef = doc(db, collection_name, data.id);
+    await setDoc(docRef, data, { merge: true });
+    console.log(`${collection_name} data successfully updated old doc: ${docRef}`);
   } catch (error) {
-    console.error('Error writing user data:', error);
+    console.error(`Error writing ${collection_name} data:`, error);
   }
 };
 
-export const writeUserLeaderboard = async (user: Leaderboard): Promise<void> => {
-  try {
-    const userDocRef = doc(db, 'leaderboard_entry', user.id);
-    await setDoc(userDocRef, user, { merge: true });
-    console.log('User data successfully written/updated!');
-  } catch (error) {
-    console.error('Error writing user data:', error);
-  }
-};
 
 /**
  * Query users based on specific criteria.
