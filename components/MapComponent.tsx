@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { GoogleMap, LoadScriptNext, Marker, useLoadScript } from "@react-google-maps/api";
 import { View, Text } from 'react-native';
+import { GoogleMap, LoadScriptNext, Marker, useLoadScript } from "@react-google-maps/api"; // web imports
 
-const googleMapsAPIKey = "AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c"; // Replace with your actual API key
+const googleMapsAPIKey = "AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c"; 
 
 const containerStyle = {
   width: "100%",

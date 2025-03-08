@@ -46,9 +46,9 @@ export function haversineDistance(lat1: number, lon1: number, lat2: number, lon2
       return { city: "Location not available", country: "Location not available" };
     }
 
-    console.log(`📍 Coordinates received: Lat ${location.coords.latitude}, Lng ${location.coords.longitude}`);
+    console.log(`Lat ${location.coords.latitude}, Lng ${location.coords.longitude}`);
     const places = await Location.reverseGeocodeAsync(location.coords); // reverse geocode coords to get places data
-    console.log("🔍 Reverse Geocode Response:", JSON.stringify(places, null, 2));
+    console.log("Reverse Geocode:", JSON.stringify(places, null, 2));
 
     if (!places || places.length === 0) {
       console.log("Reverse geocoding failed");
