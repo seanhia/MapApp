@@ -11,8 +11,7 @@ interface FooterBarProps {
 const FooterBar: React.FC<FooterBarProps> = ( ) => {
   const { colorScheme, styles } = useTheme();
   const router = useRouter();
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-  
+   
   return (
     
     <View style={styles.footer}>
@@ -40,17 +39,6 @@ const FooterBar: React.FC<FooterBarProps> = ( ) => {
       >
         <Text style={styles.buttonText}>Profile</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.footerButton}
-        onPress={() => setSidebarOpen(true)}>
-        <Text style={styles.buttonText}>Notifications</Text>
-      </TouchableOpacity>
-
-      {isSidebarOpen && (
-        <View style={[styles.sidebar, {position:'absolute'}]}>
-          <NotificationsScreen onClose={() => setSidebarOpen(false)} />
-        </View>
-      )}
     </View>
   );
 };

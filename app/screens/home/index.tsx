@@ -85,6 +85,8 @@ export default function Home() {
         <MapComponent initialCenter={mapCenter} weatherIcon={weather?.iconUrl} mapId={darkMode} />
       </View>
 
+      
+
       {/* Floating Weather Box */}
       {weather?.iconUrl && (
         <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={styles.weatherBox}>

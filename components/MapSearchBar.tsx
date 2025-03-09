@@ -1,20 +1,20 @@
 import React from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View, Image } from 'react-native';
 import { GooglePlacesAutocomplete, GooglePlaceData, GooglePlaceDetail } from 'react-native-google-places-autocomplete';
 import { PlaceDetails } from '@/data/types';
 
 interface SearchBarProps {
   onPlaceSelected: (
-    data: GooglePlaceData, 
+    data: GooglePlaceData,
     details: GooglePlaceDetail | null) => void
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
-    return (
+  return (
       <View style={styles.searchBar}>
         <GooglePlacesAutocomplete
           placeholder="Search for places"
-          fetchDetails={true} 
+          fetchDetails={true}
           minLength={2} // wait for at least 2 characters before searching
           onPress={(data, details) => {
             console.log("Selected Place:", data, details); // Debugging
@@ -25,7 +25,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
             useOnPlatform: 'all', // Ensures this works on all platforms
           }}
           query={{
-            key: 'AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c', 
+            key: 'AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c',
             language: 'en',
           }}
 
@@ -38,34 +38,34 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
             listView: styles.listView,
           }}
         />
-      </View>
-    );
-  };
 
-  const styles = StyleSheet.create({
-    searchBar: {
-      position: 'absolute',
-      top: 10,
-      width: '90%',
-      alignSelf: 'center',
-      zIndex: 1,
-    },
-    searchInput: {
-      height: 40,
-      paddingHorizontal: 10,
-      borderWidth: 1,
-      borderColor: '#ccc',
-      borderRadius: 4,
-      backgroundColor: '#fff',
-    },
-    autoCompleteContainer: {
-      flex: 1, 
-    },
-    listView: {
-      position: 'absolute',
-      top: 50,
-      backgroundColor: 'white',
-      zIndex: 1000, // Ensures it appears above other elements
-    },
-  });
-  
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  searchBar: {
+    position: 'absolute',
+    top: 10,
+    width: '90%',
+    alignSelf: 'center',
+    zIndex: 1,
+  },
+  searchInput: {
+    height: 40,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    backgroundColor: '#fff',
+  },
+  autoCompleteContainer: {
+    flex: 1,
+  },
+  listView: {
+    position: 'absolute',
+    top: 50,
+    backgroundColor: 'white',
+    zIndex: 1000, // Ensures it appears above other elements
+  },
+});

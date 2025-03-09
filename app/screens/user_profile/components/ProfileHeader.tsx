@@ -1,19 +1,39 @@
-import React from 'react';
-import { View, Text,Image } from 'react-native';
-import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useState }from 'react';
+import { View, Text,Image, Modal } from 'react-native';
+import { GestureHandlerRootView, ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
 import { Colors } from '@/constants/Colors'
+import Notifications from '../../notifications';
 
 
 const ProfileHeader = () => {
     const { colorScheme, styles } = useTheme();
     const router = useRouter();
+    
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setIsModalVisible(!isModalVisible);
+      };
+    
+
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={{flexDirection:'row', justifyContent: 'space-between', padding: 20}} >
                 
                 <Text style={styles.heading}>Profile</Text>
+                <View style={{ flexDirection: 'row', gap: 15 }}>
+                <TouchableOpacity  onPress={toggleModal}>
+                        <Image 
+                            style={[styles.profilePicture, { 
+                                height: 30, 
+                                width: 30, 
+                                tintColor: colorScheme === 'dark' ? Colors.dark.text : Colors.light.text}]} 
+                            source={require('@/assets/images/bell .png')}
+                        />
+                    </TouchableOpacity>
+                    
 
                     <TouchableOpacity onPress={() => router.push('/screens/settings')}>
                         <Image 
@@ -24,7 +44,25 @@ const ProfileHeader = () => {
                             source={require('@/assets/images/setting-icon.png')}
                         />
                     </TouchableOpacity>
-                    
+                    </View>
+                    <Modal
+        visible={isModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={toggleModal}
+        onDismiss={toggleModal} 
+        >
+        <View style={styles.modalOverlay}>
+          <View style={styles.notificationDrawer}>
+          <ScrollView>
+          <Notifications />
+          </ScrollView>
+            <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
+              <Text style={{ color: 'white' }}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
             </View>
         </GestureHandlerRootView>
     );

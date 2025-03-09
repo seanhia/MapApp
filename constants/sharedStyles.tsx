@@ -414,7 +414,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
 
     //notif
     sidebar: {
-      position: 'absolute', 
+      
     top: 0,               
     bottom: 0,             
     right: 0,              
@@ -422,6 +422,29 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     backgroundColor: '#f0f0f0',
     padding: 20,
     zIndex: 10,            
+    },
+
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+      justifyContent: 'flex-end', 
+    },
+    notificationDrawer: {
+      width:  '25%',
+      height: '100%', 
+      backgroundColor: 'white',
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      padding: 20,
+    },
+    closeButton: {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+      padding: 5,
+      backgroundColor: 'red',
+      borderRadius: 5,
     },
   
     
