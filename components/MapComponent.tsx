@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { View, Text } from 'react-native';
-import { GoogleMap, LoadScriptNext, Marker, useLoadScript } from "@react-google-maps/api"; // web imports
+import { GoogleMap, LoadScriptNext, Marker, useLoadScript } from "@react-google-maps/api"; // Web imports
 
 const googleMapsAPIKey = "AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c"; 
 
@@ -12,10 +12,10 @@ const containerStyle = {
 interface MapComponentProps {
   initialCenter: { lat: number; lng: number };
   mapId: string;
-  weatherIcon?:string;
+  weatherIcon?: string;
 }
 
-const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId,weatherIcon }) => {
+const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weatherIcon }) => {
   const [googleMaps, setGoogleMaps] = useState<typeof google | null>(null);
   const [cutoutPosition, setCutoutPosition] = useState({ x: "50%", y: "50%" });
   const [radiusInPixels, setRadiusInPixels] = useState(0);
@@ -41,100 +41,96 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId,weathe
     }
   }, [initialCenter]);
 
-  // Calculate the number of pixels for a 100m radius based on the zoom 
+  // Calculate radius in pixels for a 100m area based on zoom
   const calculateRadiusInPixels = (zoom: number, lat: number) => {
-    const metersPerPixel = (40008000 * Math.cos(lat * Math.PI / 180)) / (Math.pow(2, zoom) * 256); // Earth circumference at latitude
-    const radiusInMeters = 100; // 100 meters radius
-    return radiusInMeters / metersPerPixel;
+    const metersPerPixel = (40008000 * Math.cos(lat * Math.PI / 180)) / (Math.pow(2, zoom) * 256);
+    return 100 / metersPerPixel; // 100 meters in pixels
   };
 
-  // Update cutout position and radius when the map is loaded or zoomed
-  useEffect(() => {
+  // Update overlay position and mask
+  const updateCircle = useCallback(() => {
     if (!googleMaps || !mapRef.current || !initialCenter?.lat || !initialCenter?.lng) return;
 
     const map = mapRef.current;
+    const zoom = map.getZoom();
+    const lat = initialCenter.lat;
 
-    const updateCircle = () => {
-      const zoom = map.getZoom();
-      const lat = initialCenter.lat;
+    // Calculate the radius in pixels for 100 meters at the current zoom level
+    const newRadiusInPixels = calculateRadiusInPixels(zoom, lat);
+    setRadiusInPixels(newRadiusInPixels);
 
-      // Calculate the radius in pixels for 100 meters at current zoom level
-      const radiusInPixels = calculateRadiusInPixels(zoom, lat);
-      setRadiusInPixels(radiusInPixels);
+    // Cleanup existing overlay before creating a new one
+    if (overlayRef.current) {
+      overlayRef.current.setMap(null);
+      overlayRef.current = null;
+    }
 
-     
-      class CustomOverlay extends googleMaps.maps.OverlayView {
-        private div: HTMLDivElement | null = null;
+    class CustomOverlay extends googleMaps.maps.OverlayView {
+      private div: HTMLDivElement | null = null;
 
-        onAdd() {
-          this.div = document.createElement("div");
-          this.div.style.position = "absolute";
-          this.div.style.background = "rgba(255, 0, 0, 0.5)";
-          const panes = this.getPanes();
-          if (panes) {
-            panes.overlayLayer.appendChild(this.div);
-          }
-        }
+      onAdd() {
+        this.div = document.createElement("div");
+        this.div.style.position = "absolute";
+        this.div.style.background = "rgba(255, 0, 0, 0.5)";
+        const panes = this.getPanes();
+        panes?.overlayLayer.appendChild(this.div);
+      }
 
-        draw() {
-          if (!this.div) return;
+      draw() {
+        if (!this.div) return;
 
-          const projection = this.getProjection();
-          if (!projection) return;
+        const projection = this.getProjection();
 
-          const latLng = new googleMaps.maps.LatLng(initialCenter.lat, initialCenter.lng);
-          const point = projection.fromLatLngToContainerPixel(latLng);
+        const latLng = new googleMaps.maps.LatLng(initialCenter.lat, initialCenter.lng);
+        const point = projection.fromLatLngToContainerPixel(latLng);
 
-          if (point) {
-            this.div.style.left = `${point.x - radiusInPixels / 2}px`; // Adjust to make the circle centered
-            this.div.style.top = `${point.y - radiusInPixels / 2}px`; // Adjust to make the circle centered
+        if (point) {
+          this.div.style.left = `${point.x - newRadiusInPixels / 2}px`;
+          this.div.style.top = `${point.y - newRadiusInPixels / 2}px`;
 
-            // Set the mask position
-            setCutoutPosition({
-              x: `${point.x}px`,
-              y: `${point.y}px`,
-            });
-          }
-        }
-
-        onRemove() {
-          if (this.div) {
-            this.div.remove();
-            this.div = null;
-          }
+          setCutoutPosition({
+            x: `${point.x}px`,
+            y: `${point.y}px`,
+          });
         }
       }
 
-      const overlay = new CustomOverlay();
-      overlay.setMap(map);
-      overlayRef.current = overlay;
+      onRemove() {
+        this.div?.remove();
+        this.div = null;
+      }
+    }
 
-      return () => {
-        if (overlayRef.current) {
-          overlayRef.current.setMap(null);
-          overlayRef.current = null;
-        }
-      };
-    };
+    const overlay = new CustomOverlay();
+    overlay.setMap(map);
+    overlayRef.current = overlay;
+  }, [googleMaps, initialCenter]);
+
+  useEffect(() => {
+    if (!googleMaps || !mapRef.current) return;
+    const map = mapRef.current;
 
     updateCircle();
 
-    const zoomListener = map.addListener("zoom_changed", updateCircle); // Update on zoom change
-    const dragListener = map.addListener("dragend", updateCircle); // Update on map drag
+    const zoomListener = map.addListener("zoom_changed", updateCircle);
+    const dragListener = map.addListener("dragend", updateCircle);
 
     return () => {
-       
-      if (zoomListener) {
-        google.maps.event.removeListener(zoomListener);
-      }
-      if (dragListener) {
-        google.maps.event.removeListener(dragListener);
+      google.maps.event.removeListener(zoomListener);
+      google.maps.event.removeListener(dragListener);
+
+      if (overlayRef.current) {
+        overlayRef.current.setMap(null);
+        overlayRef.current = null;
       }
     };
-  }, [googleMaps, initialCenter, radiusInPixels]);
+  }, [googleMaps, initialCenter, updateCircle]);
 
   const options = {
-    mapId: mapId, // Applying custom map style
+    mapId: mapId,
+    streetViewControl: false,
+    fullscreenControl: false,
+    mapTypeControl: false,
   };
 
   if (!isLoaded) return <Text>Loading...</Text>;
@@ -151,7 +147,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId,weathe
         <Marker position={initialCenter} />
       </GoogleMap>
 
-      {/* overlay with circular cutout */}
+      {/* Overlay with circular cutout */}
       <View
         style={{
           position: "absolute",
@@ -159,11 +155,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId,weathe
           left: 0,
           width: "100%",
           height: "100%",
-          backgroundColor: "rgba(105, 105, 105, .7)", 
+          backgroundColor: "rgba(105, 105, 105, .7)",
           zIndex: 1,
-          pointerEvents: "none", 
+          pointerEvents: "none",
           maskImage: `radial-gradient(circle ${radiusInPixels}px at ${cutoutPosition.x} ${cutoutPosition.y}, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 60%)`,
-          WebkitMaskImage: `radial-gradient(circle ${radiusInPixels}px at ${cutoutPosition.x} ${cutoutPosition.y}, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 60%)`,  // For Safari compatibility
+          WebkitMaskImage: `radial-gradient(circle ${radiusInPixels}px at ${cutoutPosition.x} ${cutoutPosition.y}, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 60%)`, // For Safari compatibility
         }}
       />
     </View>
