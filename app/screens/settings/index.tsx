@@ -6,10 +6,7 @@ import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors'
 import { Link } from 'expo-router';
 import {changeEmail, singOutUser} from "@/auth";
-import { deleteUser } from '@/data/UserDataService';
-
-
-import { fetchCurrentUser, writeData , fetchCurrentUserLeaderboard} from '@/data/UserDataService';
+import { fetchCurrentUser, writeData , fetchCurrentUserLeaderboard, deleteUser} from '@/data/UserDataService';
 import { Leaderboard, User, Friend } from '@/data/types'
 import { updateFriendshipUsername } from '@/data/Friendship';
 
@@ -92,7 +89,6 @@ const UserSettings = () => {
             await writeData(updatedUser);
             await writeData(updatedLeaderboard); 
             await updateFriendshipUsername(updatedUser)
-            // await updateFriendship();
             alert('Settings updated successfully!');
             console.log("Updated User:", updatedUser)
             console.log("Updated Leaderboard", updatedLeaderboard)

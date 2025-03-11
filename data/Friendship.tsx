@@ -8,6 +8,7 @@ import convertToDate from '@/app/utils/convertToDate';
 const collection_name = 'Friendships'
 const friendshipsRef = collection(db, collection_name)
 
+
 {/** CREATE */}
 
 export const createFriendship = async (friend: User) => {
@@ -86,11 +87,16 @@ const existingFriendshipQuery = async (currentUser: User, friend: User) => {
  * @param user 
  * @return 
  */
-export const FriendshipQuery = async (user: User) => {
+export const FriendshipQuery = async () => {
     try {
+        const currentUser = await fetchCurrentUser(); 
+        
+        if (!currentUser) {
+            throw new Error('No user is currently signed in!');
+        } 
          // Query friendships where the user is either user1 or user2
-         const q = query(friendshipsRef, where('user1Id', '==', user.id));
-         const q2 = query(friendshipsRef, where('user2Id', '==', user.id));
+         const q = query(friendshipsRef, where('user1', '==', currentUser.id));
+         const q2 = query(friendshipsRef, where('user2', '==', currentUser.id));
  
          // Fetch documents for both cases
          const querySnapshot1 = await getDocs(q);
@@ -100,7 +106,7 @@ export const FriendshipQuery = async (user: User) => {
          const allFriendships = [...querySnapshot1.docs, ...querySnapshot2.docs];
          return allFriendships 
     } catch (e) {
-        console.error("Could not fetch snapshot of all Users 'Frienships' docs ")
+        console.error("Could not fetch snapshot of all Users 'Frienships' docs", e)
         return []
     }
 }

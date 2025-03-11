@@ -142,7 +142,6 @@ export const writeData = async (data: User | Leaderboard): Promise<void> => {
 
     const docRef = doc(db, collection_name, data.id);
     await setDoc(docRef, data, { merge: true });
-    console.log(`${collection_name} data successfully updated old doc: ${docRef}`);
   } catch (error) {
     console.error(`Error writing ${collection_name} data:`, error);
   }
