@@ -39,7 +39,7 @@ const ProfileView = () => {
    
   return (
     <View style={styles.fullContainer}>
-
+      <ProfileDetails user={user} /> 
       <FriendProfile user={user} />
 
         <FooterBar />

@@ -7,7 +7,7 @@ export const PrivateProfile =  () => {
     const privateProfileMsg = "This account is private"
 
     return (
-        <View style={[styles.fullContainer, {justifyContent: 'center', alignItems: 'center'}]}>
+        <View style={[{flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
             <Image 
                 source={lock}
                 style={styles.image}
