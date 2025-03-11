@@ -266,6 +266,67 @@ export const DeleteFriendship = async (id: string) => {
     } catch (error) {
         console.error('Error denying friendship:', error);
     }  
-}
+};
+/**
+ * friend query by userId
+ * @param userId 
+ * @returns list of friends or null
+ */
+export const FriendQueryBasedOnUserId = async (userId: string) => {
+    try {
+        const friendshipsRef = collection(db, 'friendships');
 
- 
+        const approvedQ1 = query(friendshipsRef, where('status', '==', 'approved'), where('user1', '==', userId));
+        const approvedQ2 = query(friendshipsRef, where('status', '==', 'approved'), where('user2', '==', userId));
+
+        const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(approvedQ1), getDocs(approvedQ2)]);
+
+        const friends: Friend[] = [];
+        querySnapshot1.forEach((doc) => friends.push({ 
+            id: doc.id, friendId: doc.data().user2, friendUsername: doc.data().username2, 
+            createdAt: doc.data().createdAt, status: doc.data().status
+            
+        }));
+        querySnapshot2.forEach((doc) => friends.push({ 
+            id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1,
+            createdAt: convertToDate(doc.data().createdAt), status: doc.data().status
+        }));
+        console.log('Friends:', friends);
+
+        return friends;
+
+    } catch (error) {
+        console.error('Error fetching friends:', error);
+        return [];
+    }
+};
+/**
+ * send notification to user's friends when they post 
+ * @param userId 
+ * @param postId 
+ */
+ export const sendPostNotifications = async (userId: string) =>{
+    try{
+        const friends = await FriendQueryBasedOnUserId(userId); //fetch friends list 
+        const notificationsRef = collection(db, 'notifications');//create notifictaions collection
+
+        for (const friend of friends) { //iterate through friends 
+            const notificationData = {
+                friendId: friend.friendId,
+                userId: userId,
+               // postId: postId,
+                message: `View @${userId} recent trip!`,
+                createdAt: convertToDate(new Date()),
+                read: false
+            };
+            const notificationRef = doc(notificationsRef, `${userId}_${friend.friendId}`);
+            await setDoc(notificationRef, notificationData);
+            console.log('Notification', 'Successfully created.');
+        }
+        
+    } catch (error){
+        console.error('Error creating notification for the post', error);
+    }
+
+
+ }

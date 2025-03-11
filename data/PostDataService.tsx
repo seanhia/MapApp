@@ -2,7 +2,8 @@ import { Post } from '@/data/types'
 import db from '@/firestore';
 import { addDoc, doc, collection, query, orderBy, serverTimestamp, onSnapshot, updateDoc} from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import {  storage } from '@/firebase';
+import { storage } from '@/firebase';
+import { sendPostNotifications } from './Friendship';
 
 /**
  * Save post 
@@ -42,6 +43,7 @@ export const savePost = async (
             rating,
         });
         console.log(`Saved Post.`)
+        await sendPostNotifications(userId)
     } catch (error) {
         console.error("Error saving post: ", error);
         throw error;
