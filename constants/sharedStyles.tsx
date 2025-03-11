@@ -1,5 +1,6 @@
-import { StyleSheet, useColorScheme } from "react-native";
+import { StyleSheet, useColorScheme, Dimensions } from "react-native";
 import { Colors } from "../constants/Colors";
+
 
 type colorSchemeName = "light" | "dark" | null | undefined;
 
@@ -14,6 +15,12 @@ type colorSchemeName = "light" | "dark" | null | undefined;
    * Any modifications to global styles should be made here to maintain consisten UI
    */
 }
+const { width } = Dimensions.get('window');
+const numColumns = 3; // 3 post per row
+const postMargin = 10; 
+const postWidth = (width - postMargin * (numColumns + 1)) / numColumns; // calculate post width
+const baseFontSize = width * 0.05; // can be adjusted to percantage size of the screen 
+const iconSize = width * 0.025;
 
 const sharedStyles = (colorScheme: colorSchemeName) => {
   const theme = colorScheme || "light";
@@ -199,6 +206,9 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       paddingTop: 30,
     },
     postContainer: {
+      width: postWidth,  
+      marginLeft: postMargin,
+      marginRight: postMargin,
       padding: 12,
       marginBottom: 10,
       backgroundColor:
@@ -285,8 +295,8 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       borderRadius: 50,
     },
     imagePost: {
-      width: 300,
-      height: 300,
+      width: postWidth,  
+      height: postWidth,
       marginBottom: 10,
       alignSelf: "center",
     },
@@ -377,6 +387,11 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     },
     photoList: {
       marginTop: 20, 
+    },
+    editIcon:{
+      width: iconSize,
+      height: iconSize,
+
     },
 
     /** Overlay */
