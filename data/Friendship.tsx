@@ -270,7 +270,7 @@ export const DeleteFriendship = async (id: string) => {
 /**
  * friend query by userId
  * @param userId 
- * @returns list of friends or null
+ * @returns list of friends 
  */
 export const FriendQueryBasedOnUserId = async (userId: string) => {
     try {
@@ -307,6 +307,9 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
  */
  export const sendPostNotifications = async (userId: string) =>{
     try{
+        
+        const user : User = await fetchUserByUID(userId);
+    
         const friends = await FriendQueryBasedOnUserId(userId); //fetch friends list 
         const notificationsRef = collection(db, 'notifications');//create notifictaions collection
 
@@ -315,7 +318,7 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
                 friendId: friend.friendId,
                 userId: userId,
                // postId: postId,
-                message: `View @${userId} recent trip!`,
+                message: `View @${user.username} recent trip!`,
                 createdAt: convertToDate(new Date()),
                 read: false
             };
