@@ -17,8 +17,8 @@ type colorSchemeName = "light" | "dark" | null | undefined;
 }
 const { width } = Dimensions.get('window');
 const numColumns = 3; // 3 post per row
-const postMargin = 10; 
-const postWidth = (width - postMargin * (numColumns + 1)) / numColumns; // calculate post width
+const postMargin = 5; 
+const postWidth = (width - ( 2.70 * postMargin) * (numColumns + 1)) / numColumns; // calculate post width
 const baseFontSize = width * 0.05; // can be adjusted to percantage size of the screen 
 const iconSize = width * 0.025;
 
@@ -452,16 +452,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       top: 0,
       right: 0,
       padding: 20,
-    },
-    closeButton: {
-      position: 'absolute',
-      top: 10,
-      right: 10,
-      padding: 5,
-      backgroundColor: 'red',
-      borderRadius: 5,
-    },
-  
+    }
     
 
 
