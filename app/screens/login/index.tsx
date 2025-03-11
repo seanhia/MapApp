@@ -53,7 +53,10 @@ export default function Login() {
   return (
     // loading ? <SplashScreenView setIsLoading={setLoading} /> : // Test Splash Screen 
     <GestureHandlerRootView style={{ flex: 1 }}>
+       loading ? (
+        <ActivityIndicator size={'small'} style ={{ margin: 28}} /> ) :
     <View style={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
+
       <View
         style={styles.centerContainer}
       >
@@ -78,9 +81,7 @@ export default function Login() {
                 placeholder = "Password"
               />
               {
-                loading ? (
-                  <ActivityIndicator size={'small'} style ={{ margin: 28}} />
-                ) : (
+                (
                   <>
                     <Link style={styles.rightLink} href="/screens/forgot_password">Forgot Password?</Link>
                     <TouchableOpacity style={styles.lightButton} onPress={signIn}> 
