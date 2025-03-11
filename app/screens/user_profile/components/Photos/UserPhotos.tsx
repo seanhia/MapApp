@@ -81,6 +81,7 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ user}) => {
             />
             <ProfilePost
             posts={posts}
+            user={user}
             />
         </View>
 

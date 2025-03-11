@@ -1,10 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const Notifications = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Notifications</Text>
+      <TouchableOpacity>
+        <Text style={[styles.text, { fontWeight: 100 }]}> View @Nick.644 recent trip!</Text>
+      </TouchableOpacity>
+
     </View>
   );
 };

@@ -1,6 +1,6 @@
 import { Post } from '@/data/types'
 import db from '@/firestore';
-import { addDoc, doc, collection, query, orderBy, serverTimestamp, onSnapshot} from 'firebase/firestore';
+import { addDoc, doc, collection, query, orderBy, serverTimestamp, onSnapshot, updateDoc} from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {  storage } from '@/firebase';
 
@@ -73,6 +73,27 @@ export const loadPosts = async (userId: string, callback: (posts: Post[]) => voi
 
     } catch (error) {
         console.error("Error fetching posts :", error);
+        throw error;
+    }
+};
+/**
+ * update post 
+ */
+export const updatePost = async (userId: string, postId: string, newLocation: string, newReview: string, newRating: number) => {
+    if (!userId) {
+        throw new Error("User ID is required to update post.");
+    }
+    try {
+        const postDocRef = doc(db, "users", userId, "posts", postId);
+        await updateDoc(postDocRef, {
+            location: newLocation,
+            review: newReview,
+            rating: newRating,
+          });
+          console.log('Post updated successfully');
+
+    } catch (error) {
+        console.error("Error updating posts :", error);
         throw error;
     }
 };

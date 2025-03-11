@@ -1,17 +1,20 @@
-import { Post } from '@/data/types';
+import { User, Post } from '@/data/types';
 import { View, Text, FlatList, TouchableOpacity, Image, Alert, Modal, TextInput } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import { Timestamp } from 'firebase/firestore';
 import { Rating } from 'react-native-ratings';
 import React, { useState } from 'react';
+import { updatePost } from '@/data/PostDataService';
+
 
 interface ProfilePostProp {
   posts: Post[];
+  user: User | null ;
 
 
 };
 
-const ProfilePost: React.FC<ProfilePostProp> = ({ posts }) => {
+const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
   const { colorScheme, styles } = useTheme();
   //to edit post info
   const [modalVisible, setModalVisible] = useState(false);
@@ -54,7 +57,11 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts }) => {
 
   const handleSave = () => {
     if (selectedPost) {
-      //save changes to database, yet to be implemented
+      if (!user || !user.id) {
+        console.error("User ID is undefined. Cannot save post.");
+        return;
+    }
+      updatePost(user.id, selectedPost.id, newLocation, newReview, newRating);
       Alert.alert('Success', 'Post details updated.');
       closeModal();
     } else {
