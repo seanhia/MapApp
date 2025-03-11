@@ -18,7 +18,8 @@ interface ProfileDetailsProps {
 };
 const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
     const { colorScheme, styles } = useTheme();
-    const [friendCount, setFriendCount] = useState<string>('0');
+    const [friendCount, setFriendCount] = useState<string>('-');
+    const [points, setPoints] = useState<string>('-');
     const { profileImage, handleImagePicker } = useProfileImage(user);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -39,15 +40,23 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
                 if (user) {
                     const count = await fetchFriendCount(user);
                     setFriendCount(count);
-                    console.log(user?.createdAt);
 
                 }
             } catch (error) {
                 console.error('Error fetching user:', error);
             }
         };
+        const loadPoints = async () => {
+            try {
+                const pointTotal = '0'
+                setPoints(pointTotal)
+            } catch (error) {
+                console.error('Error fetching points: ', error)
+            }
+        } 
         loadFriendCount();
         loadCurrentUser(); 
+        // loadPoints(); 
     }, [user]);
 
 
@@ -76,7 +85,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
 
                 <View style={{ width: 75, alignItems: 'center' }}>
                     <Text style={styles.label}>Points</Text>
-                    <Text style={styles.profileDetailText}>0</Text>
+                    <Text style={styles.profileDetailText}>{points}</Text>
                 </View>
             </View>
 
