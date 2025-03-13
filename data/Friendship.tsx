@@ -314,22 +314,37 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
  export const sendPostNotifications = async (userId: string) =>{
     try{
         
-        const user : User = await fetchUserByUID(userId);
+        const user: User | null = await fetchUserByUID(userId);
+        if (!user) {
+            console.error("User not found");
+            return;
+        }
     
         const friends = await FriendQueryBasedOnUserId(userId); //fetch friends list 
+        if (!friends || friends.length === 0) {
+            console.log("No friends found.");
+            return;
+        }
         const notificationsRef = collection(db, 'notifications');//create notifictaions collection
+
+        const timestamp = new Date().toISOString();
 
         for (const friend of friends) { //iterate through friends 
             const notificationData = {
                 friendId: friend.friendId,
                 userId: userId,
-               // postId: postId,
                 message: `View @${user.username} recent trip!`,
                 createdAt: convertToDate(new Date()),
                 read: false
             };
-            const notificationRef = doc(notificationsRef, `${userId}_${friend.friendId}`);
-            await setDoc(notificationRef, notificationData);
+            const notificationDocRef = doc( 
+                notificationsRef, 
+                friend.friendId, 
+                userId, 
+                timestamp
+            );
+            
+            await setDoc(notificationDocRef, notificationData); 
             console.log('Notification', 'Successfully created.');
         }
         

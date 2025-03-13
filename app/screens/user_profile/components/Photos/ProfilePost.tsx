@@ -5,6 +5,7 @@ import { Timestamp } from 'firebase/firestore';
 import { Rating } from 'react-native-ratings';
 import React, { useState } from 'react';
 import { updatePost } from '@/data/PostDataService';
+import { deletePost } from '@/data/PostDataService';
 
 
 interface ProfilePostProp {
@@ -70,7 +71,11 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
   };
   const handleDelete = () => {
     if (selectedPost) {
-      //delete post from database, yet to be implemented
+      if (!user || !user.id) {
+        console.error("User ID is undefined. Cannot save post.");
+        return;
+    }
+      deletePost(user?.id, selectedPost.id)
       Alert.alert('Success', 'Post deleted.');
       closeModal();
     } else {

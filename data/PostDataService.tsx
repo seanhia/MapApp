@@ -1,6 +1,6 @@
 import { Post } from '@/data/types'
 import db from '@/firestore';
-import { addDoc, doc, collection, query, orderBy, serverTimestamp, onSnapshot, updateDoc} from 'firebase/firestore';
+import { addDoc, doc, collection, query, orderBy, serverTimestamp, onSnapshot, updateDoc, deleteDoc} from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/firebase';
 import { sendPostNotifications } from './Friendship';
@@ -99,3 +99,14 @@ export const updatePost = async (userId: string, postId: string, newLocation: st
         throw error;
     }
 };
+
+export const deletePost = async (userId: string, postId: string) => {
+    try {
+      const postRef = doc(db, "users", userId, "posts", postId); // reference doc 
+      await deleteDoc(postRef);
+      console.log('Post deleted successfully');
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+  
