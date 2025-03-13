@@ -30,7 +30,7 @@ import { ScrollView } from "react-native-gesture-handler";
 const Friends = () => {
   const colorScheme = useColorScheme();
   const styles = sharedStyles(colorScheme);
-
+  const [isLoading, setIsLoading] = useState(true)
   const [friendsList, setFriendsList] = useState<Friend[]>([]);
   const [pendingRequests, setPendingRequests] = useState<Friend[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
@@ -57,6 +57,8 @@ const Friends = () => {
           const users = await fetchAllUsers();
           setAllUsers(users);
           setFilteredUsers(users);
+
+          setIsLoading(false);
 
         } catch (error) {
           console.error("Error fetching friends or users:", error);
@@ -127,29 +129,29 @@ const Friends = () => {
     );
   };
 
-  // const searchText = useCallback(
-  //   (text: string) => {
-  //     if (!isSearchActive) {
-  //       setIsSearchActive(true);
-  //     }
-  //     const page = 1;
-  //     const limit = 3;
-  //     const filtered = allUsers.filter((user) =>
-  //       user?.username?.toLowerCase().includes(text.toLowerCase())
-  //     );
-  //     setFilteredUsers(filtered);
-  //     if (inputRef.current) {
-  //       inputRef.current.blur();
-  //     }
-  //   },
-  //   [allUsers, isSearchActive],
-  // );
+  // if (friendsList.length === 0 && pendingRequests.length === 0) {
 
-  // const onTextClear = useCallback(() => {
-  //   if (isSearchActive) {
-  //     setIsSearchActive(false);
-  //   }
-  // }, [isSearchActive]);
+  //   return (
+  //     <View style={styles.fullContainer}> 
+  //     <SearchBar
+  //       value={searchQuery} 
+  //       onChange={handleSearch}
+  //       // inputRef={inputRef} 
+  //       />
+  //     <UserList users={filteredUsers} visible={!!searchQuery} />
+  //     <View style={styles.fullContainer}>
+  //     <Text style={[styles.text,{alignSelf: 'center'}]}>No Friends Found</Text>
+  //     </View>
+  //     <SafeAreaView>
+  //       <FooterBar />
+  //     </SafeAreaView>
+  //     </View>
+  //   )
+  // } else {
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <View style={styles.fullContainer}>
@@ -159,6 +161,14 @@ const Friends = () => {
         // inputRef={inputRef} 
         />
       <UserList users={filteredUsers} visible={!!searchQuery} />
+
+      {friendsList.length === 0 ? (
+        <View style={styles.fullContainer}>
+         <Text style={[styles.text,{alignSelf: 'center'}]}>No Friends Found</Text>
+         </View>
+      ) : (
+
+      
       <ScrollView>
         <Text style={[styles.header, {marginTop: 90}]}>Friends</Text>
         <FriendList
@@ -174,13 +184,13 @@ const Friends = () => {
           onAccept={handleAccept}
           onDeny={handleDeny}
         />
-        
       </ScrollView>
+      )}
       <SafeAreaView>
         <FooterBar />
       </SafeAreaView>
     </View>
-  );
+  )
 };
 
 export default Friends;
