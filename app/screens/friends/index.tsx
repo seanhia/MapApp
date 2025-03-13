@@ -129,26 +129,6 @@ const Friends = () => {
     );
   };
 
-  // if (friendsList.length === 0 && pendingRequests.length === 0) {
-
-  //   return (
-  //     <View style={styles.fullContainer}> 
-  //     <SearchBar
-  //       value={searchQuery} 
-  //       onChange={handleSearch}
-  //       // inputRef={inputRef} 
-  //       />
-  //     <UserList users={filteredUsers} visible={!!searchQuery} />
-  //     <View style={styles.fullContainer}>
-  //     <Text style={[styles.text,{alignSelf: 'center'}]}>No Friends Found</Text>
-  //     </View>
-  //     <SafeAreaView>
-  //       <FooterBar />
-  //     </SafeAreaView>
-  //     </View>
-  //   )
-  // } else {
-
   if (isLoading) {
     return <Text>Loading...</Text>;
   }
@@ -165,10 +145,10 @@ const Friends = () => {
       {friendsList.length === 0 ? (
         <View style={styles.fullContainer}>
          <Text style={[styles.text,{alignSelf: 'center'}]}>No Friends Found</Text>
-         </View>
+        </View>
+
       ) : (
 
-      
       <ScrollView>
         <Text style={[styles.header, {marginTop: 90}]}>Friends</Text>
         <FriendList
