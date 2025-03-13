@@ -62,6 +62,8 @@ export const fetchCurrentUser = async (): Promise<User | null> => {
   return { id: currentUser.uid, ...userData, createdAt: createdAt || new Date()} as User;
 };
 
+
+
 /**
    * Fetch the current user's leaderboard data.
    * @returns {Promise<Leaderboard | null>} Leaderboard data or null if the user doesn't exist.
@@ -202,7 +204,7 @@ export async function getCollectionSize(collectionPath: string) {
 }
 export const getTopFourUsers = async () => {
   const collectionRef = collection(db, 'leaderboard_entry');
-  const usersSorted = query(collectionRef, orderBy("points", 'desc'), limit(4));
+  const usersSorted = query(collectionRef, orderBy("points", 'desc'), limit(10));
   const topPoints = await getDocs(usersSorted);
   const people = topPoints.docs.map(doc => ({ id: doc.id, ...doc.data() } as Leaderboard));
   return people

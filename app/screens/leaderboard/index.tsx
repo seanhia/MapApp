@@ -2,28 +2,28 @@ import React, { useEffect, useState} from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import FooterBar from '@/components/FooterBar';
 import { useTheme } from '@/hooks/useTheme';
-import { rankUsers, getTopFourUsers, fetchUserByUID } from '@/data/UserDataService';
+import { rankUsers, getTopFourUsers, fetchCurrentUserLeaderboard } from '@/data/UserDataService';
 import { Leaderboard } from '@/data/types';
+import UserSettings from '../settings';
 
 const LeaderboardScreen =  () => {
     const {colorScheme, styles } = useTheme();
     const [info, setData] = useState<Leaderboard[] | null>(null);
-    const [nameUse, setName] = useState([])
-    // const data = [
-    //     { id: '1', username: 'user1', points: 150 },
-    //     { id: '2', username: 'user2', points: 120 },
-    //     { id: '3', username: 'user3', points: 100 },
-    //     { id: '4', username: 'user4', points: 90 },
-    // ];
+    const [otherInfo, setData2] = useState<Leaderboard | null>(null);
+    
+    
     useEffect(() => {
         const fetchData = async () => {
             const topUsers = await getTopFourUsers();
             
             setData(topUsers);
+            
+            const curUserRank = await fetchCurrentUserLeaderboard();
+            setData2(curUserRank);
         };
 
-
         fetchData();
+
     }, []);
     
 
@@ -37,12 +37,20 @@ const LeaderboardScreen =  () => {
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
                         <View style={style.row}>
-                            <Text style={style.username}>{item.username}</Text>
+                            <Text style={style.username}>{item.ranking +". " + item.username}</Text>
                             <Text style={style.score}>{item.points}</Text>
                         </View>
                     )}
                 />
+            
+            
 
+            </View>
+            <View style={style.box}>
+                <View style={style.row}>
+                  <Text style={style.username}>{otherInfo?.ranking}. {otherInfo?.username}</Text>
+                  <Text style={style.score}>{otherInfo?.points}</Text>
+                </View>
             </View>
             <FooterBar />
             <TouchableOpacity style={styles.lightButton} onPress={rankUsers}>
