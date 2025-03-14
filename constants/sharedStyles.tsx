@@ -445,7 +445,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       justifyContent: 'flex-end', 
     },
     notificationDrawer: {
-      width:  '25%',
+      width:  '40%',
       height: '100%', 
       backgroundColor: 'white',
       position: 'absolute',

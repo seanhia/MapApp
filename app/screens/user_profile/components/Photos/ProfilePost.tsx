@@ -75,7 +75,7 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
         console.error("User ID is undefined. Cannot save post.");
         return;
     }
-      deletePost(user?.id, selectedPost.id)
+      deletePost(user?.id, selectedPost.id, selectedPost.image || "");
       Alert.alert('Success', 'Post deleted.');
       closeModal();
     } else {
@@ -102,6 +102,7 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
         ratingCount={5}
         imageSize={25}
         startingValue={item.rating}
+        readonly
       />
 
       {/* Timestamp Formatting */}

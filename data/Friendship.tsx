@@ -353,4 +353,8 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
     }
 
 
- }
+ }; 
+
+ export const fetchNotifications = async (userId: string) =>{
+
+ };
