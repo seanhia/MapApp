@@ -51,10 +51,11 @@ export default function Login() {
   }, []);
 
   return (
-    // loading ? <SplashScreenView setIsLoading={setLoading} /> : // Test Splash Screen 
+    loading ? (
+    <ActivityIndicator size={'small'} style ={{ margin: 28}} /> ) :
+
     <GestureHandlerRootView style={{ flex: 1 }}>
-       loading ? (
-        <ActivityIndicator size={'small'} style ={{ margin: 28}} /> ) :
+      
     <View style={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
 
       <View
@@ -111,7 +112,7 @@ const style = StyleSheet.create({
   
   lowerContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     width: '80%',
   },

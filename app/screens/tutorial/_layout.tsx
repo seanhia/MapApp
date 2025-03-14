@@ -19,24 +19,28 @@ export default function TutorialLayout() {
     return (
         <Stack
             screenOptions={{
-                headerStyle: {backgroundColor: Colors.light.background}
-            }}
-        >
+                headerStyle: {
+                    backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background
+                },
+
+
+            }}>
+
             <Stack.Screen
-                name="tutorial_welcome"
-                options={{ title: "", headerShown: true, }}
+                name="index"
+                options={{ title: "Welcome", headerShown: false }}
             />
             <Stack.Screen
                 name="tutorial_2"
-                options={{}}
+                options={{title: "Page 2", headerShown: false}}
             />
              <Stack.Screen
                 name="tutorial_3"
-                options={{}}
+                options={{title: "Page 3", headerShown: false}}
             />
              <Stack.Screen
                 name="tutorial_final"
-                options={{}}
+                options={{title: "Complete", headerShown: false}}
             />
         </Stack>
     )   

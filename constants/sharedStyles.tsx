@@ -227,6 +227,12 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
         theme === "dark" ? Colors.dark.background : Colors.light.background,
       borderRadius: 8,
     },
+    tutorialContainer: {
+      flex: 1, 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      backgroundColor: theme === "dark" ? Colors.dark.background : Colors.light.background
+    },
 
     /** Buttons  */
     button: {
@@ -264,11 +270,11 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       color:
         theme === "dark" ? Colors.dark.background : Colors.light.background,
     },
-    smallButton: {
+    tutorialButton: {
       width: 100, // Small button size
       paddingVertical: 8, // Adjust height
       backgroundColor: Colors.light.tint,
-      borderRadius: 8, // Rounded corners
+      borderRadius: 28, // Rounded corners
       alignItems: "center", // Center text
     },
     addFriendButton: {

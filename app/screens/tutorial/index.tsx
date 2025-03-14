@@ -7,49 +7,22 @@ Returning users can skip the tutorial and jump straight to the main interface.
 */
 
 import React from 'react';
-import Onboarding from 'react-native-onboarding-swiper';
-import { Image, StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
-
-import slides from './TutorialSlides' // page info for each onboarding swipe 
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import TutorialScreen from './components/tutorial';
 import { useTheme } from '@/hooks/useTheme';
-import LottieView from 'lottie-react-native';
 
 
-const Tutorial = ({ onComplete }: { onComplete: () => void }) => {
-  const { colorScheme, styles } = useTheme();
-  const router = useRouter();
+const Tutorial = () => {
+  const { styles } = useTheme();
   
-  
-  const pages = slides.map((slide) => ({
-    backgroundColor: 'fff', // Customize for each slide if needed
-    title: slide.title,
-    subtitle: slide.subtitle,
-    image: <Image source={slide.image} 
-        style={{height: 200, width: 220, marginBottom: 500, justifyContent: 'space-evenly',  marginVertical: 200}}/>,
-    animation: 
-      <LottieView 
-        source={slide.animation}
-        autoPlay
-        loop={false}
-      />
-  }));
-
   return (
     <View style={styles.fullContainer}>
-            <Onboarding 
-        
-      pages={pages}
-      onSkip={() => {
-        console.log('Tutorial skipped');
-        router.replace('/screens/sign_up')}}
-      onDone={() => {
-          console.log('Tutorial Completed');
-          onComplete();
-      }}
-      showNext={true} // Ensures Next button is enabled
-      showDone={true} // Ensures Done button is displayed
-    />
+        <TutorialScreen 
+            title="Welcome to EXPLORE!" 
+            description="Track your travels and explore new destinations effortlessly." 
+            nextPage="/screens/tutorial/tutorial_2"
+            image={require('@/assets/images/cloud.png')}
+        />
     </View> 
   );
 };
