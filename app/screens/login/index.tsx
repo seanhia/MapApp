@@ -1,7 +1,7 @@
 import app, {auth} from "@/firebase";
 import {sendEmailVerification} from 'firebase/auth';
 import { useEffect, useState} from "react";
-import { Text, View, KeyboardAvoidingView, Button, ActivityIndicator, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { Text, View, KeyboardAvoidingView, ActivityIndicator, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { Link , router} from 'expo-router';
 import { FirebaseError } from 'firebase/app'
@@ -9,7 +9,7 @@ import {signUpWithEmail, signInWithEmail} from "@/auth";
 import { useTheme } from '@/hooks/useTheme'; 
 import { Colors } from '@/constants/Colors';
 import { ImageHeader } from '@/components/ImageHeader'
-import Tutorial from "../tutorial";
+import { Loading } from '@/components/Loading'
 
 
 export default function Login() {
@@ -52,7 +52,7 @@ export default function Login() {
 
   return (
     loading ? (
-    <ActivityIndicator size={'small'} style ={{ margin: 28}} /> ) :
+    <Loading/>) :
 
     <GestureHandlerRootView style={{ flex: 1 }}>
       

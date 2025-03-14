@@ -29,7 +29,8 @@ export interface Friend {
 export const status = [
     'pending',
     'approved',
-    'rejected'
+    'rejected', 
+    'invalid'
 ]
 
 export interface Post {

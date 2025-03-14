@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef, useCallback} from "react";
-import { View, SafeAreaView, Text, TextInput, useColorScheme, Alert } from "react-native";
+import { View, SafeAreaView, Text, TextInput, useColorScheme, Alert, ActivityIndicator } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link, router } from "expo-router";
 import { Divider } from 'react-native-paper';
 
+import { Loading } from '@/components/Loading'
 import SearchBar from "./components/SearchBar";
 import UserList from "./components/UserList";
 import FriendList from "./components/FriendList";
@@ -109,14 +110,25 @@ const Friends = () => {
     }
   };
 
-  const handleViewProfile = async (friendship: Friend) => {
+  const handleFriendViewProfile = async (friend: Friend) => {
     console.log(
       "Attempting to view the following users profile",
-      friendship.friendId
+      friend.friendId
     );
     router.push({
       pathname: "/screens/profile_view",
-      params: { userId: friendship.friendId }, // Pass friend_id as a parameter
+      params: { userId: friend.friendId }, // Pass friend_id as a parameter
+    });
+  };
+
+  const handleViewProfile = async (user: User) => {
+    console.log(
+      "Attempting to view the following users profile",
+      user.id
+    );
+    router.push({
+      pathname: "/screens/profile_view",
+      params: { userId: user.id },
     });
   };
 
@@ -129,20 +141,25 @@ const Friends = () => {
     );
   };
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
+  // if (isLoading) {
+  //   return <Text>Loading...</Text>;
+    
+  // }
 
   return (
+
+    isLoading ? (
+      <Loading/>) : (
+
     <View style={styles.fullContainer}>
       <SearchBar
         value={searchQuery} 
         onChange={handleSearch}
         // inputRef={inputRef} 
         />
-      <UserList users={filteredUsers} visible={!!searchQuery} />
-
-      {friendsList.length === 0 ? (
+      <UserList users={filteredUsers} visible={!!searchQuery} onViewProfile={handleViewProfile}/>
+     
+      {friendsList.length === 0 && pendingRequests.length === 0 ? (
         <View style={styles.fullContainer}>
          <Text style={[styles.text,{alignSelf: 'center'}]}>No Friends Found</Text>
         </View>
@@ -153,8 +170,8 @@ const Friends = () => {
         <Text style={[styles.header, {marginTop: 90}]}>Friends</Text>
         <FriendList
           friends={friendsList}
-          onViewProfile={handleViewProfile} // Placeholder
-          onUnfriend={handleDeny} // Delete Friendship
+          onViewProfile={handleFriendViewProfile} 
+          onUnfriend={handleDeny} 
         />
         <Divider/>
         <Text style={styles.header}>Pending Requests</Text>
@@ -170,7 +187,7 @@ const Friends = () => {
         <FooterBar />
       </SafeAreaView>
     </View>
-  )
+  ))
 };
 
 export default Friends;

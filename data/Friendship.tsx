@@ -18,9 +18,18 @@ export const createFriendship = async (friend: User) => {
         if (!currentUser) {
             throw new Error('No user is currently signed in!');
         } 
-        const frienshipExists = await existingFriendshipQuery(currentUser, friend);
-        if (frienshipExists == true) {
-            return;
+        const friendshipExists = await existingFriendshipQuery(currentUser, friend);
+        if (friendshipExists[0] == true) {
+            if (friendshipExists[1] == status[0]) {
+                alert('Friend request already sent!')
+                console.log('Friend request already sent:', friend.id);
+            } else if (friendshipExists[1] == status[1]) {
+                alert('You are already friends!')
+                console.log('You are already friends:', friend.id);
+            } else if (friendshipExists[1] == status[3]) {
+                alert('You cannot add yourself as a friend!');
+            }
+            return false
         }
         // Data for new frienship document 
         const data = {
@@ -47,13 +56,10 @@ export const createFriendship = async (friend: User) => {
 
 {/** UTIL */}
 
-const existingFriendshipQuery = async (currentUser: User, friend: User) => {
-    console.log("user: ", currentUser.username)
-    console.log("friend: ", friend.username)
+export const existingFriendshipQuery = async (currentUser: User, friend: User) => {
     if (currentUser.id === friend.id) {
-        alert('You cannot add yourself as a friend!');
         console.error('You cannot add yourself as a friend!');
-        return true;
+        return [true, status[3]];
     }
 
     const existingFriendshipQuery = query(
@@ -67,22 +73,15 @@ const existingFriendshipQuery = async (currentUser: User, friend: User) => {
     if (!existingFriendshipSnapshot.empty) {
         const friendRef = existingFriendshipSnapshot.docs[0].data()
         const existingStatus = friendRef.status; 
-        console.log("status", existingStatus)
-
         if (existingStatus === status[1]) {
-            alert('You are already friends!')
-            console.log('You are already friends:', friendRef.id);
-            return true;
+            return [true, status[1]];
         }
         if (existingStatus === status[0]) {
-            alert('Friend request already sent!')
-            console.log('Friend request already sent:', friendRef.id);
-            return true;
+            return [true, status[0]];
         }
-        return true; 
+        return [true, null]; 
     }
-
-    return false;
+    return [false, null];
 }
 
 {/** READ (GET | LIST) --> QUERY */}
