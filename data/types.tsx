@@ -21,10 +21,11 @@ export interface Friend {
     friendId: string,
     friendUsername: string,
     createdAt: Date,
-    status: string, // pending, approved, rejected
+    status: string, 
     friendProfilePhoto?: string,
 };
 
+/** Don't change this !! could result in errors in Friendships.tsx */
 export const status = [
     'pending',
     'approved',

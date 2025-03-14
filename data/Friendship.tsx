@@ -5,8 +5,8 @@ import { User, status, Friend } from '@/data/types';
 import convertToDate from '@/app/utils/convertToDate';
 
 
-const collection_name = 'Friendships'
-const friendshipsRef = collection(db, collection_name)
+const friendships_collection = 'friendships'
+const friendshipsRef = collection(db, friendships_collection)
 
 
 {/** CREATE */}
@@ -26,13 +26,13 @@ export const createFriendship = async (friend: User) => {
         const data = {
             user1: currentUser.id, //currentUser.uid,
             user2: friend.id,
-            status: 'pending', // pending, approved, rejected
+            status: status[0], // pending, approved, rejected
             username1: currentUser.username || null, 
             username2: friend.username, 
             createdAt: convertToDate(new Date()), // Use the current date and time
         }
         const friendshipId = [currentUser.id, friend.id].sort().join("_");
-        const newFriendshipRef = doc(db, 'friendships', friendshipId);
+        const newFriendshipRef = doc(db, friendships_collection, friendshipId);
         
         // Write the data into Firestore
         await setDoc(newFriendshipRef, data);
@@ -48,35 +48,40 @@ export const createFriendship = async (friend: User) => {
 {/** UTIL */}
 
 const existingFriendshipQuery = async (currentUser: User, friend: User) => {
-    // Check if a friendship already exists between the two users
-    const existingFriendshipQuery = query(
-        friendshipsRef,
-        where('status', 'in', status),
-        where('user1', 'in', [currentUser.id, friend.id]),
-        where('user2', 'in', [currentUser.id, friend.id])
-    ); 
-                                                                                                                  
-    const existingFriendshipSnapshot = await getDocs(existingFriendshipQuery);
-
-    if (!existingFriendshipSnapshot.empty) {
-        const friendRef = existingFriendshipSnapshot.docs[0]
-        if (friendRef.data().status === status[1]) {
-            alert('You are already friends!')
-            console.log('You are already friends:', friendRef.id);
-            return true;
-        }
-        if (friendRef.data().status === status[0]) {
-            alert('Friend request already sent!')
-            console.log('Friend request already sent:', friendRef.id);
-            return true;
-        }
-        return; 
-    }
+    console.log("user: ", currentUser.username)
+    console.log("friend: ", friend.username)
     if (currentUser.id === friend.id) {
         alert('You cannot add yourself as a friend!');
         console.error('You cannot add yourself as a friend!');
         return true;
     }
+
+    const existingFriendshipQuery = query(
+        friendshipsRef,
+        where('user1', 'in', [currentUser.id, friend.id]),
+        where('user2', 'in', [currentUser.id, friend.id])
+    ); 
+                                                                                                                  
+    const existingFriendshipSnapshot = await getDocs(existingFriendshipQuery);
+    console.log("empty?", existingFriendshipSnapshot.empty, "snapshot: ", existingFriendshipSnapshot)
+    if (!existingFriendshipSnapshot.empty) {
+        const friendRef = existingFriendshipSnapshot.docs[0].data()
+        const existingStatus = friendRef.status; 
+        console.log("status", existingStatus)
+
+        if (existingStatus === status[1]) {
+            alert('You are already friends!')
+            console.log('You are already friends:', friendRef.id);
+            return true;
+        }
+        if (existingStatus === status[0]) {
+            alert('Friend request already sent!')
+            console.log('Friend request already sent:', friendRef.id);
+            return true;
+        }
+        return true; 
+    }
+
     return false;
 }
 
@@ -122,10 +127,10 @@ export const FriendQuery = async () => {
             throw new Error('No user is currently signed in!');
         }
 
-        const friendshipsRef = collection(db, 'friendships');
+        // const friendshipsRef = collection(db, 'friendships');
 
-        const approvedQ1 = query(friendshipsRef, where('status', '==', 'approved'), where('user1', '==', currentUser.id));
-        const approvedQ2 = query(friendshipsRef, where('status', '==', 'approved'), where('user2', '==', currentUser.id));
+        const approvedQ1 = query(friendshipsRef, where('status', '==', status[1]), where('user1', '==', currentUser.id));
+        const approvedQ2 = query(friendshipsRef, where('status', '==', status[1]), where('user2', '==', currentUser.id));
 
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(approvedQ1), getDocs(approvedQ2)]);
 
@@ -163,7 +168,7 @@ export const PendingQuery = async () => {
 
     const friendshipsRef = collection(db, 'friendships');
 
-    const pendingQ1 = query(friendshipsRef, where('status', '==', 'pending'), where('user2', '==', currentUser.id)); // The user that has been requested 
+    const pendingQ1 = query(friendshipsRef, where('status', '==', status[0]), where('user2', '==', currentUser.id)); // The user that has been requested 
 
     const [pendingSnapshot1] = await Promise.all([getDocs(pendingQ1)]);
 
@@ -194,9 +199,8 @@ export const fetchFriendCount = async (friend: User | null): Promise<string> => 
             throw new Error('No user is currently signed in!');
         }  
        
-        const friendshipsRef = collection(db, 'friendships');
-        const countQuery1 = query(friendshipsRef, where('status', '==', 'approved'), where('user1', '==', friend.id));
-        const countQuery2 = query(friendshipsRef, where('status', '==', 'approved'), where('user2', '==', friend.id));
+        const countQuery1 = query(friendshipsRef, where('status', '==', status[1]), where('user1', '==', friend.id));
+        const countQuery2 = query(friendshipsRef, where('status', '==', status[1]), where('user2', '==', friend.id));
 
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(countQuery1), getDocs(countQuery2)]);
         const friendCount = querySnapshot1.size + querySnapshot2.size;
@@ -215,7 +219,7 @@ export const AcceptFriendship = async (id: string) => {
         status: status[1], // approved
     };
     try {
-        const friendshipDoc = doc(db, 'friendships', id);
+        const friendshipDoc = doc(db, friendships_collection, id);
         
         await updateDoc(friendshipDoc, data);
         console.log('Friendship accepted!'); 
@@ -228,14 +232,14 @@ export const AcceptFriendship = async (id: string) => {
 /**
  * Update friendship username of the user in each document they appear in
  * @props User
- * 
+ * WIP
  */
 export const updateFriendshipUsername = async (user: User) => {
     try {
-        const allFriendships = await FriendshipQuery(user)
+        const allFriendships = await FriendshipQuery()
    
         for (const docSnap of allFriendships) {
-            const friendshipDocRef = doc(db, collection_name, docSnap.id)
+            const friendshipDocRef = doc(db, friendships_collection, docSnap.id)
             const friendshipData = docSnap.data(); 
 
             const updatedFrienship = {
@@ -264,7 +268,7 @@ export const updateFriendshipUsername = async (user: User) => {
 */
 export const DeleteFriendship = async (id: string) => {
     try {
-        const friendshipDoc = doc(db, 'friendships', id);
+        const friendshipDoc = doc(db, friendships_collection, id);
         
         await deleteDoc(friendshipDoc);
         console.log('Friendship successfully delelted!'); 
@@ -280,10 +284,9 @@ export const DeleteFriendship = async (id: string) => {
  */
 export const FriendQueryBasedOnUserId = async (userId: string) => {
     try {
-        const friendshipsRef = collection(db, 'friendships');
 
-        const approvedQ1 = query(friendshipsRef, where('status', '==', 'approved'), where('user1', '==', userId));
-        const approvedQ2 = query(friendshipsRef, where('status', '==', 'approved'), where('user2', '==', userId));
+        const approvedQ1 = query(friendshipsRef, where('status', '==', status[1]), where('user1', '==', userId));
+        const approvedQ2 = query(friendshipsRef, where('status', '==', status[1]), where('user2', '==', userId));
 
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(approvedQ1), getDocs(approvedQ2)]);
 

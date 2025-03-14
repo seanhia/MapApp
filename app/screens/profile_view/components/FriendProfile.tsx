@@ -9,21 +9,12 @@ import { PrivateProfile } from './PrivateProfile';
 import { UserNotFound } from './UserNotFound';
 
 /**
- * Logic to direct to Friends Profile
+ * Friends Profile View 
+ * 
  * Cases: 
  *      user not found 
  *      user is private and not your friend
- *      all other cases result in viewing the profile
- * 
- *               ||
- *               \/
- * 
- *      if (private and not friends) {
- *        return (
- *          <PrivateProfile />
- *         )
- *      } else {return (<FriendProfile />)
- *        } 
+ *      all other cases result in viewing the users profile
  */
 
 interface FriendProfileProps {
@@ -34,8 +25,8 @@ const FriendProfile: React.FC<FriendProfileProps> = ({ user }) => {
     const { styles } = useTheme()
     const [loadedPosts, setLoadedPosts] = useState<Post[]>([]);
     const [hasMorePosts, setHasMorePosts] = useState<boolean>(true); // Flag to check if more posts are available
-    const [lastPostId, setLastPostId] = useState<string>(""); // Track the last post ID for pagination
-    const userPrivacy = user?.isPrivate // True if user is Private 
+    const [lastPostId, setLastPostId] = useState<string>("");        // Track the last post ID for pagination
+    const userPrivacy = user?.isPrivate 
     const [friendship, setFriendship] = useState<boolean>(true);  // Edit to refelct the actual friendship status 
 
      const loadPosts = async () => {
