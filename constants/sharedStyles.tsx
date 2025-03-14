@@ -192,6 +192,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     },
     leftContainer: {
       flexDirection: "row",
+      justifyContent: 'space-between',
       alignItems: "center", // Aligns items vertically
     },
     Container: {
@@ -273,7 +274,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     tutorialButton: {
       width: 100, // Small button size
       paddingVertical: 8, // Adjust height
-      backgroundColor: Colors.light.tint,
+      // backgroundColor: Colors.light.tint,
       borderRadius: 28, // Rounded corners
       alignItems: "center", // Center text
     },

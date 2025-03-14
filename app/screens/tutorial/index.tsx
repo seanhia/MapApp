@@ -21,6 +21,7 @@ const Tutorial = () => {
             title="Welcome to EXPLORE!" 
             description="Track your travels and explore new destinations effortlessly." 
             nextPage="/screens/tutorial/tutorial_2"
+            skip={true}
             image={require('@/assets/images/cloud.png')}
         />
     </View> 
