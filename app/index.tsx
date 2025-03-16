@@ -1,7 +1,11 @@
+import 'react-native-get-random-values'; // added to fix mobile issues
+import { v4 as uuidv4 } from 'uuid'; // for mobile dependencies
 import { useState, useEffect, useRef } from "react";
 import Login from "@/app/screens/login/index";
 import SplashScreenView from "@/components/SplashScreen";
 import { View, Animated } from "react-native";
+
+console.log(uuidv4());
 
 export default function Index() {
   const [isShowSplash, setIsShowSplash] = useState(true);

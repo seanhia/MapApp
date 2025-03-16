@@ -29,7 +29,7 @@ interface FriendProfileProps {
 const FriendProfile: React.FC<FriendProfileProps> = ({ user }) => { 
     const { styles } = useTheme()
     const userPrivate = user?.isPrivate 
-    const [friendship, setFriendship] = useState<boolean>(true);  // Edit to refelct the actual friendship status 
+    const [friendship, setFriendship] = useState<boolean>(true);  // Edit to reflect the actual friendship status 
     const [loading, setLoading] = useState<boolean>(true); 
 
     useEffect(() => {

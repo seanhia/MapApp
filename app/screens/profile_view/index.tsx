@@ -8,6 +8,7 @@ import { useLocalSearchParams } from "expo-router";
 import FooterBar from "@/components/FooterBar";
 // import { fetchPostbyAuthor } from "@/data/PostDataService";
 import FriendProfile from '@/app/screens/profile_view/components/FriendProfile'
+import {MapButton} from '@/app/screens/profile_view/components/MapButton'
 
 /**
  * Profile View Screen
@@ -40,9 +41,10 @@ const ProfileView = () => {
   return (
     <View style={styles.fullContainer}>
       <ProfileDetails user={user} /> 
+      <MapButton user={user} />
       <FriendProfile user={user} />
-
-        <FooterBar />
+      
+      <FooterBar />
     </View>
   );
 };

@@ -18,7 +18,7 @@ import { PendingQuery, FriendQuery } from "@/data/Friendship";
 import { AcceptFriendship, DeleteFriendship } from "@/data/Friendship";
 
 import sharedStyles from "@/constants/sharedStyles";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, GestureHandlerRootView } from "react-native-gesture-handler";
 
 // /**
 //  * Friends Screen
@@ -147,7 +147,7 @@ const Friends = () => {
   // }
 
   return (
-
+    //<GestureHandlerRootView style={{ flex: 1 }}>  # need for mobile, but it is adding blank space right now (fix later)
     isLoading ? (
       <Loading/>) : (
 
@@ -166,7 +166,7 @@ const Friends = () => {
 
       ) : (
 
-      <ScrollView>
+      <ScrollView >
         <Text style={[styles.header, {marginTop: 90}]}>Friends</Text>
         <FriendList
           friends={friendsList}
@@ -187,7 +187,9 @@ const Friends = () => {
         <FooterBar />
       </SafeAreaView>
     </View>
-  ))
+  )
+  //</GestureHandlerRootView>
+  )
 };
 
 export default Friends;
