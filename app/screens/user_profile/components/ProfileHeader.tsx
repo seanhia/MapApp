@@ -5,9 +5,14 @@ import { useRouter } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
 import { Colors } from '@/constants/Colors'
 import Notifications from '../../notifications';
+import { User } from '@/data/types'
 
+interface ProfileHeaderProps {
+    user: User | null;
 
-const ProfileHeader = () => {
+};
+
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
     const { colorScheme, styles } = useTheme();
     const router = useRouter();
 
@@ -56,7 +61,8 @@ const ProfileHeader = () => {
                     <View style={styles.modalOverlay}>
                         <View style={styles.notificationDrawer}>
                             <ScrollView>
-                                <Notifications />
+                                <Notifications 
+                                user = {user}/>
                             </ScrollView>
                             
                             <TouchableOpacity style={styles.button}

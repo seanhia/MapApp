@@ -1,7 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { User } from '@/data/types'
 
-const Notifications = () => {
+interface NotificationsProps {
+  user: User | null;
+}
+
+const Notifications: React.FC<NotificationsProps>= ({ user }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Notifications</Text>

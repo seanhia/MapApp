@@ -15,41 +15,42 @@ const userProfile = () => {
   const { colorScheme, styles } = useTheme();
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  
+
   useEffect(() => {
     const loadCurrentUser = async () => {
-        try {
-            const user = await fetchCurrentUser();
-            setCurrentUser(user)
-            console.log(user)
-        } catch (error) {
-            // console.error('Error fetching user')
-        }
+      try {
+        const user = await fetchCurrentUser();
+        setCurrentUser(user)
+        console.log(user)
+      } catch (error) {
+        // console.error('Error fetching user')
+      }
     }
-    
+
     loadCurrentUser();
-      }, []);
+  }, []);
 
   return (
-      <View style={styles.fullContainer}>
-        <ScrollView >
+    <View style={styles.fullContainer}>
+      <ScrollView >
 
-          <ProfileHeader />
+        <ProfileHeader
+          user={currentUser} />
 
-          <ProfileDetails 
-            user={currentUser} />
+        <ProfileDetails
+          user={currentUser} />
 
-          <UserPhotos
-          user={currentUser}/>
+        <UserPhotos
+          user={currentUser} />
 
-          <ProfileStatistics />
+        <ProfileStatistics />
 
-        </ScrollView> 
+      </ScrollView>
 
-        <View >
-          <FooterBar />
-        </View>
+      <View >
+        <FooterBar />
       </View>
+    </View>
   );
 };
 

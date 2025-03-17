@@ -308,10 +308,10 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
         return [];
     }
 };
+// notifications 
 /**
  * send notification to user's friends when they post 
  * @param userId 
- * @param postId 
  */
  export const sendPostNotifications = async (userId: string) =>{
     try{
