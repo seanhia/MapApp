@@ -109,7 +109,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
 
             <View style={styles.fullContainer}>
                 <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>Account Created:</Text>
-                <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>
+                <Text style={[styles.text, { padding: 0, fontWeight: '100', marginBottom: 30  }]}>
                     {user?.createdAt ?  new Date((user.createdAt)).toLocaleDateString("en-US") : "Loading"}
                 </Text>
             </View>

@@ -38,7 +38,7 @@ export const MapButton = ({user}: {user: User | null}) => {
       }, [user]); 
 
     return (
-        <View style={{flex: 1}}>
+        <View>
             <Button
                 title={`View ${user?.username}'s Map`}
                 onPress={()=> router.push({pathname: "/screens/friend_map", params: {friendId: user?.id}})}
