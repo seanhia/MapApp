@@ -1,7 +1,7 @@
-import { doc, getDoc, collection, setDoc, getDocs, query, where, updateDoc, deleteDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, setDoc, getDocs, query, where, updateDoc, deleteDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import db from '@/firestore';
 import { fetchCurrentUser, fetchUserByUID } from '@/data/UserDataService'
-import { User, status, Friend } from '@/data/types';
+import { User, status, Friend, Notification} from '@/data/types';
 import convertToDate from '@/app/utils/convertToDate';
 
 
@@ -327,26 +327,17 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
             console.log("No friends found.");
             return;
         }
-        const notificationsRef = collection(db, 'notifications');//create notifictaions collection
-
-        const timestamp = new Date().toISOString();
 
         for (const friend of friends) { //iterate through friends 
+            const notificationRef = doc(collection(db, "notifications"));
             const notificationData = {
                 friendId: friend.friendId,
                 userId: userId,
-                message: `View @${user.username} recent trip!`,
-                createdAt: convertToDate(new Date()),
+                message: `View @${user.username}'s recent trip!`,
+                createdAt: serverTimestamp(),
                 read: false
             };
-            const notificationDocRef = doc( 
-                notificationsRef, 
-                friend.friendId, 
-                userId, 
-                timestamp
-            );
-            
-            await setDoc(notificationDocRef, notificationData); 
+            await setDoc(notificationRef, notificationData); 
             console.log('Notification', 'Successfully created.');
         }
         
@@ -357,6 +348,27 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
 
  }; 
 
- export const fetchNotifications = async (userId: string) =>{
+ export const fetchNotifications = async (userId: string, callback: (notifications: Notification []) => void) =>{
+    if (!userId) {
+        throw new Error("User ID is required to fetch post.");
+    }
+    try {
+
+        const q = query(collection(db, "notifications"), where("friendId", "==", userId));
+        
+        const unsubscribe = onSnapshot(q, (snapshot)=>{
+            const notifications: Notification[] = snapshot.docs.map((doc) =>({
+                id: doc.id,
+                ...doc.data(),
+            })) as Notification [];
+
+            callback(notifications)
+        });
+        return unsubscribe;
+
+    } catch (error) {
+        console.error('Error fetching notifications', error);
+        return [];
+    }
 
  };

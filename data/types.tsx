@@ -56,6 +56,16 @@ export enum Rating {
 };
 
 
+export interface Notification {
+    id: string,
+    userId: string,
+    friendId: string,
+    message: string[],
+    createdAt: Timestamp,
+    read: boolean,
+};
+
+
 /** ALL INTERFACES BELOW ARE NOT INMPLEMENTED YET */
 
 export interface PlaceDetails {
@@ -91,15 +101,6 @@ export interface Like {
     post_id: string,
     user_id: string,
     username: string,
-    createdAt: Date,
-};
-
-export interface Notification {
-    id: string,
-    recipient: string,
-    sender: string,
-    type: string,
-    read: boolean,
     createdAt: Date,
 };
 
