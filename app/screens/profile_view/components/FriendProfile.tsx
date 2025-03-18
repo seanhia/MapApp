@@ -2,12 +2,9 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useTheme } from '@/hooks/useTheme'
 import { User, Post, status } from '@/data/types'
-import ProfileDetails from '@/app/screens/user_profile/components/ProfileDetails';
-import ProfilePost from '@/app/screens/user_profile/components/Photos/ProfilePost';
 import { PrivateProfile } from './PrivateProfile';
 import { UserNotFound } from './UserNotFound';
 import { Loading } from '@/components/Loading'
-import UserPhotos from '../../user_profile/components/Photos/UserPhotos';
 import { Posts } from '@/app/screens/profile_view/components/Posts'
 import { existingFriendshipQuery } from '@/data/Friendship';
 import { fetchCurrentUser } from '@/data/UserDataService';
@@ -28,27 +25,24 @@ interface FriendProfileProps {
 
 const FriendProfile: React.FC<FriendProfileProps> = ({ user }) => { 
     const { styles } = useTheme()
-    const userPrivate = user?.isPrivate 
-    const [friendship, setFriendship] = useState<boolean>(true);  // Edit to reflect the actual friendship status 
+    const [isPrivate, setIsPrivate] = useState<boolean | null >(null);
+    const [friendship, setFriendship] = useState<boolean | null>(null);  // Edit to reflect the actual friendship status 
     const [loading, setLoading] = useState<boolean>(true); 
 
     useEffect(() => {
       const checkFriendship = async () => {
         if (!user) {
-          setLoading(false); 
+          setTimeout(() => setLoading(false), 500);
           return; 
-        }
-
+        } 
+        setIsPrivate(user.isPrivate); 
+     
         try {
-          const currentUser = await fetchCurrentUser(); 
+          const currentUser = await fetchCurrentUser();
           if (currentUser) {
             const friendStatus = await existingFriendshipQuery(currentUser, user);
-            if (friendStatus[1] == status[1]) {
-              setFriendship(true)
-            } else {
-              setFriendship(false)
+              setFriendship(!!(friendStatus[1] == status[1]));
             }
-        }
         } catch (error) {
           console.error('Error checking friendship: ', error);
         } finally {
@@ -58,11 +52,13 @@ const FriendProfile: React.FC<FriendProfileProps> = ({ user }) => {
         checkFriendship(); 
     }, [user]); 
     
-    if (loading) return <Loading/>
-    if (!user) return <UserNotFound/>
-    if (user.isPrivate && !friendship) return <PrivateProfile />
+    let content; 
+    if (loading) content = <Loading/>
 
-    return (
+    else if (!user) content = <UserNotFound/>
+    else if ((isPrivate && !friendship) || (isPrivate && (friendship == null))) content = <PrivateProfile />
+    else if (friendship || !isPrivate
+    ) content = (
       <View style={{flex: 1}}>
         <ScrollView>
           <Text style={[styles.heading, {}]}> </Text>  
@@ -70,6 +66,8 @@ const FriendProfile: React.FC<FriendProfileProps> = ({ user }) => {
         </ScrollView>
       </View>
     );
+
+    return <>{content}</>
 } 
   
 
