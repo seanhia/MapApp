@@ -368,7 +368,7 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
 
     } catch (error) {
         console.error('Error fetching notifications', error);
-        return [];
+        throw error;
     }
 
  };
