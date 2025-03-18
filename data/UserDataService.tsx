@@ -3,6 +3,7 @@ import db from '@/firestore';
 import { getAuth, deleteUser as authDeleteUser  } from 'firebase/auth';
 import { User, userSubcollections as subcollections, Leaderboard } from './types';
 import { Timestamp } from 'firebase/firestore';
+import {FriendQueryBasedOnUserId, fetchFriendCount} from './Friendship'
 
 
 /**
@@ -202,6 +203,7 @@ export async function getCollectionSize(collectionPath: string) {
   const size = snapshot.data().count;
   return size + 1;
 }
+
 export const getTopFourUsers = async () => {
   const collectionRef = collection(db, 'leaderboard_entry');
   const usersSorted = query(collectionRef, orderBy("points", 'desc'), limit(10));
@@ -210,6 +212,24 @@ export const getTopFourUsers = async () => {
   return people
   
 }
+
+export const getFriendsRank = async () => {
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+  const friends = await FriendQueryBasedOnUserId(currentUser.uid);
+  const colSize = friends.length
+  const friendsList = []
+  for (var i = 0; i < colSize; i++){
+    const userDocRef = doc(db, 'leaderboard_entry', friends[i].friendId);
+    console.log(friends[i].friendId)
+    const pleaseWork = await getDoc(userDocRef)
+    friendsList.push(pleaseWork.data())
+    }
+  return friendsList as Leaderboard[];
+}
+
+
+  
 export async function rankUsers() {
   const collectionRef = collection(db, 'leaderboard_entry');
   const usersSorted = query(collectionRef, orderBy("points", 'desc'));
