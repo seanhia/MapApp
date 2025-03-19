@@ -313,7 +313,7 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
  * send notification to user's friends when they post 
  * @param userId 
  */
- export const sendPostNotifications = async (userId: string) =>{
+ export const sendPostNotifications = async (userId: string, postId: string) =>{
     try{
         
         const user: User | null = await fetchUserByUID(userId);
@@ -331,6 +331,7 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
         for (const friend of friends) { //iterate through friends 
             const notificationRef = doc(collection(db, "notifications"));
             const notificationData = {
+                postId: postId,
                 friendId: friend.friendId,
                 userId: userId,
                 message: `View @${user.username}'s recent trip!`,

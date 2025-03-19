@@ -3,11 +3,10 @@ import db from '@/firestore';
 import { addDoc, doc, collection, query, orderBy, serverTimestamp, onSnapshot, updateDoc, deleteDoc} from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { storage } from '@/firebase';
-import { sendPostNotifications } from './Friendship';
 
 /**
  * Save post 
- * 
+ * returns postId
  */
 
 export const savePost = async (
@@ -16,7 +15,7 @@ export const savePost = async (
     location: string,
     review: string,
     rating: number,
-): Promise<void> => {
+): Promise< string | null > => {
     if (!userId) {
         throw new Error("User ID is required to savepost.");
     }
@@ -43,7 +42,7 @@ export const savePost = async (
             rating,
         });
         console.log(`Saved Post.`)
-        await sendPostNotifications(userId)
+        return postRef.id; 
     } catch (error) {
         console.error("Error saving post: ", error);
         throw error;
