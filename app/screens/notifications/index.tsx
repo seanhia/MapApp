@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import { User, Notification } from '@/data/types'
-import { fetchNotifications } from '@/data/Friendship';
+import { fetchNotifications, updateNotification} from '@/data/Friendship';
 import { router } from "expo-router";
+
 
 
 interface NotificationsProps {
@@ -13,20 +14,26 @@ const Notifications: React.FC<NotificationsProps> = ({ user }) => {
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const handleFriendViewProfile = async (friendId: string) => {
-    console.log( "Attempting to view the following users profile", friendId );
-    router.push({
-      pathname: "/screens/profile_view",
-      params: { userId: friendId }, // Pass friend_id as a parameter
-    });
+//updates notifications and displays friend's profile 
+  const handleNotifictaion = async (notification: Notification) => {
+    //updates notifications to true and deletes it from the database 
+    const update = await updateNotification(notification); 
+      //view friend's profile 
+      router.push({
+        pathname: '/screens/profile_view',
+        params: { userId: notification.userId },
+      });
+    
   };
 
   useEffect(() => {
+    //check userid 
     if (!user || !user.id) {
       console.error("User ID is undefined. Cannot fetch posts.");
       return;
       
     }
+    //loads notifications 
     const loadNotifications = async () => {
       try {
           const unsubscribe = await fetchNotifications(user.id, (newNotifications) => {
@@ -54,7 +61,7 @@ const Notifications: React.FC<NotificationsProps> = ({ user }) => {
           data={notifications}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleFriendViewProfile(item.userId)}>
+            <TouchableOpacity onPress={() => handleNotifictaion(item)}>
               <Text style={[styles.text, { fontWeight: '100' }]}>{item.message}</Text>
             </TouchableOpacity>
           )}

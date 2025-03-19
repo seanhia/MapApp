@@ -346,7 +346,13 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
     }
 
 
- }; 
+ };
+ /**
+  * loads Notifications real time 
+  * @param userId 
+  * @param callback 
+  * @returns 
+  */
 
  export const fetchNotifications = async (userId: string, callback: (notifications: Notification []) => void) =>{
     if (!userId) {
@@ -370,5 +376,20 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
         console.error('Error fetching notifications', error);
         throw error;
     }
+
+ };
+ /**
+  *  Update notifications read to true & deletes from database 
+  * @param notification 
+  */
+ export const updateNotification = async ( notification: Notification ) => {
+    try {
+        const notificationRef = doc(db, "notifications", notification.id);
+  
+        await updateDoc(notificationRef, { read: true }); // notification has been read 
+        await deleteDoc(notificationRef); // delete after its been read 
+      } catch (error) {
+        console.error('Error updating and deleting notification:', error);
+      }
 
  };

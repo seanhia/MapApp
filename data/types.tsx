@@ -60,7 +60,7 @@ export interface Notification {
     id: string,
     userId: string,
     friendId: string,
-    message: string[],
+    message: string,
     createdAt: Timestamp,
     read: boolean,
 };
