@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import { User, Notification } from '@/data/types'
 import { fetchNotifications } from '@/data/Friendship';
+import { router } from "expo-router";
 
 
 interface NotificationsProps {
@@ -11,6 +12,14 @@ interface NotificationsProps {
 const Notifications: React.FC<NotificationsProps> = ({ user }) => {
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  const handleFriendViewProfile = async (friendId: string) => {
+    console.log( "Attempting to view the following users profile", friendId );
+    router.push({
+      pathname: "/screens/profile_view",
+      params: { userId: friendId }, // Pass friend_id as a parameter
+    });
+  };
 
   useEffect(() => {
     if (!user || !user.id) {
@@ -45,8 +54,8 @@ const Notifications: React.FC<NotificationsProps> = ({ user }) => {
           data={notifications}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <TouchableOpacity >
-              <Text style={[styles.text, { fontWeight: 100 }]}>{item.message}</Text>
+            <TouchableOpacity onPress={() => handleFriendViewProfile(item.userId)}>
+              <Text style={[styles.text, { fontWeight: '100' }]}>{item.message}</Text>
             </TouchableOpacity>
           )}
         />
