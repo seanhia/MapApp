@@ -102,7 +102,7 @@ export default function RootLayout() {
         />
       <Stack.Screen 
         name="screens/tutorial" 
-        options={{ title: "" }} 
+        options={{ title: "", headerShown: false }} 
         />
       <Stack.Screen
         name="screens/forgot_password/index"
@@ -115,11 +115,11 @@ export default function RootLayout() {
         />
       <Stack.Screen 
         name="screens/friends/index" 
-        options={{ title: "" }}
+        options={{ title: "", headerShown: false}}
         />
       <Stack.Screen 
         name="screens/user_profile/index" 
-        options={{ title: "" }} 
+        options={{ title: "", headerShown: false }} 
         />
       <Stack.Screen 
         name="screens/settings/index" 
@@ -127,7 +127,7 @@ export default function RootLayout() {
         />
       <Stack.Screen 
         name="screens/leaderboard/index" 
-        options={{ title: "" }} 
+        options={{ title: "", headerShown: false }} 
         />
       <Stack.Screen
         name="screens/email_verifying/index"
