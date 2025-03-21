@@ -307,6 +307,13 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       marginBottom: 10,
       alignSelf: "center",
     },
+    tutorialImage: {
+      width: '40%',
+      height: '40%',
+      marginBottom: 10,
+      alignSelf: "center",
+      resizeMode: "contain"
+    },
 
     /** Components  */
     footer: {

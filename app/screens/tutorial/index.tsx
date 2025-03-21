@@ -19,31 +19,14 @@ const Tutorial = () => {
     <View style={styles.fullContainer}>
         <TutorialScreen 
             title="Welcome to EXPLORE!" 
-            description="Track your travels and explore new destinations effortlessly." 
+            description="Track your travels and explore new destinations effortlessly with a personalized map. See your travel history uncloud as you explore new locations." 
             nextPage="/screens/tutorial/tutorial_2"
             skip={true}
-            image={require('@/assets/images/cloud.png')}
+            image={require('@/assets/images/personal_map.png')}
         />
     </View> 
   );
 };
 
-const styles = StyleSheet.create({
-  image: {
-    paddingTop: 700,
-    width: 600,
-    height: 500,
-    resizeMode: 'center',
-    position: 'absolute'
-  },
-  button: {
-    padding: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'black',
-    fontWeight: 'bold',
-  },
-});
 
 export default Tutorial;
