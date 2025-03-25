@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme'
+import { Colors } from '@/constants/Colors';
+import { ExternalLink } from '@/components/ExternalLink';
 
 interface TutorialProps {
     title: string;
@@ -10,23 +12,28 @@ interface TutorialProps {
     complete?: boolean; 
     skip?: boolean; 
     image?: string;
+    url?: string; 
 
 }
 
-const TutorialScreen = ({ title, description, nextPage, prevPage, complete, skip, image }: TutorialProps) => {
+const TutorialScreen = ({ title, description, nextPage, prevPage, complete, skip, image, url }: TutorialProps) => {
     const router = useRouter();
     const { styles } = useTheme()
 
     return (
         <View style={styles.fullContainer}>
             <View style={styles.tutorialContainer}>
-                <Image
-                    style={styles.image}
+                <Image 
+                    style={[styles.tutorialImage, {borderRadius: 24}]}
                     source={image}
                     />
         
                 <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{title}</Text>
-                <Text style={{ textAlign: 'center', marginVertical: 10 }}>{description}</Text>
+                <Text style={{ textAlign: 'center', marginVertical: 10, lineHeight: 50 }}>{description}</Text>
+
+                {url &&
+                <ExternalLink href={url}/>
+                }   
 
             </View>
             

@@ -9,11 +9,11 @@ export default function Tutorial2() {
     
     return (
         <TutorialScreen 
-            title="View Your EXPLORE Map" 
-            description="See your travel history uncloud as you explore new locations."
+            title="View Your Travel Stats" 
+            description="Learn about your weekly and monthly travel patterns!"
             nextPage="/screens/tutorial/tutorial_3"
             prevPage='/screens/tutorial'
-            image={require('../../../assets/images/location.png')}
+            image={require('../../../assets/images/tourist.png')}
 
         />
     )
