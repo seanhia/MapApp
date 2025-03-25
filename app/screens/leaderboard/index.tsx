@@ -13,18 +13,21 @@ const LeaderboardScreen =  () => {
     const [otherInfo, setData2] = useState<Leaderboard | null>(null);
     const [friendinfo, setFriend] = useState<Leaderboard[] | null>(null);
     const [tempData, setTemp] = useState<Leaderboard[] | null>(null);
+    const [buttonName, setName] = useState('Friends')
     var isFriendsList = false;
 
     const switchData = async () => {
         if(!isFriendsList){
-            setTemp(info)
-            setData(friendinfo)
-            setFriend(info)
+            setTemp(info);
+            setData(friendinfo);
+            setFriend(info);
+            setName('Global');
             isFriendsList = true;
         }else{
-            setTemp(info)
-            setData(friendinfo)
-            setFriend(info)
+            setTemp(info);
+            setData(friendinfo);
+            setFriend(info);
+            setName('Friends');
             isFriendsList = false;
         }
     }
@@ -53,90 +56,7 @@ const LeaderboardScreen =  () => {
 
 
     return (
-//         <View style={style.container}>
-//             <Text style={style.text}>Leaderboard</Text>
-//             <View style={style.box}>
-//                 <FlatList
-//                     data= {info}
-//                     keyExtractor={(item) => item.id}
-//                     renderItem={({ item }) => (
-//                         <View style={style.row}>
-//                             <Text style={style.username}>{item.ranking +". " + item.username}</Text>
-//                             <Text style={style.score}>{item.points}</Text>
-//                         </View>
-//                     )}
-//                 />
-            
-            
 
-//             </View>
-//             <View style={style.box}>
-//                 <View style={style.row}>
-//                   <Text style={style.username}>{otherInfo?.ranking}. {otherInfo?.username}</Text>
-//                   <Text style={style.score}>{otherInfo?.points}</Text>
-//                 </View>
-//             </View>
-//             <FooterBar />
-//             <TouchableOpacity style={styles.lightButton} onPress={rankUsers}>
-//                         <Text style={styles.buttonText}>
-//                             Update Rank
-//                         </Text>
-//             </TouchableOpacity>
-//         </View>
-        
-//     );
-// };
-
-// const style = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         backgroundColor: '#f0f0f0', 
-//         marginTop: 200,
-//     },
-//     box: {
-//         width: '80%', 
-//         padding: 20,
-//         backgroundColor: '#fff',
-//         borderRadius: 10,
-//         shadowColor: '#000',
-//         shadowOffset: { width: 0, height: 2 },
-//         shadowOpacity: 0.2,
-//         shadowRadius: 4,
-//     },
-//     row: {
-//         flexDirection: 'row',
-//         justifyContent: 'space-between',
-//         paddingVertical: 10,
-//         borderBottomWidth: 1,
-//         borderBottomColor: '#ddd',
-//     },
-//     text: {
-//         fontSize: 30,
-//         position: 'absolute',
-//         top: 20,
-//         right: 20,
-//         fontWeight: 'bold'
-//     },
-//     username: {
-//         fontSize: 28,
-//         fontWeight: 'bold',
-//         marginLeft: 50
-//     },
-//     score: {
-//         fontSize: 22,
-//         color: '#555',
-//         marginRight: 50,
-
-//     },
-//     title: {
-//         fontSize: 30,
-//         position: 'absolute',
-        
-//         fontWeight: 'bold'
-//     }
-// });
 <View style={style.container}>
     <Text style={style.text}>Leaderboard</Text>
     
@@ -168,7 +88,7 @@ const LeaderboardScreen =  () => {
         </TouchableOpacity>
         
         <TouchableOpacity style={[style.lightButton, style.friendsButton]} onPress={switchData}>
-            <Text style={style.buttonText}>Friends</Text>
+            <Text style={style.buttonText}>{buttonName}</Text>
         </TouchableOpacity>
     </View>
 </View>
