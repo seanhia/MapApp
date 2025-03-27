@@ -14,7 +14,7 @@ interface FriendListProps {
   onUnfriend: (id: Friend) => void;
 }
 
-const FriendList: React.FC<FriendListProps> = ({ friends, onViewProfile, onUnfriend }) => {
+const FriendList = ({ friends, onViewProfile, onUnfriend }: FriendListProps) => {
   const { colorScheme, styles } = useTheme();
   
   return (

@@ -8,6 +8,8 @@ import { getAuth } from "firebase/auth";
 import axios from 'axios';
 import { Colors } from '@/constants/Colors';
 import { useTheme } from '@/hooks/useTheme'; 
+import { CustomPin } from './components/CustomPin'
+import { Favorites } from './components/Favorites';
 
 const WEATHER_API_KEY = "c91505cb2ca1c66df5e70feade5e8d06"; // Replace with your API key
 
@@ -104,6 +106,10 @@ export default function Home() {
         </View>
       )}
 
+      {/* <CustomPin/> */}
+      {/* <Favorites 
+        userId={userId}
+      /> */}
       <FooterBar />
     </View>
   );
@@ -155,6 +161,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     textAlign: 'center',
     fontWeight: "bold",
+  },
+  pinButton: {
+
   },
 });
 

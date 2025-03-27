@@ -187,26 +187,27 @@ const UserSettings = () => {
                             Submit Chanages
                         </Text>
                     </TouchableOpacity>
-      
-                </View>
 
-                <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/change_password')}>
+                    <View style={{padding: 20}}></View>
+
+                    <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/change_password')}>
                     <Text style={styles.buttonText}>Change Password</Text>
-                </TouchableOpacity>
-                
-                <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/tutorial')}>
-                    <Text style={styles.buttonText}>View Tutorial</Text>
-                </TouchableOpacity>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/tutorial')}>
+                        <Text style={styles.buttonText}>View Tutorial</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={styles.lightButton} onPress={handleDeleteAccount}>
-                    <Text style={styles.buttonText}>Delete Account</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.lightButton} onPress={handleDeleteAccount}>
+                        <Text style={styles.buttonText}>Delete Account</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={styles.lightButton} onPress={handleSignOut}>
-                    <Text style={styles.buttonText}>Log Out</Text> 
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.lightButton} onPress={handleSignOut}>
+                        <Text style={styles.buttonText}>Log Out</Text> 
+                    </TouchableOpacity>
 
-
+        
+                </View>
             </View>
         </ScrollView>
         </GestureHandlerRootView>

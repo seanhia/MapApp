@@ -13,9 +13,7 @@ import { ActivityIndicator, View } from "react-native";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/hooks/useTheme";
-import sharedStyles from "@/constants/sharedStyles";
 import { ThemeProvider } from "@react-navigation/native";
-import FooterBar from "@/components/FooterBar";
 
 export default function RootLayout() {
   const { colorScheme, styles } = useTheme();

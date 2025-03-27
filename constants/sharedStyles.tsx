@@ -249,10 +249,10 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       height: 50,
       backgroundColor:
         theme === "dark" ? Colors.dark.button : Colors.light.button,
-        borderRadius: 25,
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 10,
+      borderRadius: 25,
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: 10,
     },
     sideButton: {
       width: "50%",
@@ -308,8 +308,8 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       alignSelf: "center",
     },
     tutorialImage: {
-      width: '40%',
-      height: '40%',
+      width: '50%',
+      height: '50%',
       marginBottom: 10,
       alignSelf: "center",
       resizeMode: "contain"

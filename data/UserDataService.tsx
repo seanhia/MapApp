@@ -1,7 +1,7 @@
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc, getCountFromServer, orderBy, serverTimestamp, limit } from 'firebase/firestore';
 import db from '@/firestore'; 
 import { getAuth, deleteUser as authDeleteUser  } from 'firebase/auth';
-import { User, userSubcollections as subcollections, Leaderboard } from './types';
+import { User, userSubcollections as subcollections, Leaderboard, FavoriteLoc } from './types';
 import { Timestamp } from 'firebase/firestore';
 import {FriendQueryBasedOnUserId, fetchFriendCount} from './Friendship'
 
@@ -91,6 +91,31 @@ export const fetchCurrentUserLeaderboard = async (): Promise<Leaderboard | null>
 
   return { id: currentUser.uid, ...userData} as Leaderboard;
 };
+
+/**
+ * Fetch users Favorite Location List from favorites subcollection
+ * @returns {}
+ * @param {User}
+ */
+export const fetchUsersFavLocation = async (id: string): Promise<FavoriteLoc[] | null> => {
+  try {
+    const favLocactionsRef = collection(db, 'users', id, 'favorite'); 
+    const favLocationsSnap = await getDocs(favLocactionsRef)
+    console.log(`fetching ${id}'s favorite locations`)
+
+    const favList =  [{}]
+    favLocationsSnap.forEach((location) => {
+      favList.push(location.data())
+    })
+
+    console.log('favList: ', favList)
+    return favList as FavoriteLoc[]
+    
+  } catch (error) {
+    console.error('fetchUsersFavLocation: ', error)
+    return null; 
+  }
+}
 
 /**
  * Fetch a user's data by their UID.
@@ -277,14 +302,11 @@ export const deleteUser = async (uid: string) => {
 
     const friendshipDocs = [...friendshipsSnap1.docs, ...friendshipsSnap2.docs];
 
-    // Delete all friendship documents found
     const deleteFriendships = friendshipDocs.map(friendshipDoc => deleteDoc(friendshipDoc.ref));
     await Promise.all(deleteFriendships);
     console.log(`All friendships associated with user ${uid} deleted.`);
 
- 
-    // Delete user from Firebase Authentication
-    const user = auth.currentUser;
+     const user = auth.currentUser;
     if (user && user.uid === uid) {
       await authDeleteUser(user);
       console.log(`User ${uid} deleted from Firebase Authentication.`);
