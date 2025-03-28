@@ -47,41 +47,37 @@ export const Favorites = ({userId}: Props)  => {
                 />
             </TouchableOpacity>
 
-            <View style={styles.centered}>
-                <Modal
-                    animationType="fade"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => setModalVisible(!modalVisible)}
-                >
-                    <View style={[styles.modalView, 
-                        {
-                        }
-                        ]}>
-                            <Text style={styles.heading}>
-                                FAVORITE LOCATIONS:
-                            </Text>
+            {/* <View style={styles.centered}> */}
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(!modalVisible)}
+            >
+                <View style={styles.centered}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.heading}>Favorite Locations</Text>
 
-                            {favLocations?.length ? (
-                                favLocations.map((favorite) => (
-                                    <View key={favorite.id} style={styles.text}>
-                                        <Text>{favorite.name}</Text>
-                                    </View>
-                                ))
-                            ) : (
-                            <Text>No favorite locations yet.</Text> 
-                            )}
+                        {Array.isArray(favLocations) && favLocations.length > 1 ? (
+                            favLocations.map((favorite) => (
+                                <View key={favorite.id} style={styles.text}>
+                                    <Text style={styles.text}>{favorite.name}</Text>
+                                </View>
+                            ))
+                        ) : (
+                        <Text style={styles.text}>No favorite locations yet.</Text> 
+                        )}
                             
-                            <View style={{justifyContent:'flex-end', flex: 1, flexDirection: 'column'}}>
-                                <Pressable
-                                    style={styles.button}
-                                    onPress={() => setModalVisible(!modalVisible)}>
-                                    <Text style={styles.buttonText}>Cancel</Text>
-                                </Pressable>
+                        <View style={{justifyContent:'flex-end', flex: 1, flexDirection: 'column'}}>
+                            <Pressable
+                                style={styles.button}
+                                onPress={() => setModalVisible(!modalVisible)}>
+                                <Text style={styles.buttonText}>Cancel</Text>
+                            </Pressable>
                         </View>
                     </View>
-                </Modal>
-            </View>
+                </View>
+            </Modal>
         </View>
     );
 }

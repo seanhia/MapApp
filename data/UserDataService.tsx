@@ -112,16 +112,11 @@ export const fetchUsersFavLocation = async (id: string): Promise<FavoriteLoc[] |
   try {
     const favLocactionsRef = collection(db, 'users', id, 'favorite'); 
     const favLocationsSnap = await getDocs(favLocactionsRef)
-    console.log(`fetching ${id}'s favorite locations`)
-
     const favList =  [{}]
     favLocationsSnap.forEach((location) => {
       favList.push(location.data())
     })
-
-    console.log('favList: ', favList)
     return favList as FavoriteLoc[]
-    
   } catch (error) {
     console.error('fetchUsersFavLocation: ', error)
     return null; 
