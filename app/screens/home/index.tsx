@@ -21,12 +21,12 @@ export default function Home() {
     console.error("User is not logged in!");
     Alert.alert("Error", "You are not logged in. Please log in to use the app.");
     return (
-      <View style={styles.container}>
+      <View style={style.container}>
         <Text>User is not logged in. Please log in to continue.</Text>
       </View>
     );null;
   }
-  const { colorScheme } = useTheme();
+  const { colorScheme, styles } = useTheme();
   const [location, error] = useRealTimeTracking(userId, 100); // Save new location once 100 meters away
   const [mapCenter, setMapCenter] = useState({ lat: 33.7838, lng: -118.1141 });
   const [weather, setWeather] = useState<{ iconUrl?: string; description?: string; details?: any } | null>(null);
@@ -80,10 +80,11 @@ export default function Home() {
     }
   };
   colorScheme === 'dark' ? Colors.dark.background : Colors.light.background
+  
   return (     
-    <View style={styles.container}>
+    <View style={style.container}>
       <SearchBar onPlaceSelected={handlePlaceChanged} />
-      <View style={styles.mapContainer}>
+      <View style={style.mapContainer}>
         <MapComponent initialCenter={mapCenter} weatherIcon={weather?.iconUrl} mapId={darkMode} />
       </View>
 
@@ -91,15 +92,19 @@ export default function Home() {
 
       {/* Floating Weather Box */}
       {weather?.iconUrl && (
-        <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={styles.weatherBox}>
-          <Image source={{ uri: weather.iconUrl }} style={styles.weatherIcon} />
+        <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={style.weatherBox}>
+          <Image source={{ uri: weather.iconUrl }} style={style.weatherIcon} />
         </TouchableOpacity>
       )}
 
+      <Favorites 
+        userId={userId}
+      />  
+
       {/*  Weather Details  */}
       {isExpanded && weather?.details && (
-        <View style={styles.weatherPopup}>
-          <Text style={styles.weatherDescription}>{weather.details.weather[0]?.description}</Text>
+        <View style={style.weatherPopup}>
+          <Text style={style.weatherDescription}>{weather.details.weather[0]?.description}</Text>
           <Text>Temperature: {weather.details.main?.temp}°C</Text>
           <Text>Humidity: {weather.details.main?.humidity}%</Text>
           <Text>Wind Speed: {weather.details.wind?.speed} m/s</Text>
@@ -107,15 +112,13 @@ export default function Home() {
       )}
 
       {/* <CustomPin/> */}
-      {/* <Favorites 
-        userId={userId}
-      /> */}
+      
       <FooterBar />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity, Image, Modal, Pressable } from 'react-native'
 import { FavoriteLoc, User } from '@/data/types'
+import { useTheme } from '@/hooks/useTheme'
 import { fetchUsersFavLocation } from '@/data/UserDataService'
 
 type Props = {
@@ -15,7 +16,9 @@ type Props = {
     */}
 
 export const Favorites = ({userId}: Props)  => {
+    const { styles } = useTheme()
     const [favLocations, setFavLocations] = useState<FavoriteLoc[] | null>(null); 
+    const [modalVisible, setModalVisible] = useState<boolean>(false); 
 
     const favList = fetchUsersFavLocation(userId)
     console.log('favList: ', favList)
@@ -24,7 +27,6 @@ export const Favorites = ({userId}: Props)  => {
         const fetchFavorites = async () => {
             try {
                 setFavLocations(await fetchUsersFavLocation(userId)); 
-                
                 console.log(`favorite locations: ${favLocations}`)
             } catch (error) {
                 console.error(error)
@@ -32,24 +34,54 @@ export const Favorites = ({userId}: Props)  => {
         }
         fetchFavorites(); 
     }, [userId]) 
-        
-   
-
-
-
-    // Based on the passed in prop 'user' fetch the favorite locations (query in user)
-        // FetchFavLocations(userId: string) => return([{}])
 
     return (
         <View>
-        <Text style={{fontSize: 17, fontWeight: 'bold'}}>FAVORITE LOCATIONS: </Text>
-        {favLocations?.map((favorite) => (
-            <View key={favorite?.id}>
-                <Text>{favorite?.name}</Text>
+            <TouchableOpacity
+                style={styles.homePageButton}
+                onPress={ () => setModalVisible(true)}
+            >
+                <Image
+                style={{height: 40, width: 40}}
+                source={require('@/assets/images/favLocation.png')}
+                />
+            </TouchableOpacity>
+
+            <View style={styles.centered}>
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(!modalVisible)}
+                >
+                    <View style={[styles.modalView, 
+                        {
+                        }
+                        ]}>
+                            <Text style={styles.heading}>
+                                FAVORITE LOCATIONS:
+                            </Text>
+
+                            {favLocations?.length ? (
+                                favLocations.map((favorite) => (
+                                    <View key={favorite.id} style={styles.text}>
+                                        <Text>{favorite.name}</Text>
+                                    </View>
+                                ))
+                            ) : (
+                            <Text>No favorite locations yet.</Text> 
+                            )}
+                            
+                            <View style={{justifyContent:'flex-end', flex: 1, flexDirection: 'column'}}>
+                                <Pressable
+                                    style={styles.button}
+                                    onPress={() => setModalVisible(!modalVisible)}>
+                                    <Text style={styles.buttonText}>Cancel</Text>
+                                </Pressable>
+                        </View>
+                    </View>
+                </Modal>
             </View>
-        ))}
         </View>
     );
-   
-
 }

@@ -184,8 +184,8 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     listContainer: {
       width: "85%",
       flexDirection: "row",
-      justifyContent: "space-between", // Ensures elements are spread apart
-      alignItems: "center", // Aligns items vertically
+      justifyContent: "space-between", 
+      alignItems: "center", 
       alignSelf: "center",
       paddingVertical: 10,
       marginVertical: 5,
@@ -193,7 +193,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     leftContainer: {
       flexDirection: "row",
       justifyContent: 'space-between',
-      alignItems: "center", // Aligns items vertically
+      alignItems: "center", 
     },
     Container: {
       flexDirection: "row",
@@ -237,12 +237,12 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
 
     /** Buttons  */
     button: {
-      width: "100%",
-      height: 50,
+      // width: "100%",
       backgroundColor: theme === "dark" ? Colors.dark.tint : Colors.light.tint,
       borderRadius: 25,
       justifyContent: "center",
       alignItems: "center",
+      padding: 10
     },
     lightButton: {
       width: "100%",
@@ -272,11 +272,11 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
         theme === "dark" ? Colors.dark.background : Colors.light.background,
     },
     tutorialButton: {
-      width: 100, // Small button size
-      paddingVertical: 8, // Adjust height
+      width: 100, 
+      paddingVertical: 8, 
       // backgroundColor: Colors.light.tint,
-      borderRadius: 28, // Rounded corners
-      alignItems: "center", // Center text
+      borderRadius: 28, 
+      alignItems: "center", 
     },
     addFriendButton: {
       width: 100,
@@ -287,6 +287,21 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       alignItems: "center",
       marginBottom: 10,
       paddingVertical: 8, 
+    },
+    // Favorite Location
+    homePageButton: { 
+      justifyContent: 'center', 
+      backgroundColor: theme === "dark" ? Colors.dark.button : Colors.light.button, 
+      alignItems: 'center', 
+      padding: 15, 
+      borderRadius: 10,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 5, 
+      position: "absolute",
+      top: 100,
+      right: 20,
     },
 
     /** Images  */
@@ -374,7 +389,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       marginBottom: 15,
       textAlign: "center",
     },
-
+    
     /**Photo Details */
 
     rating: {

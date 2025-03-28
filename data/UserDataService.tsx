@@ -32,6 +32,17 @@ const isLeaderboard = (data: any): data is Leaderboard => {
   );
 };
 
+const isFavoriteLoc = (data: any): data is FavoriteLoc => {
+  return (
+    typeof data === 'object'
+    && data != null 
+    && 'id' in data
+    && 'latitude' in data
+    && 'longitude' in data
+    && 'name' in data 
+  )
+}
+
 
 /**
  * Fetch the current user's data.
@@ -154,7 +165,7 @@ export const fetchUserByUID = async (id: string): Promise<User | null> => {
  * @param {User | Leaderboard} user - The data to write.
  * @returns {Promise<void>}
  */
-export const writeData = async (data: User | Leaderboard): Promise<void> => {
+export const writeData = async (data: User | Leaderboard | FavoriteLoc): Promise<void> => {
   var collection_name = ''
   try {
     
@@ -163,6 +174,8 @@ export const writeData = async (data: User | Leaderboard): Promise<void> => {
       collection_name = 'users'
     } else if (isLeaderboard(data)) {
       collection_name = 'leaderboard_entry'
+    } else if (isFavoriteLoc(data)) {
+      collection_name = 'favorite'
     } else {
       throw new Error('Invalid data type. Expected User or Leaderboard.');
     }
