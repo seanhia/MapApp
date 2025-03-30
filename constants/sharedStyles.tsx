@@ -372,11 +372,11 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       width: "55%",
       height: "55%",
       margin: 20,
-      backgroundColor: "white",
+      backgroundColor: theme === "dark" ? Colors.dark.background : Colors.light.background,
       borderRadius: 20,
       padding: 35,
       alignItems: "center",
-      shadowColor: "#000",
+      shadowColor: theme === "dark" ? Colors.dark.tabIconDefault : Colors.light.tabIconDefault,
       shadowOffset: {
         width: 0,
         height: 2,
@@ -388,6 +388,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     modalText: {
       marginBottom: 15,
       textAlign: "center",
+      color: theme === "dark" ? Colors.dark.text : Colors.light.text,
     },
     
     /**Photo Details */

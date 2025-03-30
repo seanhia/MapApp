@@ -2,6 +2,7 @@ import React, { useEffect, useState} from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import FooterBar from '@/components/FooterBar';
 import { useTheme } from '@/hooks/useTheme';
+import { Colors } from '@/constants/Colors'
 import { rankUsers, getTopFourUsers, fetchCurrentUserLeaderboard, getFriendsRank } from '@/data/UserDataService';
 import { Leaderboard } from '@/data/types';
 import UserSettings from '../settings';
@@ -147,7 +148,7 @@ const style = StyleSheet.create({
         color: '#333',
     },
     lightButton: {
-        backgroundColor: '#007BFF', // Button color
+        backgroundColor: Colors.dark.container, // Button color
         paddingVertical: 15, // Make the button taller for easier tap
         paddingHorizontal: 30,
         borderRadius: 5,
@@ -169,7 +170,7 @@ const style = StyleSheet.create({
     },
     // Specific style for "Friends" button (optional)
     friendsButton: {
-        backgroundColor: '#28a745', // Different color for the "Friends" button
+        backgroundColor: Colors.dark.button, // Different color for the "Friends" button
     }
 });
 
