@@ -14,7 +14,7 @@ const LeaderboardScreen =  () => {
     const [friendinfo, setFriend] = useState<Leaderboard[] | null>(null);
     const [tempData, setTemp] = useState<Leaderboard[] | null>(null);
     const [buttonName, setName] = useState('Friends')
-    var isFriendsList = false;
+    const [isFriendsList, setIsFriendsList] = useState<boolean>(false); 
 
     const switchData = async () => {
         if(!isFriendsList){
@@ -22,13 +22,13 @@ const LeaderboardScreen =  () => {
             setData(friendinfo);
             setFriend(info);
             setName('Global');
-            isFriendsList = true;
+            setIsFriendsList(!isFriendsList)
         }else{
             setTemp(info);
             setData(friendinfo);
             setFriend(info);
             setName('Friends');
-            isFriendsList = false;
+            setIsFriendsList(!isFriendsList)
         }
     }
     
@@ -57,8 +57,13 @@ const LeaderboardScreen =  () => {
 
     return (
 
-<View style={style.container}>
-    <Text style={style.text}>Leaderboard</Text>
+<View style={
+    [
+        styles.fullContainer, 
+        {justifyContent: 'flex-start', alignItems: 'center', paddingTop: 50}
+
+    ]}>
+    <Text style={styles.heading}>Leaderboard</Text>
     
     <View style={style.box}>
         <FlatList
