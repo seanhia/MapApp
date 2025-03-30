@@ -82,7 +82,9 @@ export default function Home() {
   colorScheme === 'dark' ? Colors.dark.background : Colors.light.background
   
   return (     
-    <View style={style.container}>
+    <View style={[styles.fullContainer,
+      {flexDirection: 'row'}
+    ]}>
       <SearchBar onPlaceSelected={handlePlaceChanged} />
       <View style={style.mapContainer}>
         <MapComponent initialCenter={mapCenter} weatherIcon={weather?.iconUrl} mapId={darkMode} />

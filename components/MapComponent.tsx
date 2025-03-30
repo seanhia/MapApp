@@ -6,7 +6,7 @@ const googleMapsAPIKey = "AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c";
 
 const containerStyle = {
   width: "100%",
-  height: "90%",
+  height: "100%",
 };
 
 interface MapComponentProps {
