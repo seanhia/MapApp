@@ -169,14 +169,22 @@ const Friends = () => {
           onViewProfile={handleFriendViewProfile} 
           onUnfriend={handleDeny} 
         />
-        <Divider/>
-        <Text style={styles.header}>Pending Requests</Text>
         
-        <PendingList
-          pending={pendingRequests}
-          onAccept={handleAccept}
-          onDeny={handleDeny}
-        />
+        
+        
+        {pendingRequests.length > 0 ? (
+        <ScrollView>
+          <Divider/>
+          <Text style={styles.header}>Pending Requests</Text>
+          <PendingList
+            pending={pendingRequests}
+            onAccept={handleAccept}
+            onDeny={handleDeny}
+          />
+          </ScrollView>
+        ) : (
+          <Text>no pending requests</Text>
+        )}
       </ScrollView>
       )}
       <SafeAreaView>
