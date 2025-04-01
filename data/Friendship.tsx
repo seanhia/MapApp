@@ -1,4 +1,4 @@
-import { doc, getDoc, collection, setDoc, getDocs, query, where, updateDoc, deleteDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
+import { doc, addDoc, getDoc, collection, setDoc, getDocs, query, orderBy, where, updateDoc, deleteDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import db from '@/firestore';
 import { fetchCurrentUser, fetchUserByUID } from '@/data/UserDataService'
 import { User, status, Friend, Notification} from '@/data/types';
@@ -329,7 +329,19 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
         }
 
         for (const friend of friends) { //iterate through friends 
-            const notificationRef = doc(collection(db, "notifications"));
+            const userDocRef = doc(db, "users", friend.friendId); // reference to friend's document 
+            const notificationRef = collection(userDocRef, "notifications"); // subcollection 
+
+            await addDoc (notificationRef, {
+                postId: postId,
+                postUserId: userId,
+                message: `View @${user.username}'s recent trip!`,
+                createdAt: serverTimestamp(),
+                read: false
+            });
+            console.log('Notification', 'Successfully created.');
+            /**
+             * const notificationRef = doc(collection(db, "notifications"));
             const notificationData = {
                 postId: postId,
                 friendId: friend.friendId,
@@ -340,6 +352,8 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
             };
             await setDoc(notificationRef, notificationData); 
             console.log('Notification', 'Successfully created.');
+             */
+            
         }
         
     } catch (error){
@@ -361,7 +375,9 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
     }
     try {
 
-        const q = query(collection(db, "notifications"), where("friendId", "==", userId));
+        const userDocRef = collection(db, "users", userId, "notifications");
+        const q = query(userDocRef, orderBy("createdAt", "desc"))
+        //const q = query(collection(db, "notifications"), where("friendId", "==", userId));
         
         const unsubscribe = onSnapshot(q, (snapshot)=>{
             const notifications: Notification[] = snapshot.docs.map((doc) =>({
