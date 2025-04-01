@@ -1,7 +1,7 @@
 import { doc, addDoc, getDoc, collection, setDoc, getDocs, query, orderBy, where, updateDoc, deleteDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import db from '@/firestore';
 import { fetchCurrentUser, fetchUserByUID } from '@/data/UserDataService'
-import { User, status, Friend, Notification} from '@/data/types';
+import { User, status, Friend, Notification } from '@/data/types';
 import convertToDate from '@/app/utils/convertToDate';
 
 
@@ -9,15 +9,15 @@ const friendships_collection = 'friendships'
 const friendshipsRef = collection(db, friendships_collection)
 
 
-{/** CREATE */}
+{/** CREATE */ }
 
 export const createFriendship = async (friend: User) => {
     try {
-        const currentUser = await fetchCurrentUser(); 
-        
+        const currentUser = await fetchCurrentUser();
+
         if (!currentUser) {
             throw new Error('No user is currently signed in!');
-        } 
+        }
         const friendshipExists = await existingFriendshipQuery(currentUser, friend);
         if (friendshipExists[0] == true) {
             if (friendshipExists[1] == status[0]) {
@@ -36,25 +36,26 @@ export const createFriendship = async (friend: User) => {
             user1: currentUser.id, //currentUser.uid,
             user2: friend.id,
             status: status[0], // pending, approved, rejected
-            username1: currentUser.username || null, 
-            username2: friend.username, 
+            username1: currentUser.username || null,
+            username2: friend.username,
             createdAt: convertToDate(new Date()), // Use the current date and time
         }
         const friendshipId = [currentUser.id, friend.id].sort().join("_");
         const newFriendshipRef = doc(db, friendships_collection, friendshipId);
-        
+
         // Write the data into Firestore
         await setDoc(newFriendshipRef, data);
+        await sendFriendNotification(currentUser.id, friend.id);
         alert('Friend Request Sent!')
         console.log('Friendship successfully initiated!');
 
     } catch (error) {
         console.error('Error creating friendship:', error);
     }
-}; 
+};
 
 
-{/** UTIL */}
+{/** UTIL */ }
 
 export const existingFriendshipQuery = async (currentUser: User, friend: User) => {
     if (currentUser.id === friend.id) {
@@ -66,25 +67,25 @@ export const existingFriendshipQuery = async (currentUser: User, friend: User) =
         friendshipsRef,
         where('user1', 'in', [currentUser.id, friend.id]),
         where('user2', 'in', [currentUser.id, friend.id])
-    ); 
-                                                                                                                  
+    );
+
     const existingFriendshipSnapshot = await getDocs(existingFriendshipQuery);
     console.log("empty?", existingFriendshipSnapshot.empty, "snapshot: ", existingFriendshipSnapshot)
     if (!existingFriendshipSnapshot.empty) {
         const friendRef = existingFriendshipSnapshot.docs[0].data()
-        const existingStatus = friendRef.status; 
+        const existingStatus = friendRef.status;
         if (existingStatus === status[1]) {
             return [true, status[1]];
         }
         if (existingStatus === status[0]) {
             return [true, status[0]];
         }
-        return [true, null]; 
+        return [true, null];
     }
     return [false, null];
 }
 
-{/** READ (GET | LIST) --> QUERY */}
+{/** READ (GET | LIST) --> QUERY */ }
 
 /**
  * Query to fetch all the 'friendships' documents a user is apart of
@@ -93,22 +94,22 @@ export const existingFriendshipQuery = async (currentUser: User, friend: User) =
  */
 export const FriendshipQuery = async () => {
     try {
-        const currentUser = await fetchCurrentUser(); 
-        
+        const currentUser = await fetchCurrentUser();
+
         if (!currentUser) {
             throw new Error('No user is currently signed in!');
-        } 
-         // Query friendships where the user is either user1 or user2
-         const q = query(friendshipsRef, where('user1', '==', currentUser.id));
-         const q2 = query(friendshipsRef, where('user2', '==', currentUser.id));
- 
-         // Fetch documents for both cases
-         const querySnapshot1 = await getDocs(q);
-         const querySnapshot2 = await getDocs(q2);
- 
-         // Merge results
-         const allFriendships = [...querySnapshot1.docs, ...querySnapshot2.docs];
-         return allFriendships 
+        }
+        // Query friendships where the user is either user1 or user2
+        const q = query(friendshipsRef, where('user1', '==', currentUser.id));
+        const q2 = query(friendshipsRef, where('user2', '==', currentUser.id));
+
+        // Fetch documents for both cases
+        const querySnapshot1 = await getDocs(q);
+        const querySnapshot2 = await getDocs(q2);
+
+        // Merge results
+        const allFriendships = [...querySnapshot1.docs, ...querySnapshot2.docs];
+        return allFriendships
     } catch (e) {
         console.error("Could not fetch snapshot of all Users 'Frienships' docs", e)
         return []
@@ -134,12 +135,12 @@ export const FriendQuery = async () => {
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(approvedQ1), getDocs(approvedQ2)]);
 
         const friends: Friend[] = [];
-        querySnapshot1.forEach((doc) => friends.push({ 
-            id: doc.id, friendId: doc.data().user2, friendUsername: doc.data().username2, 
+        querySnapshot1.forEach((doc) => friends.push({
+            id: doc.id, friendId: doc.data().user2, friendUsername: doc.data().username2,
             createdAt: doc.data().createdAt, status: doc.data().status
-            
+
         }));
-        querySnapshot2.forEach((doc) => friends.push({ 
+        querySnapshot2.forEach((doc) => friends.push({
             id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1,
             createdAt: convertToDate(doc.data().createdAt), status: doc.data().status
         }));
@@ -165,20 +166,20 @@ export const PendingQuery = async () => {
             throw new Error('No user is currently signed in!');
         }
 
-    const friendshipsRef = collection(db, 'friendships');
+        const friendshipsRef = collection(db, 'friendships');
 
-    const pendingQ1 = query(friendshipsRef, where('status', '==', status[0]), where('user2', '==', currentUser.id)); // The user that has been requested 
+        const pendingQ1 = query(friendshipsRef, where('status', '==', status[0]), where('user2', '==', currentUser.id)); // The user that has been requested 
 
-    const [pendingSnapshot1] = await Promise.all([getDocs(pendingQ1)]);
+        const [pendingSnapshot1] = await Promise.all([getDocs(pendingQ1)]);
 
-    const pending: Friend[] = [];
-    pendingSnapshot1.forEach((doc) => pending.push({ 
-        id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1, 
-        createdAt: doc.data().createdAt, status: doc.data().status
-    }));
-    
-    return pending; 
-    
+        const pending: Friend[] = [];
+        pendingSnapshot1.forEach((doc) => pending.push({
+            id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1,
+            createdAt: doc.data().createdAt, status: doc.data().status
+        }));
+
+        return pending;
+
     } catch (error) {
         console.error('Error fetching pending requests:', error);
         return [];
@@ -196,8 +197,8 @@ export const fetchFriendCount = async (friend: User | null): Promise<string> => 
         // const currentUser = await fetchCurrentUser();
         if (!friend) {
             throw new Error('No user is currently signed in!');
-        }  
-       
+        }
+
         const countQuery1 = query(friendshipsRef, where('status', '==', status[1]), where('user1', '==', friend.id));
         const countQuery2 = query(friendshipsRef, where('status', '==', status[1]), where('user2', '==', friend.id));
 
@@ -209,9 +210,9 @@ export const fetchFriendCount = async (friend: User | null): Promise<string> => 
         console.error('Error fetching friends:', error);
         return '0';
     }
-}  
+}
 
-{/** UPDATE */}
+{/** UPDATE */ }
 
 export const AcceptFriendship = async (id: string) => {
     const data = {
@@ -219,13 +220,13 @@ export const AcceptFriendship = async (id: string) => {
     };
     try {
         const friendshipDoc = doc(db, friendships_collection, id);
-        
+
         await updateDoc(friendshipDoc, data);
-        console.log('Friendship accepted!'); 
+        console.log('Friendship accepted!');
 
     } catch (error) {
         console.error('Error accepting friendship:', error);
-    }  
+    }
 };
 
 /**
@@ -236,29 +237,29 @@ export const AcceptFriendship = async (id: string) => {
 export const updateFriendshipUsername = async (user: User) => {
     try {
         const allFriendships = await FriendshipQuery()
-   
+
         for (const docSnap of allFriendships) {
             const friendshipDocRef = doc(db, friendships_collection, docSnap.id)
-            const friendshipData = docSnap.data(); 
+            const friendshipData = docSnap.data();
 
             const updatedFrienship = {
-                ...friendshipData, 
+                ...friendshipData,
                 username1: friendshipData.User.user1 === user.id ? user.username : friendshipData.User.username1,
-                username2: friendshipData.User.user2 === user.id ? user.username : friendshipData.User.username2 
+                username2: friendshipData.User.user2 === user.id ? user.username : friendshipData.User.username2
             };
 
             await updateDoc(friendshipDocRef, updatedFrienship);
-        } 
+        }
 
         console.log(`Successfully updated ${allFriendships.length} friendships for user ${user.id}`);
-    
+
     } catch (error) {
-       console.error('Error updating friendship documents:', error);
+        console.error('Error updating friendship documents:', error);
     }
 };
 
 
-{/** DELETE */}
+{/** DELETE */ }
 
 /**
 * Deletes Friendship Document
@@ -268,13 +269,13 @@ export const updateFriendshipUsername = async (user: User) => {
 export const DeleteFriendship = async (id: string) => {
     try {
         const friendshipDoc = doc(db, friendships_collection, id);
-        
+
         await deleteDoc(friendshipDoc);
-        console.log('Friendship successfully delelted!'); 
+        console.log('Friendship successfully delelted!');
 
     } catch (error) {
         console.error('Error denying friendship:', error);
-    }  
+    }
 };
 /**
  * friend query by userId
@@ -290,12 +291,12 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(approvedQ1), getDocs(approvedQ2)]);
 
         const friends: Friend[] = [];
-        querySnapshot1.forEach((doc) => friends.push({ 
-            id: doc.id, friendId: doc.data().user2, friendUsername: doc.data().username2, 
+        querySnapshot1.forEach((doc) => friends.push({
+            id: doc.id, friendId: doc.data().user2, friendUsername: doc.data().username2,
             createdAt: doc.data().createdAt, status: doc.data().status
-            
+
         }));
-        querySnapshot2.forEach((doc) => friends.push({ 
+        querySnapshot2.forEach((doc) => friends.push({
             id: doc.id, friendId: doc.data().user1, friendUsername: doc.data().username1,
             createdAt: convertToDate(doc.data().createdAt), status: doc.data().status
         }));
@@ -313,15 +314,15 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
  * send notification to user's friends when they post 
  * @param userId 
  */
- export const sendPostNotifications = async (userId: string, postId: string) =>{
-    try{
-        
+export const sendPostNotifications = async (userId: string, postId: string) => {
+    try {
+
         const user: User | null = await fetchUserByUID(userId);
         if (!user) {
             console.error("User not found");
             return;
         }
-    
+
         const friends = await FriendQueryBasedOnUserId(userId); //fetch friends list 
         if (!friends || friends.length === 0) {
             console.log("No friends found.");
@@ -332,7 +333,7 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
             const userDocRef = doc(db, "users", friend.friendId); // reference to friend's document 
             const notificationRef = collection(userDocRef, "notifications"); // subcollection 
 
-            await addDoc (notificationRef, {
+            await addDoc(notificationRef, {
                 postId: postId,
                 postUserId: userId,
                 message: `View @${user.username}'s recent trip!`,
@@ -340,36 +341,52 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
                 read: false
             });
             console.log('Notification', 'Successfully created.');
-            /**
-             * const notificationRef = doc(collection(db, "notifications"));
-            const notificationData = {
-                postId: postId,
-                friendId: friend.friendId,
-                userId: userId,
-                message: `View @${user.username}'s recent trip!`,
-                createdAt: serverTimestamp(),
-                read: false
-            };
-            await setDoc(notificationRef, notificationData); 
-            console.log('Notification', 'Successfully created.');
-             */
-            
+
         }
-        
-    } catch (error){
+
+    } catch (error) {
         console.error('Error creating notification for the post', error);
     }
 
+};
+/**
+ * send notification when friend request sent 
+ */
+export const sendFriendNotification = async (userId: string, friendId: string) => {
 
- };
- /**
-  * loads Notifications real time 
-  * @param userId 
-  * @param callback 
-  * @returns 
-  */
+    try {
 
- export const fetchNotifications = async (userId: string, callback: (notifications: Notification []) => void) =>{
+        const user: User | null = await fetchUserByUID(userId);
+        if (!user) {
+            console.error("User not found");
+            return;
+        }
+
+        const userDocRef = doc(db, "users", friendId); // reference to friend's document 
+        const notificationRef = collection(userDocRef, "notifications"); // subcollection 
+
+        await addDoc(notificationRef, {
+            friendRequestUserId: userId,
+            message: `@${user.username} sent you a friend request`,
+            createdAt: serverTimestamp(),
+            read: false
+        });
+        console.log('Friend request Notification', 'Successfully created.');
+
+    } catch (error) {
+        console.error('Error creating notification for the post', error);
+    }
+};
+
+
+/**
+ * loads Notifications real time 
+ * @param userId 
+ * @param callback 
+ * @returns 
+ */
+
+export const fetchNotifications = async (userId: string, callback: (notifications: Notification[]) => void) => {
     if (!userId) {
         throw new Error("User ID is required to fetch post.");
     }
@@ -378,12 +395,12 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
         const userDocRef = collection(db, "users", userId, "notifications");
         const q = query(userDocRef, orderBy("createdAt", "desc"))
         //const q = query(collection(db, "notifications"), where("friendId", "==", userId));
-        
-        const unsubscribe = onSnapshot(q, (snapshot)=>{
-            const notifications: Notification[] = snapshot.docs.map((doc) =>({
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const notifications: Notification[] = snapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
-            })) as Notification [];
+            })) as Notification[];
 
             callback(notifications)
         });
@@ -394,19 +411,19 @@ export const FriendQueryBasedOnUserId = async (userId: string) => {
         throw error;
     }
 
- };
- /**
-  *  Update notifications read to true & deletes from database 
-  * @param notification 
-  */
- export const updateNotification = async ( notification: Notification ) => {
+};
+/**
+ *  Update notifications read to true & deletes from database 
+ * @param notification 
+ */
+export const updateNotification = async (notification: Notification) => {
     try {
         const notificationRef = doc(db, "notifications", notification.id);
-  
+
         await updateDoc(notificationRef, { read: true }); // notification has been read 
         await deleteDoc(notificationRef); // delete after its been read 
-      } catch (error) {
+    } catch (error) {
         console.error('Error updating and deleting notification:', error);
-      }
+    }
 
- };
+};
