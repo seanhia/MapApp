@@ -21,7 +21,7 @@ const Notifications: React.FC<NotificationsProps> = ({ user }) => {
       //view friend's profile 
       router.push({
         pathname: '/screens/profile_view',
-        params: { userId: notification.userId },
+        params: { userId: notification.userId || notification.friendRequestUserId },
       });
     
   };
