@@ -39,21 +39,28 @@ const passport = () => {
         <SafeAreaProvider>
           <SafeAreaView style={style.container}>
               <Text style={style.title}> Virtual Passport</Text>
-              <View style={style.column}>
-              <View>
-              <ul >
-              <Text style={style.title}> Places Visited</Text>
-              {CityCountry.map((stat, index) => (
-                <li style={style.list} key={index}>
-                  {stat.cities}, {stat.countries}
-                </li>
-              ))}
-            </ul>
-              </View>
-              <View>
-              <Text style={style.title}> Achievements</Text>
-              </View>
-            </View>
+
+                <View style={style.column}>
+                  <View>
+                    <Text style={style.title}> Places Visited</Text>
+                    {CityCountry.map((stat, index) => (
+                      <View style={style.list} key={index}>
+                        {stat.cities}, {stat.countries}
+                      </View>
+                    ))}
+                  </View>
+                  <View>
+                    <Text style={style.title}> Achievements</Text>
+                    <View>
+                      <Text style={style.list}> First City Visited!</Text>
+                      <Text style={style.list}> Visited 5 Cities </Text>
+                      <Text style={style.list}> Visited 3 Countries</Text>
+                      <Text style={style.list}> Traveled over 1000 meters </Text>
+                      <Text style={style.list}> Share a post! </Text>
+                    </View>
+                  </View>
+                </View>
+
           </SafeAreaView>
         </SafeAreaProvider>
       );
@@ -71,12 +78,12 @@ const style = StyleSheet.create({
     marginTop: 16,
     paddingVertical: 6,
     borderWidth: 6,
-    borderColor: '#20232a',
-    borderRadius: 100,
+    borderColor: '#FFFFFF',
+    borderRadius: 15,
     backgroundColor: '#48b3ee',
     color: '#FFFFFF',
     textAlign: 'center',
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   list: {
@@ -88,5 +95,9 @@ const style = StyleSheet.create({
   },
   column: {
     flexDirection: 'row',
+    marginTop: 20,
+    justifyContent: 'center',
+    marginBottom: 10,
+    gap: 20,
   }
   })
