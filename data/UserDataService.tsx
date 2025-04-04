@@ -103,6 +103,22 @@ export const fetchCurrentUserLeaderboard = async (): Promise<Leaderboard | null>
   return { id: currentUser.uid, ...userData} as Leaderboard;
 };
 
+
+export const getCitiesSize = async (id: string) => {
+  try {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+    const statsRef = collection(db, 'users', id, 'stats'); 
+    const statsSnap = await getCountFromServer(statsRef);
+    const size = statsSnap.data().count;
+    return size;
+
+
+  } catch (error) {
+    console.error('getCites: ', error)
+    return null; 
+  }
+}
 /**
  * Fetch users Favorite Location List from favorites subcollection
  * @returns {}

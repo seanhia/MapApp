@@ -1,4 +1,4 @@
-import { Timestamp, FieldValue } from "firebase/firestore";
+import { Timestamp, FieldValue, CollectionReference } from "firebase/firestore";
 import { ImageSourcePropType } from "react-native";
 
 export interface User {
@@ -13,6 +13,7 @@ export interface User {
     points?: number; 
     profilePhoto?: string;
   };
+
 
 export const userSubcollections = ['posts', 'locations', 'favorite', 'stats'];
 
