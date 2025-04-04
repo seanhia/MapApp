@@ -10,12 +10,14 @@ import { fetchCurrentUser, writeData, fetchCurrentUserLeaderboard, deleteUser } 
 import { Leaderboard, User, Friend } from '@/data/types'
 import { updateFriendshipUsername } from '@/data/Friendship';
 import { Picker } from '@react-native-picker/picker';
-
+import { useTranslation } from 'react-i18next';
+import i18n from '@/components/translations/i18n';
 
 const UserSettings = () => {
 
     const { colorScheme, styles } = useTheme();
     const router = useRouter();
+    const { t } = useTranslation();
 
     const [isPrivateAccount, setIsPrivateAccount] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -128,18 +130,18 @@ const UserSettings = () => {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ScrollView contentContainerStyle={{ backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1 }}>
                 <View>
-                    <Text style={[styles.heading, { padding: 16 }]}>Settings</Text>
+                    <Text style={[styles.heading, { padding: 16 }]}>{t('settings')}</Text>
 
                     <View style={style.card}>
                         <View style={style.rowBetween}>
-                            <Text style={styles.label}>Private Account</Text>
+                            <Text style={styles.label}>{t('private_account')}</Text>
                             <Switch
                                 trackColor={{ false: '#aaa', true: Colors.light.tint }}
                                 thumbColor={isPrivateAccount ? '#f5dd4b' : '#f4f3f4'}
                                 onValueChange={togglePrivate}
                                 value={isPrivateAccount}
                             />
-                            <Text style={styles.label}>Dark Mode</Text>
+                            <Text style={styles.label}>{t('dark_mode')}</Text>
                             <Switch
                                 trackColor={{ false: '#aaa', true: Colors.light.tint }}
                                 thumbColor={isDarkMode ? '#f5dd4b' : '#f4f3f4'}
@@ -156,7 +158,7 @@ const UserSettings = () => {
                             style={styles.placeHolderInput}
                             onChangeText={setUsername}
                             value={username}
-                            placeholder="Username"
+                            placeholder={t('username')}
                         // placeholderTextColor= "#fffff6"
                         />
 
@@ -164,7 +166,7 @@ const UserSettings = () => {
                             style={styles.placeHolderInput}
                             onChangeText={setBio}
                             value={bio}
-                            placeholder="Bio"
+                            placeholder={t('bio')}
                         // placeholderTextColor="#aaa"
                         />
 
@@ -172,7 +174,7 @@ const UserSettings = () => {
                             style={styles.placeHolderInput}
                             onChangeText={setEmail}
                             value={eMail}
-                            placeholder={"Email"}
+                            placeholder={t('email')}
                             // placeholderTextColor="#aaa"
                             keyboardType="email-address"
                         />
@@ -181,15 +183,18 @@ const UserSettings = () => {
                             style={styles.placeHolderInput}
                             onChangeText={setPhoneNumber}
                             value={phoneNumber}
-                            placeholder="Phone Number"
+                            placeholder={t('phone_number')}
                             // placeholderTextColor="#aaa"
                             keyboardType="phone-pad"
                         />
                         <View style={styles.card}>
-                            <Text style={styles.labels}>Choose Your Language</Text>
+                            <Text style={styles.labels}>{t('choose_language')}</Text>
                             <Picker
                                 selectedValue={selectedLanguage}
-                                onValueChange={(itemValue: string) => setSelectedLanguage(itemValue)}
+                                onValueChange={(itemValue: string) => {
+                                    setSelectedLanguage(itemValue); //set language 
+                                    i18n.changeLanguage(itemValue); //change to language 
+                                }}
                                 style={styles.picker}
                             >
                                 <Picker.Item label="English" value="en" />
@@ -199,26 +204,26 @@ const UserSettings = () => {
                         </View>
                         <TouchableOpacity style={styles.lightButton} onPress={handleSubmit}>
                             <Text style={styles.buttonText}>
-                                Submit Chanages
+                                {t('submit_changes')}
                             </Text>
                         </TouchableOpacity>
 
                         <View style={{ padding: 20 }}></View>
 
                         <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/change_password')}>
-                            <Text style={styles.buttonText}>Change Password</Text>
+                            <Text style={styles.buttonText}>{t('change_password')}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/tutorial')}>
-                            <Text style={styles.buttonText}>View Tutorial</Text>
+                            <Text style={styles.buttonText}>{t('view_tutorial')}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.lightButton} onPress={handleDeleteAccount}>
-                            <Text style={styles.buttonText}>Delete Account</Text>
+                            <Text style={styles.buttonText}>{t('delete_account')}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.lightButton} onPress={handleSignOut}>
-                            <Text style={styles.buttonText}>Log Out</Text>
+                            <Text style={styles.buttonText}>{t('log_out')}</Text>
                         </TouchableOpacity>
 
 
