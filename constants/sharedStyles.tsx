@@ -17,8 +17,8 @@ type colorSchemeName = "light" | "dark" | null | undefined;
 }
 const { width } = Dimensions.get('window');
 const numColumns = 3; // 3 post per row
-const postMargin = 5; 
-const postWidth = (width - ( 2.70 * postMargin) * (numColumns + 1)) / numColumns; // calculate post width
+const postMargin = 5;
+const postWidth = (width - (2.70 * postMargin) * (numColumns + 1)) / numColumns; // calculate post width
 const baseFontSize = width * 0.05; // can be adjusted to percantage size of the screen 
 const iconSize = width * 0.025;
 
@@ -153,14 +153,14 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     },
     fullContainer: {
       //Horizonatal Full Page
-      flex:1,
+      flex: 1,
       flexDirection: "column",
       justifyContent: "space-evenly",
       backgroundColor:
         theme === "dark" ? Colors.dark.background : Colors.light.background,
     },
-    
-    
+
+
     halfContainer: {
       //Vertical Half Page
       marginHorizontal: 40,
@@ -184,8 +184,8 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     listContainer: {
       width: "85%",
       flexDirection: "row",
-      justifyContent: "space-between", 
-      alignItems: "center", 
+      justifyContent: "space-between",
+      alignItems: "center",
       alignSelf: "center",
       paddingVertical: 10,
       marginVertical: 5,
@@ -193,7 +193,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     leftContainer: {
       flexDirection: "row",
       justifyContent: 'space-between',
-      alignItems: "center", 
+      alignItems: "center",
     },
     Container: {
       flexDirection: "row",
@@ -207,7 +207,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       paddingTop: 30,
     },
     postContainer: {
-      width: postWidth,  
+      width: postWidth,
       marginLeft: postMargin,
       marginRight: postMargin,
       padding: 12,
@@ -229,9 +229,9 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       borderRadius: 8,
     },
     tutorialContainer: {
-      flex: 1, 
-      alignItems: 'center', 
-      justifyContent: 'center', 
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
       backgroundColor: theme === "dark" ? Colors.dark.background : Colors.light.background
     },
 
@@ -267,16 +267,16 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     footerButton: {
       padding: 10,
       alignItems: "center",
-      
+
       color:
         theme === "dark" ? Colors.dark.background : Colors.light.background,
     },
     tutorialButton: {
-      width: 100, 
-      paddingVertical: 8, 
+      width: 100,
+      paddingVertical: 8,
       // backgroundColor: Colors.light.tint,
-      borderRadius: 28, 
-      alignItems: "center", 
+      borderRadius: 28,
+      alignItems: "center",
     },
     addFriendButton: {
       width: 100,
@@ -286,19 +286,19 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       justifyContent: "flex-end",
       alignItems: "center",
       marginBottom: 10,
-      paddingVertical: 8, 
+      paddingVertical: 8,
     },
     // Favorite Location
-    homePageButton: { 
-      justifyContent: 'center', 
-      backgroundColor: theme === "dark" ? Colors.dark.button : Colors.light.button, 
-      alignItems: 'center', 
-      padding: 15, 
+    homePageButton: {
+      justifyContent: 'center',
+      backgroundColor: theme === "dark" ? Colors.dark.button : Colors.light.button,
+      alignItems: 'center',
+      padding: 15,
       borderRadius: 10,
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.2,
       shadowRadius: 4,
-      elevation: 5, 
+      elevation: 5,
       position: "absolute",
       top: 100,
       right: 20,
@@ -317,7 +317,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       borderRadius: 50,
     },
     imagePost: {
-      width: postWidth,  
+      width: postWidth,
       height: postWidth,
       marginBottom: 10,
       alignSelf: "center",
@@ -390,7 +390,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       textAlign: "center",
       color: theme === "dark" ? Colors.dark.text : Colors.light.text,
     },
-    
+
     /**Photo Details */
 
     rating: {
@@ -398,8 +398,8 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       padding: 10,
     },
 
-     /** Post */
-     photoItemContainer: {
+    /** Post */
+    photoItemContainer: {
       flex: 1 / 3,
       margin: 8,
       borderWidth: 1,
@@ -416,9 +416,9 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       padding: 4,
     },
     photoList: {
-      marginTop: 20, 
+      marginTop: 20,
     },
-    editIcon:{
+    editIcon: {
       width: iconSize,
       height: iconSize,
 
@@ -459,31 +459,57 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
 
     //notif
     sidebar: {
-      
-    top: 0,               
-    bottom: 0,             
-    right: 0,              
-    width: '33%',         
-    backgroundColor: '#f0f0f0',
-    padding: 20,
-    zIndex: 10,            
+
+      top: 0,
+      bottom: 0,
+      right: 0,
+      width: '33%',
+      backgroundColor: '#f0f0f0',
+      padding: 20,
+      zIndex: 10,
     },
 
     modalOverlay: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-      justifyContent: 'flex-end', 
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'flex-end',
     },
     notificationDrawer: {
-      width:  '40%',
-      height: '100%', 
+      width: '40%',
+      height: '100%',
       backgroundColor: 'white',
       position: 'absolute',
       top: 0,
       right: 0,
       padding: 20,
-    }
-    
+    },
+    // Language 
+    card: {
+      borderRadius: 8,
+      padding: 20,
+      marginBottom: 30,
+      backgroundColor: theme === "dark" ? Colors.dark.tint : Colors.light.tint,
+      color:
+        theme === "dark" ? Colors.dark.placeHolder : Colors.light.placeHolder,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 3,
+    },
+
+    labels: {
+      fontSize: 16,
+      marginBottom: 10,
+      color: '#000',
+    },
+    picker: {
+      height: 50,
+      width: '100%',
+      color: '#000',
+      backgroundColor: '#FFFFFF',
+      borderRadius: 8,
+    },
 
 
   });

@@ -5,13 +5,15 @@ import { useTheme } from '@/hooks/useTheme';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors'
 import { Link } from 'expo-router';
-import {changeEmail, singOutUser} from "@/auth";
-import { fetchCurrentUser, writeData , fetchCurrentUserLeaderboard, deleteUser} from '@/data/UserDataService';
+import { changeEmail, singOutUser } from "@/auth";
+import { fetchCurrentUser, writeData, fetchCurrentUserLeaderboard, deleteUser } from '@/data/UserDataService';
 import { Leaderboard, User, Friend } from '@/data/types'
 import { updateFriendshipUsername } from '@/data/Friendship';
+import { Picker } from '@react-native-picker/picker';
+
 
 const UserSettings = () => {
-    
+
     const { colorScheme, styles } = useTheme();
     const router = useRouter();
 
@@ -23,6 +25,7 @@ const UserSettings = () => {
     const [bio, setBio] = useState('');
     const [eMail, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
 
     useEffect(() => {
         const loadCurrentUser = async () => {
@@ -61,9 +64,9 @@ const UserSettings = () => {
     const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
     const handleSubmit = async () => {
-        try { 
-        await changeEmail(eMail);
-        } catch(e) {
+        try {
+            await changeEmail(eMail);
+        } catch (e) {
             alert(e)
             return
         }
@@ -87,7 +90,7 @@ const UserSettings = () => {
 
         try {
             await writeData(updatedUser);
-            await writeData(updatedLeaderboard); 
+            await writeData(updatedLeaderboard);
             await updateFriendshipUsername(updatedUser)
             alert('Settings updated successfully!');
             console.log("Updated User:", updatedUser)
@@ -109,7 +112,7 @@ const UserSettings = () => {
             console.log("Error: ", error, ". Unable to delete account.")
         }
     }
-    
+
     const handleSignOut = async () => {
         try {
             singOutUser();
@@ -123,93 +126,107 @@ const UserSettings = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={{backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1}}>
-            <View>
-                <Text style={[styles.heading, {padding:16}]}>Settings</Text>
+            <ScrollView contentContainerStyle={{ backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1 }}>
+                <View>
+                    <Text style={[styles.heading, { padding: 16 }]}>Settings</Text>
 
-                <View style={style.card}>
-                    <View style={style.rowBetween}>
-                        <Text style={styles.label}>Private Account</Text>
-                        <Switch
-                            trackColor={{ false: '#aaa', true: Colors.light.tint }}
-                            thumbColor={isPrivateAccount ? '#f5dd4b' : '#f4f3f4'}
-                            onValueChange={togglePrivate}
-                            value={isPrivateAccount}
-                        />
-                        <Text style={styles.label}>Dark Mode</Text>
-                        <Switch
-                            trackColor={{ false: '#aaa', true: Colors.light.tint }}
-                            thumbColor={isDarkMode ? '#f5dd4b' : '#f4f3f4'}
-                            onValueChange={toggleDarkMode}
-                            value={isDarkMode}
-                        />
+                    <View style={style.card}>
+                        <View style={style.rowBetween}>
+                            <Text style={styles.label}>Private Account</Text>
+                            <Switch
+                                trackColor={{ false: '#aaa', true: Colors.light.tint }}
+                                thumbColor={isPrivateAccount ? '#f5dd4b' : '#f4f3f4'}
+                                onValueChange={togglePrivate}
+                                value={isPrivateAccount}
+                            />
+                            <Text style={styles.label}>Dark Mode</Text>
+                            <Switch
+                                trackColor={{ false: '#aaa', true: Colors.light.tint }}
+                                thumbColor={isDarkMode ? '#f5dd4b' : '#f4f3f4'}
+                                onValueChange={toggleDarkMode}
+                                value={isDarkMode}
+                            />
+                        </View>
+
                     </View>
 
-                </View>
-                
-                <View style={style.card}> 
+                    <View style={style.card}>
 
-                    <TextInput
-                        style={styles.placeHolderInput}
-                        onChangeText={setUsername}
-                        value={username}
-                        placeholder="Username"
+                        <TextInput
+                            style={styles.placeHolderInput}
+                            onChangeText={setUsername}
+                            value={username}
+                            placeholder="Username"
                         // placeholderTextColor= "#fffff6"
-                    />
+                        />
 
-                    <TextInput
-                        style={styles.placeHolderInput}
-                        onChangeText={setBio}
-                        value={bio}
-                        placeholder="Bio"
+                        <TextInput
+                            style={styles.placeHolderInput}
+                            onChangeText={setBio}
+                            value={bio}
+                            placeholder="Bio"
                         // placeholderTextColor="#aaa"
-                    />
-             
-                    <TextInput
-                        style={styles.placeHolderInput}
-                        onChangeText={setEmail}
-                        value={eMail}
-                        placeholder={"Email"}
-                        // placeholderTextColor="#aaa"
-                        keyboardType="email-address"
-                    />
+                        />
 
-                    <TextInput
-                        style={styles.placeHolderInput}
-                        onChangeText={setPhoneNumber}
-                        value={phoneNumber}
-                        placeholder="Phone Number"
-                        // placeholderTextColor="#aaa"
-                        keyboardType="phone-pad"
-                    />
-                    <TouchableOpacity style={styles.lightButton} onPress={handleSubmit}>
-                        <Text style={styles.buttonText}>
-                            Submit Chanages
-                        </Text>
-                    </TouchableOpacity>
+                        <TextInput
+                            style={styles.placeHolderInput}
+                            onChangeText={setEmail}
+                            value={eMail}
+                            placeholder={"Email"}
+                            // placeholderTextColor="#aaa"
+                            keyboardType="email-address"
+                        />
 
-                    <View style={{padding: 20}}></View>
+                        <TextInput
+                            style={styles.placeHolderInput}
+                            onChangeText={setPhoneNumber}
+                            value={phoneNumber}
+                            placeholder="Phone Number"
+                            // placeholderTextColor="#aaa"
+                            keyboardType="phone-pad"
+                        />
+                        <View style={styles.card}>
+                            <Text style={styles.labels}>Choose Your Language</Text>
+                            <Picker
+                                selectedValue={selectedLanguage}
+                                onValueChange={(itemValue: string) => setSelectedLanguage(itemValue)}
+                                style={styles.picker}
+                            >
+                                <Picker.Item label="English" value="en" />
+                                <Picker.Item label="Spanish" value="es" />
+                                <Picker.Item label="Mandarin" value="zh" />
+                                <Picker.Item label="Japanese" value="ja" />
+                                <Picker.Item label="French" value="fr" />
+                            </Picker>
+                        </View>
+                        <TouchableOpacity style={styles.lightButton} onPress={handleSubmit}>
+                            <Text style={styles.buttonText}>
+                                Submit Chanages
+                            </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/change_password')}>
-                    <Text style={styles.buttonText}>Change Password</Text>
-                    </TouchableOpacity>
-                    
-                    <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/tutorial')}>
-                        <Text style={styles.buttonText}>View Tutorial</Text>
-                    </TouchableOpacity>
+                        <View style={{ padding: 20 }}></View>
 
-                    <TouchableOpacity style={styles.lightButton} onPress={handleDeleteAccount}>
-                        <Text style={styles.buttonText}>Delete Account</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/change_password')}>
+                            <Text style={styles.buttonText}>Change Password</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.lightButton} onPress={handleSignOut}>
-                        <Text style={styles.buttonText}>Log Out</Text> 
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.lightButton} onPress={() => router.push('/screens/tutorial')}>
+                            <Text style={styles.buttonText}>View Tutorial</Text>
+                        </TouchableOpacity>
 
-        
+                        <TouchableOpacity style={styles.lightButton} onPress={handleDeleteAccount}>
+                            <Text style={styles.buttonText}>Delete Account</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.lightButton} onPress={handleSignOut}>
+                            <Text style={styles.buttonText}>Log Out</Text>
+                        </TouchableOpacity>
+
+
+                    </View>
                 </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
         </GestureHandlerRootView>
     );
 };
