@@ -1,0 +1,16 @@
+{
+    "settings": "设置",
+    "private_account": "私人账户",
+    "dark_mode": "深色模式",
+    "username": "用户名",
+    "bio": "简介",
+    "email": "电子邮件",
+    "phone_number": "电话号码",
+    "choose_language": "选择你的语言",
+    "submit_changes": "提交更改",
+    "change_password": "更改密码",
+    "view_tutorial": "查看教程",
+    "delete_account": "删除账户",
+    "log_out": "退出登录"
+  }
+  
