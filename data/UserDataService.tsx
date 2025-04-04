@@ -103,11 +103,24 @@ export const fetchCurrentUserLeaderboard = async (): Promise<Leaderboard | null>
   return { id: currentUser.uid, ...userData} as Leaderboard;
 };
 
+export const getTotalDistance = async (id: string) => {
+  try {
+    const statsRef = collection(db, 'users', id, 'locations'); 
+    const statsSnap = await getDocs(statsRef);
+    var totalDis = 0;
+    statsSnap.forEach((dfromL) => {
+      totalDis += dfromL.get('distanceFromLast')
+    })
+    return Math.round(totalDis)
+  } catch (error) {
+    console.error('getCites: ', error)
+    return null; 
+  }
+}
+
 
 export const getCitiesSize = async (id: string) => {
   try {
-    const auth = getAuth();
-    const currentUser = auth.currentUser;
     const statsRef = collection(db, 'users', id, 'stats'); 
     const statsSnap = await getCountFromServer(statsRef);
     const size = statsSnap.data().count;
