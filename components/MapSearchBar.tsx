@@ -21,11 +21,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
             onPlaceSelected(data, details);
           }}
           requestUrl={{
-            url: 'https://maps.googleapis.com/maps/api', // Fixes web environment issue
-            useOnPlatform: 'all', // Ensures this works on all platforms
+            url: 'http://localhost:3000/proxy',
+            useOnPlatform: 'all',
           }}
+          
           query={{
-            key: 'AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c',
             language: 'en',
           }}
 
@@ -37,6 +37,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
             container: styles.autoCompleteContainer,
             listView: styles.listView,
           }}
+         
         />
 
     </View>

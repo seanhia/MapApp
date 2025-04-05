@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Alert, Text, Image, TouchableOpacity } from 'react-native';
 import MapComponent from '@/components/MapComponent';
@@ -8,6 +9,7 @@ import { getAuth } from "firebase/auth";
 import axios from 'axios';
 import { Colors } from '@/constants/Colors';
 import { useTheme } from '@/hooks/useTheme'; 
+import { saveStats } from '@/firestore';
 
 const WEATHER_API_KEY = "c91505cb2ca1c66df5e70feade5e8d06"; // Replace with your API key
 
@@ -37,12 +39,27 @@ export default function Home() {
   } else {
     darkMode = '37201bcde93d12e8'
   }
+  const input = "california"
+  const fetchAutocomplete = async (input) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/autocomplete?input=${input}`);
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching autocomplete:", error);
+    }
+  };
+  
 
   useEffect(() => {
     if (location) {
       console.log("Real-time location:", location.coords.latitude, location.coords.longitude);
       setMapCenter({ lat: location.coords.latitude, lng: location.coords.longitude });
       fetchWeather(location.coords.latitude, location.coords.longitude);
+    }
+
+    if(userId) {
+      saveStats(userId);
     }
     
     if (error) {
@@ -84,8 +101,6 @@ export default function Home() {
       <View style={styles.mapContainer}>
         <MapComponent initialCenter={mapCenter} weatherIcon={weather?.iconUrl} mapId={darkMode} />
       </View>
-
-      
 
       {/* Floating Weather Box */}
       {weather?.iconUrl && (

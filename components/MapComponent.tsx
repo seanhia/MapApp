@@ -15,9 +15,15 @@ interface MapComponentProps {
   weatherIcon?: string;
 }
 
+const fixedPoints = [
+  { lat: 37.7749, lng: -122.4194 }, // Example point (San Francisco)
+];
+
 const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weatherIcon }) => {
   const [googleMaps, setGoogleMaps] = useState<typeof google | null>(null);
   const [cutoutPosition, setCutoutPosition] = useState({ x: "50%", y: "50%" });
+  const [cutoutPosition2, setCutoutPosition2] = useState({ x: "50%", y: "50%" });
+
   const [radiusInPixels, setRadiusInPixels] = useState(0);
 
   const mapRef = useRef<google.maps.Map | null>(null);
@@ -138,14 +144,17 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weath
   return (
     <View style={{ position: "absolute", width: "100%", height: "90%" }}>
       <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={initialCenter}
-        zoom={17}
-        options={options}
-        onLoad={(map) => (mapRef.current = map)}
-      >
-        <Marker position={initialCenter} />
-      </GoogleMap>
+       mapContainerStyle={containerStyle}
+       center={initialCenter}
+       zoom={17}
+       options={options}
+       onLoad={(map) => (mapRef.current = map)}
+     >
+       <Marker position={initialCenter} />
+       {fixedPoints.map((point, index) => (
+         <Marker key={index} position={point} />
+       ))}
+     </GoogleMap>
 
       {/* Overlay with circular cutout */}
       <View
@@ -159,6 +168,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weath
           zIndex: 1,
           pointerEvents: "none",
           maskImage: `radial-gradient(circle ${radiusInPixels}px at ${cutoutPosition.x} ${cutoutPosition.y}, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 60%)`,
+          maskImage2: `radial-gradient(circle ${radiusInPixels}px at ${cutoutPosition2.x} ${cutoutPosition2.y}, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 60%)`,
           WebkitMaskImage: `radial-gradient(circle ${radiusInPixels}px at ${cutoutPosition.x} ${cutoutPosition.y}, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 60%)`, // For Safari compatibility
         }}
       />
