@@ -19,6 +19,9 @@ export function ExternalLink({ href, ...rest }: Props) {
           await openBrowserAsync(href);
         }
       }}
-    />
+      >
+        Learn More
+      </Link>
+    
   );
 }

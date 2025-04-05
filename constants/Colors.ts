@@ -7,7 +7,7 @@ const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 const darkBlue = '#06003D';
 const lightBlue = '#B1C9F7';
-const lightYellow = '#FFE699'; 
+const lightYellow = '#FFE699';
 const tan = '#FBE8C5';
 
 
@@ -42,6 +42,6 @@ export const Colors = {
     tabIconSelected: tintColorDark,
     button: darkPrimary,
     placeHolder: placeHolder,
-    container: '#343731'
+    container: darkAccent
   },
 };

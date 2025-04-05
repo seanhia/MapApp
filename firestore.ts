@@ -160,17 +160,10 @@ export async function saveStats(userId: string) {
   console.log(`City: ${CityCountry.city}, Country: ${CityCountry.country}`);
 }
 
-export async function getStats(userId: string) {
-  const userLocationRef = doc(db, `users/${userId}/locations`); // access location data from user
-  const locationSnapshot = await getDoc(userLocationRef); // get location doc
+export async function getStats(userId: string): Promise<{ cities: string; countries: string }[]> {
+  const userLocationRef = collection(db, `users/${userId}/stats`); // access stats data from user
+  const locationSnapshot = await getDocs(userLocationRef); // get stats docs
 
-  if (locationSnapshot.exists()) {
-    return locationSnapshot.data();
-  }
-
-return {
-  cities: [],
-  countries: []
-};
+  return locationSnapshot.docs.map((doc) => doc.data() as { cities: string; countries: string });
 }
 

@@ -141,17 +141,13 @@ const Friends = () => {
     );
   };
 
-  // if (isLoading) {
-  //   return <Text>Loading...</Text>;
-    
-  // }
 
   return (
     //<GestureHandlerRootView style={{ flex: 1 }}>  # need for mobile, but it is adding blank space right now (fix later)
     isLoading ? (
       <Loading/>) : (
 
-    <View style={styles.fullContainer}>
+<View style={styles.fullContainer}>
       <SearchBar
         value={searchQuery} 
         onChange={handleSearch}
@@ -173,14 +169,22 @@ const Friends = () => {
           onViewProfile={handleFriendViewProfile} 
           onUnfriend={handleDeny} 
         />
-        <Divider/>
-        <Text style={styles.header}>Pending Requests</Text>
         
-        <PendingList
-          pending={pendingRequests}
-          onAccept={handleAccept}
-          onDeny={handleDeny}
-        />
+        
+        
+        {pendingRequests.length > 0 ? (
+        <ScrollView>
+          <Divider/>
+          <Text style={styles.header}>Pending Requests</Text>
+          <PendingList
+            pending={pendingRequests}
+            onAccept={handleAccept}
+            onDeny={handleDeny}
+          />
+          </ScrollView>
+        ) : (
+          <Text>no pending requests</Text>
+        )}
       </ScrollView>
       )}
       <SafeAreaView>

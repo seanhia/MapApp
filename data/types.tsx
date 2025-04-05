@@ -1,4 +1,4 @@
-import { Timestamp, FieldValue } from "firebase/firestore";
+import { Timestamp, FieldValue, CollectionReference } from "firebase/firestore";
 import { ImageSourcePropType } from "react-native";
 
 export interface User {
@@ -14,7 +14,8 @@ export interface User {
     profilePhoto?: string;
   };
 
-export const userSubcollections = ['posts', 'locations'];
+
+export const userSubcollections = ['posts', 'locations', 'favorite', 'stats'];
 
 export interface Friend {
     id: string,
@@ -58,12 +59,30 @@ export enum Rating {
 
 export interface Notification {
     id: string,
-    userId: string,
-    friendId: string,
-    message: string[],
+    postId?: string,
+    userId?: string,
+    friendId?: string,
+    friendRequestUserId?: string,
+    message: string,
     createdAt: Timestamp,
     read: boolean,
 };
+
+export interface Leaderboard {
+    id: string,
+    ranking: number,
+    userid: string,
+    username: string,
+    points: number,
+    last_updated: Date,
+}; 
+
+export interface FavoriteLoc {
+    id: string, 
+    latitude: string,  
+    longitude: string,
+    name: string
+}
 
 
 /** ALL INTERFACES BELOW ARE NOT INMPLEMENTED YET */
@@ -116,11 +135,4 @@ export interface Location {
     createdAt: Date,
 }
 
-export interface Leaderboard {
-    id: string,
-    ranking: number,
-    userid: string,
-    username: string,
-    points: number,
-    last_updated: Date,
-}
+

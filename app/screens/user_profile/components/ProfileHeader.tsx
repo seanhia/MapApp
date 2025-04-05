@@ -40,6 +40,15 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
                         />
                     </TouchableOpacity>
 
+                    <TouchableOpacity onPress={() => router.push('/screens/passport')}>
+                        <Image
+                            style={[styles.profilePicture, {
+                                height: 30,
+                                width: 30,
+                            }]}                          
+                            source={require('@/assets/images/globe.png')}
+                        />
+                    </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => router.push('/screens/settings')}>
                         <Image

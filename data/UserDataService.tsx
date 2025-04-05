@@ -1,8 +1,9 @@
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc, getCountFromServer, orderBy, serverTimestamp, limit } from 'firebase/firestore';
 import db from '@/firestore'; 
 import { getAuth, deleteUser as authDeleteUser  } from 'firebase/auth';
-import { User, userSubcollections as subcollections, Leaderboard } from './types';
+import { User, userSubcollections as subcollections, Leaderboard, FavoriteLoc } from './types';
 import { Timestamp } from 'firebase/firestore';
+import {FriendQueryBasedOnUserId, fetchFriendCount} from './Friendship'
 
 
 /**
@@ -30,6 +31,17 @@ const isLeaderboard = (data: any): data is Leaderboard => {
     && 'ranking' in data 
   );
 };
+
+const isFavoriteLoc = (data: any): data is FavoriteLoc => {
+  return (
+    typeof data === 'object'
+    && data != null 
+    && 'id' in data
+    && 'latitude' in data
+    && 'longitude' in data
+    && 'name' in data 
+  )
+}
 
 
 /**
@@ -91,6 +103,55 @@ export const fetchCurrentUserLeaderboard = async (): Promise<Leaderboard | null>
   return { id: currentUser.uid, ...userData} as Leaderboard;
 };
 
+export const getTotalDistance = async (id: string) => {
+  try {
+    const statsRef = collection(db, 'users', id, 'locations'); 
+    const statsSnap = await getDocs(statsRef);
+    var totalDis = 0;
+    statsSnap.forEach((dfromL) => {
+      totalDis += dfromL.get('distanceFromLast')
+    })
+    return Math.round(totalDis)
+  } catch (error) {
+    console.error('getCites: ', error)
+    return null; 
+  }
+}
+
+
+export const getCitiesSize = async (id: string) => {
+  try {
+    const statsRef = collection(db, 'users', id, 'stats'); 
+    const statsSnap = await getCountFromServer(statsRef);
+    const size = statsSnap.data().count;
+    return size;
+
+
+  } catch (error) {
+    console.error('getCites: ', error)
+    return null; 
+  }
+}
+/**
+ * Fetch users Favorite Location List from favorites subcollection
+ * @returns {}
+ * @param {User}
+ */
+export const fetchUsersFavLocation = async (id: string): Promise<FavoriteLoc[] | null> => {
+  try {
+    const favLocactionsRef = collection(db, 'users', id, 'favorite'); 
+    const favLocationsSnap = await getDocs(favLocactionsRef)
+    const favList =  [{}]
+    favLocationsSnap.forEach((location) => {
+      favList.push(location.data())
+    })
+    return favList as FavoriteLoc[]
+  } catch (error) {
+    console.error('fetchUsersFavLocation: ', error)
+    return null; 
+  }
+}
+
 /**
  * Fetch a user's data by their UID.
  * @param {string} id - The UID of the user to fetch.
@@ -128,7 +189,7 @@ export const fetchUserByUID = async (id: string): Promise<User | null> => {
  * @param {User | Leaderboard} user - The data to write.
  * @returns {Promise<void>}
  */
-export const writeData = async (data: User | Leaderboard): Promise<void> => {
+export const writeData = async (data: User | Leaderboard | FavoriteLoc): Promise<void> => {
   var collection_name = ''
   try {
     
@@ -137,6 +198,8 @@ export const writeData = async (data: User | Leaderboard): Promise<void> => {
       collection_name = 'users'
     } else if (isLeaderboard(data)) {
       collection_name = 'leaderboard_entry'
+    } else if (isFavoriteLoc(data)) {
+      collection_name = 'favorite'
     } else {
       throw new Error('Invalid data type. Expected User or Leaderboard.');
     }
@@ -202,6 +265,7 @@ export async function getCollectionSize(collectionPath: string) {
   const size = snapshot.data().count;
   return size + 1;
 }
+
 export const getTopFourUsers = async () => {
   const collectionRef = collection(db, 'leaderboard_entry');
   const usersSorted = query(collectionRef, orderBy("points", 'desc'), limit(10));
@@ -210,6 +274,24 @@ export const getTopFourUsers = async () => {
   return people
   
 }
+
+export const getFriendsRank = async () => {
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+  const friends = await FriendQueryBasedOnUserId(currentUser.uid);
+  const colSize = friends.length
+  const friendsList = []
+  for (var i = 0; i < colSize; i++){
+    const userDocRef = doc(db, 'leaderboard_entry', friends[i].friendId);
+    console.log(friends[i].friendId)
+    const pleaseWork = await getDoc(userDocRef)
+    friendsList.push(pleaseWork.data())
+    }
+  return friendsList as Leaderboard[];
+}
+
+
+  
 export async function rankUsers() {
   const collectionRef = collection(db, 'leaderboard_entry');
   const usersSorted = query(collectionRef, orderBy("points", 'desc'));
@@ -257,14 +339,11 @@ export const deleteUser = async (uid: string) => {
 
     const friendshipDocs = [...friendshipsSnap1.docs, ...friendshipsSnap2.docs];
 
-    // Delete all friendship documents found
     const deleteFriendships = friendshipDocs.map(friendshipDoc => deleteDoc(friendshipDoc.ref));
     await Promise.all(deleteFriendships);
     console.log(`All friendships associated with user ${uid} deleted.`);
 
- 
-    // Delete user from Firebase Authentication
-    const user = auth.currentUser;
+     const user = auth.currentUser;
     if (user && user.uid === uid) {
       await authDeleteUser(user);
       console.log(`User ${uid} deleted from Firebase Authentication.`);

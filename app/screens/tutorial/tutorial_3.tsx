@@ -6,11 +6,11 @@ const Tutorial_3 = () => {
     
     return (
         <TutorialScreen 
-            title='Log Your Journeys'
-            description='Easily add and categorize your trips.'
-            nextPage="/screens/tutorial/tutorial_final"
+            title='Compete for a Place on the Leaderboard'
+            description='Aquire travel points and compete with friends to determine who is the most adventurous.'
+            nextPage="/screens/tutorial/tutorial_4"
             prevPage='/screens/tutorial/tutorial_2'
-            image={require('../../../assets/images/cloud.png')}
+            image={require('../../../assets/images/ranking.png')}
         />
     )
 }
