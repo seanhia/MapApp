@@ -14,7 +14,7 @@ import FooterBar from "@/components/FooterBar";
 import { User, Friend } from "@/data/types";
 
 import { fetchAllUsers } from "@/data/UserDataService";
-import { PendingQuery, FriendQuery } from "@/data/Friendship";
+import { PendingQuery, FriendQuery, deleteFriendshipAndNotifications } from "@/data/Friendship";
 import { AcceptFriendship, DeleteFriendship } from "@/data/Friendship";
 
 import sharedStyles from "@/constants/sharedStyles";
@@ -96,7 +96,8 @@ const Friends = () => {
     );
     if (confirmDeny) {
       // Handle deny logic (e.g., remove the friendship request or change the status)
-      await DeleteFriendship(friendship.id);
+      //await DeleteFriendship(friendship.id);
+      await deleteFriendshipAndNotifications(friendship.id);
       console.log("Denied friend request from friendshipId:", friendship.id);
       // Update state
       setFriendsList((oldRequest) => {

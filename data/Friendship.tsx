@@ -3,6 +3,7 @@ import db from '@/firestore';
 import { fetchCurrentUser, fetchUserByUID } from '@/data/UserDataService'
 import { User, status, Friend, Notification } from '@/data/types';
 import convertToDate from '@/app/utils/convertToDate';
+import Notifications from '@/app/screens/notifications';
 
 
 const friendships_collection = 'friendships'
@@ -426,4 +427,44 @@ export const updateNotification = async (notification: Notification) => {
         console.error('Error updating and deleting notification:', error);
     }
 
+};
+export const deleteFriendshipAndNotifications= async (id: string) => {
+    try {
+        // fetch friendship document 
+        const friendshipDocRef = doc(db, friendships_collection, id);
+        const friendshipSnap = await getDoc(friendshipDocRef);
+        // confirm friendship exists 
+        if (!friendshipSnap.exists()) {
+          console.error("Friendship does not exist.");
+          return;
+        }
+        // get user ids
+        const { user1, user2 } = friendshipSnap.data();
+    
+        // notifications for both users
+        const user1NotificationRef = collection(db, "users", user1, "notifications");
+        const user2NotificationRef = collection(db, "users", user2, "notifications");
+    
+        // delete notifications created by user2 for user1
+        const notificationsUser1 = await getDocs(query(user1NotificationRef, where("postUserId", "==", user2)));
+        for (const docSnap of notificationsUser1.docs) {
+          await deleteDoc(docSnap.ref);
+        }
+        console.log("Post notifications by user2 to user1 deleted.");
+    
+        // delete notifications created by user1 for user2
+        const notificationsUser2 = await getDocs(query(user2NotificationRef, where("postUserId", "==", user1)));
+        for (const docSnap of notificationsUser2.docs) {
+          await deleteDoc(docSnap.ref);
+        }
+        console.log("Post notifications by user1 to user2 deleted.");
+
+        // dlete the friendship document
+        await deleteDoc(friendshipDocRef);
+        console.log("Friendship successfully deleted!");
+    
+        
+      } catch (error) {
+        console.error("Error deleting friendship and notifications:", error);
+      }
 };
