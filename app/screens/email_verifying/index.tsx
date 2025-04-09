@@ -9,10 +9,13 @@ import { ImageHeader } from '@/components/ImageHeader';
 import {waitForEmailVerification} from "@/auth";
 import {router} from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
+import { useTranslation } from 'react-i18next';
+import i18n from '@/components/translations/i18n';
 
 
 const emailVerifyScreen = () => {
   const { colorScheme, styles } = useTheme();
+  const { t } = useTranslation();
   const  checkingEmail = async () => {
   try {
     await waitForEmailVerification();
@@ -32,7 +35,7 @@ const emailVerifyScreen = () => {
 
       {/* Instructions */}
       <Text style={style.instructions}>
-        Please go to your email inbox and verify your email
+        {t('email_instructions')}
       </Text>
     </View>
   );

@@ -60,8 +60,7 @@ export enum Rating {
 export interface Notification {
     id: string,
     postId?: string,
-    userId?: string,
-    friendId?: string,
+    postUserId?: string,
     friendRequestUserId?: string,
     message: string,
     createdAt: Timestamp,

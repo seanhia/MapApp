@@ -73,7 +73,7 @@ const UserSettings = () => {
             return
         }
         if (!currentUser) {
-            alert('No user data found.');
+            alert(t('alert_no_user'));
             return;
         }
         const updatedUser: User = {
@@ -94,12 +94,12 @@ const UserSettings = () => {
             await writeData(updatedUser);
             await writeData(updatedLeaderboard);
             await updateFriendshipUsername(updatedUser)
-            alert('Settings updated successfully!');
+            alert(t('alert_settings_success'));
             console.log("Updated User:", updatedUser)
             console.log("Updated Leaderboard", updatedLeaderboard)
         } catch (error) {
             console.error('Failed to update settings:', error);
-            alert('Error updating settings. Please try again.');
+            alert(t('alert_error_updating_settings'));
         }
     }
     const handleDeleteAccount = async () => {

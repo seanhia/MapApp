@@ -11,5 +11,20 @@
     "change_password": "Cambiar contraseña",
     "view_tutorial": "Ver tutorial",
     "delete_account": "Eliminar cuenta",
-    "log_out": "Cerrar sesión"
+    "log_out": "Cerrar sesión",
+    "alert_no_user": "No se encontraron datos de usuario.",
+    "alert_settings_success": "¡La configuración se actualizó!",
+    "alert_error_updating_settings": "Error al actualizar la configuración. Inténtalo de nuevo.",
+
+    "new_password_not_match": "La nueva contraseña no coincide con la contraseña confirmada",
+    "password_changed": "Contraseña cambiada",
+    "error": "Se ha producido un error. Inténtalo de nuevo más tarde.",
+    "current_password": "Contraseña actual",
+    "new_password": "Nueva contraseña",
+    "confirm_password": "Confirmar Contraseña",
+    "continue": "Continuar",
+    "notification": "Notificación",
+    "ok": "De Acuerdo",
+
+    "email_instructions": "Por favor, vaya a su correo electrónico y verifique su correo electrónico."
   }

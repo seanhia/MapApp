@@ -14,11 +14,14 @@ import { useTheme } from '@/hooks/useTheme';
 import { Colors } from '@/constants/Colors'
 import { ImageHeader } from '@/components/ImageHeader';
 import {validatePassword} from "@/auth";
+import { useTranslation } from 'react-i18next';
+import i18n from '@/components/translations/i18n';
 
 
 
 const UpdatePasswordScreen = () => {
   const { colorScheme, styles } = useTheme();
+  const { t } = useTranslation();
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -32,7 +35,7 @@ const UpdatePasswordScreen = () => {
   const handlePasswordChange = async () => {
     setLoading(true);
     if (newPassword !== confirmPassword) {
-      setModalMessage('New password does not match confirmed password');
+      setModalMessage(t('new_password_not_match'));
       setModalVisible(true); //Show the modal with the appropriate message 
       setLoading(false);
       return
@@ -40,11 +43,11 @@ const UpdatePasswordScreen = () => {
     try {
       const user = await validatePassword(currentPassword);
       await updatePassword(user, newPassword)
-        setModalMessage("Password Changed")
+        setModalMessage(t('password_changed'))
         setLoading(false);
     } catch (error) {
         console.error(error); 
-        setModalMessage('An error occured. Please try again later.');
+        setModalMessage(t('error'));
         setLoading(false);
     } finally {
         setModalVisible(true); //Show the modal with the appropriate message 
@@ -68,7 +71,7 @@ const UpdatePasswordScreen = () => {
         {/* Password Input */}
         <TextInput
           style={styles.placeHolderInput}
-          placeholder="Current Password"
+          placeholder={t('current_password')}
           secureTextEntry
           autoCapitalize="none"
           onChangeText={setCurrentPassword}
@@ -77,7 +80,7 @@ const UpdatePasswordScreen = () => {
 
         <TextInput
           style={styles.placeHolderInput}
-          placeholder="New Password"
+          placeholder={t('new_password')}
           autoCapitalize="none"
           secureTextEntry
           onChangeText={setNewPassword}
@@ -86,7 +89,7 @@ const UpdatePasswordScreen = () => {
 
       <TextInput
         style={styles.placeHolderInput}
-        placeholder="Confirm Password"
+        placeholder={t('confirm_password')}
         autoCapitalize="none"
         secureTextEntry
         onChangeText={setConfirmPassword}
@@ -95,7 +98,7 @@ const UpdatePasswordScreen = () => {
 
         {/* Continue Button */}
         <TouchableOpacity style={styles.lightButton} onPress={handlePasswordChange}>
-          <Text style={styles.buttonText}>Continue</Text>
+          <Text style={styles.buttonText}>{t('continue')}</Text>
         </TouchableOpacity>
 
         {/* Modal for Feedback */}
@@ -107,13 +110,13 @@ const UpdatePasswordScreen = () => {
         >
           <View style={style.modalOverlay}>
             <View style={style.modalContent}>
-              <Text style={style.modalTitle}>Notification</Text>
+              <Text style={style.modalTitle}>{t('notification')}</Text>
               <Text style={style.modalMessage}>{modalMessage}</Text>
               <Pressable
                 style={styles.lightButton}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.boldText}>OK</Text>
+                <Text style={styles.boldText}>{t('ok')}</Text>
               </Pressable>
             </View>
           </View>
