@@ -418,9 +418,9 @@ export const fetchNotifications = async (userId: string, callback: (notification
  *  Update notifications read to true & deletes from database 
  * @param notification 
  */
-export const updateNotification = async (notification: Notification) => {
+export const updateNotification = async (userId: string, notification: Notification) => {
     try {
-        const notificationRef = doc(db, "notifications", notification.id);
+        const notificationRef = doc(db, "users", userId, "notifications", notification.id);
 
         await updateDoc(notificationRef, { read: true }); // notification has been read 
         await deleteDoc(notificationRef); // delete after its been read 

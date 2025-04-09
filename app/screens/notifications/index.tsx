@@ -7,7 +7,7 @@ import { router } from "expo-router";
 
 
 interface NotificationsProps {
-  user: User | null;
+  user: User;
 }
 
 const Notifications: React.FC<NotificationsProps> = ({ user }) => {
@@ -17,11 +17,11 @@ const Notifications: React.FC<NotificationsProps> = ({ user }) => {
 //updates notifications and displays friend's profile 
   const handleNotifictaion = async (notification: Notification) => {
     //updates notifications to true and deletes it from the database 
-    const update = await updateNotification(notification); 
+    const update = await updateNotification(user?.id, notification); 
       //view friend's profile 
       router.push({
         pathname: '/screens/profile_view',
-        params: { userId: notification.userId || notification.friendRequestUserId },
+        params: { userId: notification.postUserId || notification.friendRequestUserId },
       });
     
   };
