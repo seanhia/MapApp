@@ -104,8 +104,13 @@ export default function Home() {
     ]}>
       <SearchBar onPlaceSelected={handlePlaceChanged} />
       <View style={style.mapContainer}>
-        <MapComponent initialCenter={mapCenter} weatherIcon={weather?.iconUrl} mapId={darkMode} />
-      </View>
+      <MapComponent
+  initialCenter={mapCenter}
+  weatherIcon={weather?.iconUrl}
+  mapId={darkMode}
+  userId={userId}
+/>
+</View>
 
       {/* Floating Weather Box */}
       {weather?.iconUrl && (
@@ -147,9 +152,9 @@ const style = StyleSheet.create({
   // weather box (light box)
   weatherBox: {
     position: "absolute",
-    top: 20,
+    top: 180,
     right: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.9)", // Light effect
+    backgroundColor: "rgba(255, 255, 255, 0.4)", // Light effect
     padding: 10,
     borderRadius: 10,
     shadowColor: "#000",

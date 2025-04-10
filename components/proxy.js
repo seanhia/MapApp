@@ -1,26 +1,20 @@
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const morgan = require('morgan');
 
 const app = express();
 const port = 3000;
 
-// Logging for debugging
-app.use(morgan('dev'));
-
 // Proxy configuration
 const apiProxy = createProxyMiddleware({
   target: 'https://maps.googleapis.com',
-  changeOrigin: true,
+  changeOrigin: true, // Needed for Google Maps
   pathRewrite: {
-    '^/proxy': '/maps/api', 
+    '^/proxy': '/maps/api', // Rewrite the path to match Google Maps API
   },
-  onProxyReq: (proxyReq, req, res) => {
-    console.log('Proxying request to:', proxyReq.path);
-  },
-  onError: (err, req, res) => {
-    console.error('Proxy error:', err);
-    res.status(500).send('Proxy error');
+  onProxyRes: function (proxyRes, req, res) {
+    // Add CORS header to allow access from http://localhost:8081
+    proxyRes.headers['Access-Control-Allow-Origin'] = 'http://localhost:8081';
+    proxyRes.headers['Access-Control-Allow-Methods'] = 'GET,OPTIONS';
   },
 });
 
@@ -28,5 +22,5 @@ const apiProxy = createProxyMiddleware({
 app.use('/proxy', apiProxy);
 
 app.listen(port, () => {
-  console.log(`Proxy server running on http://localhost:${port}`);
+  console.log(Proxy server listening on port ${port});
 });

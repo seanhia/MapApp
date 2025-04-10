@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View, Text } from 'react-native';
-import { GoogleMap, LoadScriptNext, Marker, useLoadScript } from "@react-google-maps/api"; // Web imports
+import { View, Text } from "react-native";
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import { fetchLocations } from "@/firestore"; // Ensure this returns a Promise<Location[]>
 
-const googleMapsAPIKey = "AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c"; 
+const googleMapsAPIKey = "AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c";
 
 const containerStyle = {
   width: "100%",
@@ -12,26 +13,24 @@ const containerStyle = {
 interface MapComponentProps {
   initialCenter: { lat: number; lng: number };
   mapId: string;
-  weatherIcon?: string;
+  userId: string;
 }
 
-const fixedPoints = [
-  { lat: 37.7749, lng: -122.4194 }, // Example point (San Francisco)
-];
+interface Location {
+  lat: number;
+  lng: number;
+}
 
-const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weatherIcon }) => {
+const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, userId }) => {
   const [googleMaps, setGoogleMaps] = useState<typeof google | null>(null);
-  const [cutoutPosition, setCutoutPosition] = useState({ x: "50%", y: "50%" });
-  const [cutoutPosition2, setCutoutPosition2] = useState({ x: "50%", y: "50%" });
-
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [cutoutPositions, setCutoutPositions] = useState<{ x: string; y: string }[]>([]);
   const [radiusInPixels, setRadiusInPixels] = useState(0);
 
   const mapRef = useRef<google.maps.Map | null>(null);
   const overlayRef = useRef<google.maps.OverlayView | null>(null);
 
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: googleMapsAPIKey,
-  });
+  const { isLoaded } = useLoadScript({ googleMapsApiKey: googleMapsAPIKey });
 
   useEffect(() => {
     if (isLoaded && window.google) {
@@ -39,98 +38,71 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weath
     }
   }, [isLoaded]);
 
-  // Handle undefined initialCenter values
   useEffect(() => {
-    if (!initialCenter?.lat || !initialCenter?.lng) {
-      console.error("Invalid initialCenter prop");
-      return;
-    }
-  }, [initialCenter]);
+    if (!userId) return;
+    fetchLocations(userId).then((data) => {
+      setLocations(data.map(loc => ({ lat: loc.latitude, lng: loc.longitude })));
+    });
+  }, [userId]);
+  
 
-  // Calculate radius in pixels for a 100m area based on zoom
   const calculateRadiusInPixels = (zoom: number, lat: number) => {
     const metersPerPixel = (40008000 * Math.cos(lat * Math.PI / 180)) / (Math.pow(2, zoom) * 256);
-    return 100 / metersPerPixel; // 100 meters in pixels
+    return 100 / metersPerPixel;
   };
 
-  // Update overlay position and mask
   const updateCircle = useCallback(() => {
-    if (!googleMaps || !mapRef.current || !initialCenter?.lat || !initialCenter?.lng) return;
+    if (!googleMaps || !mapRef.current || !initialCenter) return;
 
     const map = mapRef.current;
     const zoom = map.getZoom();
     const lat = initialCenter.lat;
-
-    // Calculate the radius in pixels for 100 meters at the current zoom level
     const newRadiusInPixels = calculateRadiusInPixels(zoom, lat);
     setRadiusInPixels(newRadiusInPixels);
 
-    // Cleanup existing overlay before creating a new one
     if (overlayRef.current) {
       overlayRef.current.setMap(null);
       overlayRef.current = null;
     }
 
     class CustomOverlay extends googleMaps.maps.OverlayView {
-      private div: HTMLDivElement | null = null;
-
-      onAdd() {
-        this.div = document.createElement("div");
-        this.div.style.position = "absolute";
-        this.div.style.background = "rgba(255, 0, 0, 0.5)";
-        const panes = this.getPanes();
-        panes?.overlayLayer.appendChild(this.div);
-      }
-
+      onAdd() {}
       draw() {
-        if (!this.div) return;
-
         const projection = this.getProjection();
+        const positions: { x: string; y: string }[] = [];
 
-        const latLng = new googleMaps.maps.LatLng(initialCenter.lat, initialCenter.lng);
-        const point = projection.fromLatLngToContainerPixel(latLng);
+        locations.forEach((loc) => {
+          const point = projection.fromLatLngToContainerPixel(
+            new googleMaps.maps.LatLng(loc.lat, loc.lng)
+          );
+          if (point) {
+            positions.push({ x: `${point.x}px`, y: `${point.y}px` });
+          }
+        });
 
-        if (point) {
-          this.div.style.left = `${point.x - newRadiusInPixels / 2}px`;
-          this.div.style.top = `${point.y - newRadiusInPixels / 2}px`;
-
-          setCutoutPosition({
-            x: `${point.x}px`,
-            y: `${point.y}px`,
-          });
-        }
+        setCutoutPositions(positions);
       }
-
-      onRemove() {
-        this.div?.remove();
-        this.div = null;
-      }
+      onRemove() {}
     }
 
     const overlay = new CustomOverlay();
     overlay.setMap(map);
     overlayRef.current = overlay;
-  }, [googleMaps, initialCenter]);
+  }, [googleMaps, initialCenter, locations]);
 
   useEffect(() => {
     if (!googleMaps || !mapRef.current) return;
-    const map = mapRef.current;
 
     updateCircle();
 
-    const zoomListener = map.addListener("zoom_changed", updateCircle);
-    const dragListener = map.addListener("dragend", updateCircle);
+    const zoomListener = mapRef.current.addListener("zoom_changed", updateCircle);
+    const dragListener = mapRef.current.addListener("dragend", updateCircle);
 
     return () => {
       google.maps.event.removeListener(zoomListener);
       google.maps.event.removeListener(dragListener);
-
-      if (overlayRef.current) {
-        overlayRef.current.setMap(null);
-        overlayRef.current = null;
-      }
     };
-  }, [googleMaps, initialCenter, updateCircle]);
+  }, [googleMaps, updateCircle]);
 
   const options = {
     mapId: mapId,
@@ -144,19 +116,18 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weath
   return (
     <View style={{ position: "absolute", width: "100%", height: "90%" }}>
       <GoogleMap
-       mapContainerStyle={containerStyle}
-       center={initialCenter}
-       zoom={17}
-       options={options}
-       onLoad={(map) => (mapRef.current = map)}
-     >
-       <Marker position={initialCenter} />
-       {fixedPoints.map((point, index) => (
-         <Marker key={index} position={point} />
-       ))}
-     </GoogleMap>
+        mapContainerStyle={containerStyle}
+        center={initialCenter}
+        zoom={17}
+        options={options}
+        onLoad={(map) => (mapRef.current = map)}
+      >
+        <Marker position={initialCenter} />
+        {locations.map((point, index) => (
+          <Marker key={index} position={point} />
+        ))}
+      </GoogleMap>
 
-      {/* Overlay with circular cutout */}
       <View
         style={{
           position: "absolute",
@@ -164,14 +135,36 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, weath
           left: 0,
           width: "100%",
           height: "100%",
-          backgroundColor: "rgba(105, 105, 105, .7)",
           zIndex: 1,
           pointerEvents: "none",
-          maskImage: `radial-gradient(circle ${radiusInPixels}px at ${cutoutPosition.x} ${cutoutPosition.y}, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 60%)`,
-          maskImage2: `radial-gradient(circle ${radiusInPixels}px at ${cutoutPosition2.x} ${cutoutPosition2.y}, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 60%)`,
-          WebkitMaskImage: `radial-gradient(circle ${radiusInPixels}px at ${cutoutPosition.x} ${cutoutPosition.y}, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 60%)`, // For Safari compatibility
         }}
-      />
+      >
+        <svg width="100%" height="100%" style={{ position: "absolute", top: 0, left: 0 }}>
+          <defs>
+            <mask id="cutout-mask">
+              <rect x="0" y="0" width="100%" height="100%" fill="white" />
+              {cutoutPositions.map((pos, index) => (
+                <circle
+                  key={index}
+                  cx={parseFloat(pos.x)}
+                  cy={parseFloat(pos.y)}
+                  r={radiusInPixels}
+                  fill="black"
+                />
+              ))}
+            </mask>
+          </defs>
+
+          <rect
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            fill="rgba(105, 105, 105, 0.7)"
+            mask="url(#cutout-mask)"
+          />
+        </svg>
+      </View>
     </View>
   );
 };
