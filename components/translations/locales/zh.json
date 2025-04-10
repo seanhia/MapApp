@@ -1,0 +1,31 @@
+{
+    "settings": "设置",
+    "private_account": "私人账户",
+    "dark_mode": "深色模式",
+    "username": "用户名",
+    "bio": "简介",
+    "email": "电子邮件",
+    "phone_number": "电话号码",
+    "choose_language": "选择你的语言",
+    "submit_changes": "提交更改",
+    "change_password": "更改密码",
+    "view_tutorial": "查看教程",
+    "delete_account": "删除账户",
+    "log_out": "退出登录",
+    "alert_no_user": "未找到用户数据。",
+    "alert_settings_success": "设置更新成功!",
+    "alert_error_updating_settings": "更新设置时出错。请重试",
+
+    "new_password_not_match": "新密码与确认密码不匹配",
+    "password_changed": "密码已更改",
+    "error": "发生错误。请稍后重试",
+    "current_password": "当前密码",
+    "new_password": "新密码",
+    "confirm_password": "确认密码",
+    "continue": "继续",
+    "notification": "通知",
+    "ok": "好的",
+
+    "email_instructions": "请前往您的电子邮件收件箱并验证您的电子邮件"
+  }
+  

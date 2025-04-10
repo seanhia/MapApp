@@ -1,0 +1,34 @@
+{
+    "settings": "Settings",
+    "private_account": "Private Account",
+    "dark_mode": "Dark Mode",
+    "username": "Username",
+    "bio": "Bio",
+    "email": "Email",
+    "phone_number": "Phone Number",
+    "choose_language": "Choose Your Language",
+    "submit_changes": "Submit Changes",
+    "change_password": "Change Password",
+    "view_tutorial": "View Tutorial",
+    "delete_account": "Delete Account",
+    "log_out": "Log Out",
+    "alert_no_user": "No user data found.",
+    "alert_settings_success": "Settings updated successfully!",
+    "alert_error_updating_settings": "Error updating settings. Please try again.",
+
+    "new_password_not_match": "New password does not match confirmed password",
+    "password_changed": "Password Changed",
+    "error": "An error occured. Please try again later",
+    "current_password": "Current Password",
+    "new_password": "New Password",
+    "confirm_password": "Confirm Password",
+    "continue": "Continue",
+    "notification": "Notification",
+    "ok": "OK",
+
+    "email_instructions": "Please go to your email inbox and verify your email",
+
+    "valid_email": "Please enter a valid email address.",
+    "password_reset": "Password reset email sent!",
+    "email_associated": "Enter the email associated with your account and we'll send you a link to reset your password."
+  }

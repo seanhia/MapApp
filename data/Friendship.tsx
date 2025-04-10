@@ -1,4 +1,4 @@
-import { doc, addDoc, getDoc, collection, setDoc, getDocs, query, orderBy, where, updateDoc, deleteDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
+import { doc, addDoc, getDoc, collection, setDoc, getDocs, query, orderBy, where, updateDoc, deleteDoc, serverTimestamp, onSnapshot, writeBatch } from 'firebase/firestore';
 import db from '@/firestore';
 import { fetchCurrentUser, fetchUserByUID } from '@/data/UserDataService'
 import { User, status, Friend, Notification } from '@/data/types';
@@ -325,6 +325,7 @@ export const sendPostNotifications = async (userId: string, postId: string) => {
         }
 
         const friends = await FriendQueryBasedOnUserId(userId); //fetch friends list 
+        console.log(friends);
         if (!friends || friends.length === 0) {
             console.log("No friends found.");
             return;
@@ -417,9 +418,9 @@ export const fetchNotifications = async (userId: string, callback: (notification
  *  Update notifications read to true & deletes from database 
  * @param notification 
  */
-export const updateNotification = async (notification: Notification) => {
+export const updateNotification = async (userId: string, notification: Notification) => {
     try {
-        const notificationRef = doc(db, "notifications", notification.id);
+        const notificationRef = doc(db, "users", userId, "notifications", notification.id);
 
         await updateDoc(notificationRef, { read: true }); // notification has been read 
         await deleteDoc(notificationRef); // delete after its been read 
@@ -428,43 +429,70 @@ export const updateNotification = async (notification: Notification) => {
     }
 
 };
-export const deleteFriendshipAndNotifications= async (id: string) => {
+export const deleteFriendshipAndNotifications = async (id: string) => {
     try {
         // fetch friendship document 
         const friendshipDocRef = doc(db, friendships_collection, id);
         const friendshipSnap = await getDoc(friendshipDocRef);
         // confirm friendship exists 
         if (!friendshipSnap.exists()) {
-          console.error("Friendship does not exist.");
-          return;
+            console.error("Friendship does not exist.");
+            return;
         }
         // get user ids
         const { user1, user2 } = friendshipSnap.data();
-    
+
         // notifications for both users
         const user1NotificationRef = collection(db, "users", user1, "notifications");
         const user2NotificationRef = collection(db, "users", user2, "notifications");
-    
+
         // delete notifications created by user2 for user1
         const notificationsUser1 = await getDocs(query(user1NotificationRef, where("postUserId", "==", user2)));
         for (const docSnap of notificationsUser1.docs) {
-          await deleteDoc(docSnap.ref);
+            await deleteDoc(docSnap.ref);
         }
         console.log("Post notifications by user2 to user1 deleted.");
-    
+
         // delete notifications created by user1 for user2
         const notificationsUser2 = await getDocs(query(user2NotificationRef, where("postUserId", "==", user1)));
         for (const docSnap of notificationsUser2.docs) {
-          await deleteDoc(docSnap.ref);
+            await deleteDoc(docSnap.ref);
         }
         console.log("Post notifications by user1 to user2 deleted.");
 
         // dlete the friendship document
         await deleteDoc(friendshipDocRef);
         console.log("Friendship successfully deleted!");
-    
-        
-      } catch (error) {
+
+
+    } catch (error) {
         console.error("Error deleting friendship and notifications:", error);
-      }
+    }
+};
+
+export const deletePostNotification = async (userId: string, postId: string) => {
+    if (!userId) {
+        throw new Error("User ID is required to delete post notification.");
+    }
+
+    try {
+        const friends = await FriendQueryBasedOnUserId(userId); //fetch friends list 
+        if (!friends || friends.length === 0) {
+            console.log("No friends found.");
+            return;
+        }
+
+        for (const friend of friends) {
+            const notificationRef = collection(db, "users", friend.friendId, "notifications");
+            const snapshot = await getDocs(query(notificationRef, where("postId", "==", postId)));
+
+           for (const docSnap of snapshot.docs) {
+                await deleteDoc(docSnap.ref);
+            }
+            console.log(`Deleted notifications for post ${postId}`);
+        }
+
+    } catch (error) {
+        console.error("Error deleting post notifications:", error);
+    }
 };

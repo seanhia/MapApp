@@ -1,9 +1,9 @@
 import { Post } from '@/data/types'
 import db from '@/firestore';
-import { addDoc, doc, collection, query, orderBy, serverTimestamp, onSnapshot, updateDoc, deleteDoc} from 'firebase/firestore';
+import { addDoc, doc, collection, query, orderBy, serverTimestamp, onSnapshot, updateDoc, deleteDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { storage } from '@/firebase';
-
+import { deletePostNotification } from './Friendship';
 /**
  * Save post 
  * returns postId
@@ -15,7 +15,7 @@ export const savePost = async (
     location: string,
     review: string,
     rating: number,
-): Promise< string | null > => {
+): Promise<string | null> => {
     if (!userId) {
         throw new Error("User ID is required to savepost.");
     }
@@ -32,7 +32,7 @@ export const savePost = async (
         const userDocRef = doc(db, "users", userId); // reference to user's document 
         const postRef = collection(userDocRef, "posts"); //subcollection
 
-        await addDoc(postRef, {
+        const docRef = await addDoc(postRef, {
             location,
             review,
             published: true,
@@ -42,7 +42,7 @@ export const savePost = async (
             rating,
         });
         console.log(`Saved Post.`)
-        return postRef.id; 
+        return docRef.id;
     } catch (error) {
         console.error("Error saving post: ", error);
         throw error;
@@ -62,8 +62,8 @@ export const loadPosts = async (userId: string, callback: (posts: Post[]) => voi
         const userDocRef = collection(db, "users", userId, "posts");
         const q = query(userDocRef, orderBy("createdAt", "desc")); //newer post at the top 
 
-        const unsubscribe = onSnapshot(q, (snapshot) =>{
-            const posts: Post[] = snapshot.docs.map((doc) =>({
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const posts: Post[] = snapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
             })) as Post[];
@@ -90,8 +90,8 @@ export const updatePost = async (userId: string, postId: string, newLocation: st
             location: newLocation,
             review: newReview,
             rating: newRating,
-          });
-          console.log('Post updated successfully');
+        });
+        console.log('Post updated successfully');
 
     } catch (error) {
         console.error("Error updating posts :", error);
@@ -101,17 +101,21 @@ export const updatePost = async (userId: string, postId: string, newLocation: st
 
 export const deletePost = async (userId: string, postId: string, imageUrl: string) => {
     try {
-      const postRef = doc(db, "users", userId, "posts", postId); // reference doc 
-      await deleteDoc(postRef);
 
-      if (imageUrl) {
-        const imageRef = ref(storage, imageUrl);
-        await deleteObject(imageRef);
-    }
+        await deletePostNotification(userId, postId); // delete any notification associated with the post 
 
-      console.log('Post deleted successfully');
+        const postRef = doc(db, "users", userId, "posts", postId); // reference doc 
+        await deleteDoc(postRef);
+
+        if (imageUrl) {
+            const imageRef = ref(storage, imageUrl);
+            await deleteObject(imageRef);
+        }
+
+        console.log('Post deleted successfully');
     } catch (error) {
-      console.error('Error deleting post:', error);
+        console.error('Error deleting post:', error);
     }
-  };
-  
+};
+
+

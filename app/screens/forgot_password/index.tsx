@@ -13,12 +13,14 @@ import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import { useTheme } from '@/hooks/useTheme';
 import { ImageHeader } from '@/components/ImageHeader';
 import { Colors } from '@/constants/Colors';
+import { useTranslation } from 'react-i18next';
 
 
 
 const ForgotPassword = () => {
   const { colorScheme, styles } = useTheme();
-  
+  const { t } = useTranslation();
+
   const [email, setEmail] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
@@ -27,7 +29,7 @@ const ForgotPassword = () => {
   const handleContinue = async () => {
     // Simulate email sending (add actual email sending logic here)
     if (!email) {
-        setModalMessage('Please enter a valid email address.');
+        setModalMessage(t('valid_email'));
         setModalVisible(true);
         return; 
     }
@@ -44,10 +46,10 @@ const ForgotPassword = () => {
         //     setModalMessage('A password reset link has been sent to ${email}.');
         // }
         await sendPasswordResetEmail(auth, email);
-        setModalMessage("Password reset email sent!")
+        setModalMessage(t('password_reset'))
     } catch (error) {
         console.error(error); 
-        setModalMessage('An error occured. Please try again later.');
+        setModalMessage(t('error'));
     } finally {
         setModalVisible(true); //Show the modal with the appropriate message 
     }
@@ -63,13 +65,13 @@ const ForgotPassword = () => {
 
         {/* Instructions */}
         <Text style={style.instructions}>
-          Enter the email associated with your account and we'll send you a link to reset your password.
+          {t('email_associated')}
         </Text>
 
         {/* Email Input */}
         <TextInput
           style={styles.placeHolderInput}
-          placeholder="Email"
+          placeholder={t('email')}
           keyboardType="email-address"
           autoCapitalize="none"
           onChangeText={setEmail}

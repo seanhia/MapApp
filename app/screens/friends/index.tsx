@@ -184,7 +184,7 @@ const Friends = () => {
           />
           </ScrollView>
         ) : (
-          <Text>no pending requests</Text>
+          <Text></Text>
         )}
       </ScrollView>
       )}

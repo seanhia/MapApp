@@ -141,7 +141,7 @@ export const fetchUsersFavLocation = async (id: string): Promise<FavoriteLoc[] |
   try {
     const favLocactionsRef = collection(db, 'users', id, 'favorite'); 
     const favLocationsSnap = await getDocs(favLocactionsRef)
-    const favList =  [{}]
+    let favList: FavoriteLoc[] = []
     favLocationsSnap.forEach((location) => {
       favList.push(location.data())
     })
@@ -198,10 +198,10 @@ export const writeData = async (data: User | Leaderboard | FavoriteLoc): Promise
       collection_name = 'users'
     } else if (isLeaderboard(data)) {
       collection_name = 'leaderboard_entry'
-    } else if (isFavoriteLoc(data)) {
-      collection_name = 'favorite'
+    // } else if (isFavoriteLoc(data)) {
+    //   collection_name = 'favorite'
     } else {
-      throw new Error('Invalid data type. Expected User or Leaderboard.');
+      throw new Error('Invalid data type. Expected User, Leaderboard, or FavoriteLoc.');
     }
     console.log('Detected data type:', collection_name);
 
@@ -211,6 +211,31 @@ export const writeData = async (data: User | Leaderboard | FavoriteLoc): Promise
     console.error(`Error writing ${collection_name} data:`, error);
   }
 };
+
+export const writeFavLocation = async (
+  userId: string, 
+  dataOrId: FavoriteLoc | string, 
+  action: "add" | "remove"): 
+  Promise<void> => {
+    try {
+      const docId = typeof dataOrId === "string" ? dataOrId : dataOrId.id;
+
+      const docRef = doc(db, 'users', userId, 'favorite', docId);
+      if (action === "add") {
+        if (typeof dataOrId === "object") {
+          await setDoc(docRef, dataOrId, { merge: true });
+          console.log("Favorite location added/updated:", dataOrId);
+        } else {
+          console.error("Invalid data provided for adding a favorite location.");
+        }
+      } else if (action === "remove") {
+        await deleteDoc(docRef);
+        console.log("Favorite location removed:", docId);
+      }
+    } catch (error) {
+      console.error("Error updating favorite location:", error);
+    }
+  }
 
 
 /**
