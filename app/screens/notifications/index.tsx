@@ -60,6 +60,7 @@ const Notifications: React.FC<NotificationsProps> = ({ user }) => {
         <FlatList
           data={notifications}
           keyExtractor={(item) => item.id}
+          scrollEnabled={true}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handleNotifictaion(item)}>
               <Text style={[styles.text, { fontWeight: '100' }]}>{item.message}</Text>

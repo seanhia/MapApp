@@ -71,11 +71,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
     
                         <View style={styles.modalOverlay}>
                             <View style={styles.notificationDrawer}>
-                                <ScrollView>
                                     <Notifications 
                                     user = {user}/>
-                                </ScrollView>
-                                
                                 <TouchableOpacity style={styles.button}
                                     onPress={closeModal}>
                                     <Text style={{ color: 'white' }}>Close</Text>
