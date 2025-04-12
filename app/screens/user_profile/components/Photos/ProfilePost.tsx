@@ -132,6 +132,7 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         numColumns={3}
+        scrollEnabled={false}
         contentContainerStyle={styles.scrollContainer}
         ListEmptyComponent={<Text style={styles.warningMessage}>No posts to display.</Text>}
       />
