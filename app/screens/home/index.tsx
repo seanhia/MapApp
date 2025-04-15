@@ -12,6 +12,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { CustomPin } from './components/CustomPin'
 import { Favorites } from './components/Favorites';
 import { saveStats } from '@/firestore';
+import { nearbySearch } from '@/data/MapData';
 
 const WEATHER_API_KEY = "c91505cb2ca1c66df5e70feade5e8d06"; // Replace with your API key
 
@@ -51,9 +52,17 @@ export default function Home() {
       console.error("Error fetching autocomplete:", error);
     }
   };
+
   
 
   useEffect(() => {
+    if (location?.coords) {
+      nearbySearch(location.coords.latitude, location.coords.longitude)
+          .then(results => {
+              // Do something with results
+              console.log('Nearby places:', results);
+          });
+    }
     if (location) {
       console.log("Real-time location:", location.coords.latitude, location.coords.longitude);
       setMapCenter({ lat: location.coords.latitude, lng: location.coords.longitude });
