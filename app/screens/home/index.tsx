@@ -11,6 +11,7 @@ import { Colors } from '@/constants/Colors';
 import { useTheme } from '@/hooks/useTheme'; 
 import { CustomPin } from './components/CustomPin'
 import { Favorites } from './components/Favorites';
+import { Recommendations } from './components/Recommendations';
 import { saveStats } from '@/firestore';
 import { nearbySearch } from '@/data/MapData';
 
@@ -60,7 +61,7 @@ export default function Home() {
       nearbySearch(location.coords.latitude, location.coords.longitude)
           .then(results => {
               // Do something with results
-              console.log('Nearby places:', results);
+              console.log('Nearby places:', results[0].id);
           });
     }
     if (location) {
@@ -131,6 +132,9 @@ export default function Home() {
       <Favorites 
         userId={userId}
       />  
+      <Recommendations
+        userId={userId}
+      />
 
       {/*  Weather Details  */}
       {isExpanded && weather?.details && (
