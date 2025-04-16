@@ -445,6 +445,7 @@ export const deleteFriendshipAndNotifications = async (id: string) => {
         // notifications for both users
         const user1NotificationRef = collection(db, "users", user1, "notifications");
         const user2NotificationRef = collection(db, "users", user2, "notifications");
+        
 
         // delete notifications created by user2 for user1
         const notificationsUser1 = await getDocs(query(user1NotificationRef, where("postUserId", "==", user2)));
@@ -454,11 +455,19 @@ export const deleteFriendshipAndNotifications = async (id: string) => {
         console.log("Post notifications by user2 to user1 deleted.");
 
         // delete notifications created by user1 for user2
-        const notificationsUser2 = await getDocs(query(user2NotificationRef, where("postUserId", "==", user1)));
+        const notificationsUser2 = await getDocs(query(user2NotificationRef, where("postUserId", "==", user1 )));
         for (const docSnap of notificationsUser2.docs) {
             await deleteDoc(docSnap.ref);
         }
         console.log("Post notifications by user1 to user2 deleted.");
+
+        // delete friendship request 
+        const friendRequestNotifications = await getDocs(query(user2NotificationRef, where("friendRequestUserId", "==", user1 )));
+        for (const docSnap of friendRequestNotifications.docs) {
+            await deleteDoc(docSnap.ref);
+        }
+        console.log("Friend Request notifications by user1 to user2 deleted.");
+
 
         // dlete the friendship document
         await deleteDoc(friendshipDocRef);
