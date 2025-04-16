@@ -497,46 +497,6 @@ export const deletePostNotification = async (userId: string, postId: string) => 
     }
 };
 
-const User1FromFriendship = async (userId: string) => {
-    try {
-        const friendshipDocRef = doc(db, "friendships", userId);
-        const docSnap = await getDoc(friendshipDocRef);
-
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            const user1 = data.user1;
-
-            console.log("user1:", user1);
-            return user1;
-        } else {
-            console.error("No friendship document exists!");
-            return null;
-        }
-    } catch (error) {
-        console.error("Error retrieving user1:", error);
-        return null;
-    }
-};
-const User2FromFriendship = async (userId: string) => {
-    try {
-        const friendshipDocRef = doc(db, "friendships", userId);
-        const docSnap = await getDoc(friendshipDocRef);
-
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            const user2 = data.user2;
-
-            console.log("user2:", user2);
-            return user2;
-        } else {
-            console.error("No friendship document exists!");
-            return null;
-        }
-    } catch (error) {
-        console.error("Error retrieving user1:", error);
-        return null;
-    }
-};
 
 {/** UPDATE freind request and deletes friend request notification */ }
 
@@ -548,24 +508,23 @@ export const AcceptFriendshipAndDeleteNotification = async (friendShipId: string
         status: status[1], // approved
     };
     try {
-        
-        const friendshipDoc = doc(db, friendships_collection, friendShipId);
+        // fetch friendship document 
+        const friendshipDocRef = doc(db, friendships_collection, friendShipId);
 
-        await updateDoc(friendshipDoc, data);
+        await updateDoc(friendshipDocRef, data);
         console.log('Friendship accepted!');
 
-        const userId = await User2FromFriendship(friendShipId);
-        if (!userId) {
-            throw new Error("Could not retrieve friendId.");
+        const friendshipSnap = await getDoc(friendshipDocRef);
+        // confirm friendship exists 
+        if (!friendshipSnap.exists()) {
+            console.error("Friendship does not exist.");
+            return;
         }
+        // get user ids
+        const { user1, user2 } = friendshipSnap.data();
 
-        const friendId = await User1FromFriendship(friendShipId);
-        if (!friendId) {
-            throw new Error("Could not retrieve friendId.");
-        }
-
-        const notificationRef = collection(db, "users", userId, "notifications"); // reference to user's notifications
-        const snapshot = await getDocs(query(notificationRef, where("friendRequestUserId", "==", friendId)));
+        const notificationRef = collection(db, "users", user2, "notifications"); // reference to user's notifications
+        const snapshot = await getDocs(query(notificationRef, where("friendRequestUserId", "==", user1)));
 
         for (const docSnap of snapshot.docs) {
             await deleteDoc(docSnap.ref);
