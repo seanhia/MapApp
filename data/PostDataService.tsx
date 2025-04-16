@@ -1,6 +1,6 @@
 import { Post } from '@/data/types'
 import db from '@/firestore';
-import { addDoc, doc, collection, query, orderBy, serverTimestamp, onSnapshot, updateDoc, deleteDoc } from 'firebase/firestore';
+import { addDoc, doc, collection, query, orderBy, serverTimestamp, onSnapshot, updateDoc, deleteDoc, getDoc} from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { storage } from '@/firebase';
 import { deletePostNotification } from './Friendship';
@@ -42,6 +42,16 @@ export const savePost = async (
             rating,
         });
         console.log(`Saved Post.`)
+
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+            const currentPoints = userDoc.data().points || 0; // get current points 
+            await updateDoc(userDocRef, {
+                points: currentPoints + 10, //update points by 10 
+            });
+            console.log(`User points updated: +10`);
+        }
+
         return docRef.id;
     } catch (error) {
         console.error("Error saving post: ", error);
