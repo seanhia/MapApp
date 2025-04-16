@@ -46,7 +46,7 @@ export const createFriendship = async (friend: User) => {
 
         // Write the data into Firestore
         await setDoc(newFriendshipRef, data);
-        await sendFriendNotification(currentUser.id, friend.id);
+        await sendFriendNotification(currentUser.id, friend.id); // send notification 
         alert('Friend Request Sent!')
         console.log('Friendship successfully initiated!');
 
@@ -486,7 +486,7 @@ export const deletePostNotification = async (userId: string, postId: string) => 
             const notificationRef = collection(db, "users", friend.friendId, "notifications");
             const snapshot = await getDocs(query(notificationRef, where("postId", "==", postId)));
 
-           for (const docSnap of snapshot.docs) {
+            for (const docSnap of snapshot.docs) {
                 await deleteDoc(docSnap.ref);
             }
             console.log(`Deleted notifications for post ${postId}`);
@@ -494,5 +494,88 @@ export const deletePostNotification = async (userId: string, postId: string) => 
 
     } catch (error) {
         console.error("Error deleting post notifications:", error);
+    }
+};
+
+const User1FromFriendship = async (userId: string) => {
+    try {
+        const friendshipDocRef = doc(db, "friendships", userId);
+        const docSnap = await getDoc(friendshipDocRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            const user1 = data.user1;
+
+            console.log("user1:", user1);
+            return user1;
+        } else {
+            console.error("No friendship document exists!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error retrieving user1:", error);
+        return null;
+    }
+};
+const User2FromFriendship = async (userId: string) => {
+    try {
+        const friendshipDocRef = doc(db, "friendships", userId);
+        const docSnap = await getDoc(friendshipDocRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            const user2 = data.user2;
+
+            console.log("user2:", user2);
+            return user2;
+        } else {
+            console.error("No friendship document exists!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error retrieving user1:", error);
+        return null;
+    }
+};
+
+{/** UPDATE freind request and deletes friend request notification */ }
+
+export const AcceptFriendshipAndDeleteNotification = async (friendShipId: string,) => {
+    if (!friendShipId) {
+        throw new Error("friendship ID is required to delete post notification.");
+    }
+    const data = {
+        status: status[1], // approved
+    };
+    try {
+        
+        const friendshipDoc = doc(db, friendships_collection, friendShipId);
+
+        await updateDoc(friendshipDoc, data);
+        console.log('Friendship accepted!');
+
+        const userId = await User2FromFriendship(friendShipId);
+        if (!userId) {
+            throw new Error("Could not retrieve friendId.");
+        }
+
+        const friendId = await User1FromFriendship(friendShipId);
+        if (!friendId) {
+            throw new Error("Could not retrieve friendId.");
+        }
+
+        const notificationRef = collection(db, "users", userId, "notifications"); // reference to user's notifications
+        const snapshot = await getDocs(query(notificationRef, where("friendRequestUserId", "==", friendId)));
+
+        for (const docSnap of snapshot.docs) {
+            await deleteDoc(docSnap.ref);
+            console.log("Deleted:", docSnap.id);
+        }
+        
+        console.log(`Deleted friend request notification after accepting friend request`);
+
+
+    } catch (error) {
+        console.error('Error accepting friendship:', error);
     }
 };

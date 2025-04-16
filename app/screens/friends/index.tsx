@@ -14,7 +14,7 @@ import FooterBar from "@/components/FooterBar";
 import { User, Friend } from "@/data/types";
 
 import { fetchAllUsers } from "@/data/UserDataService";
-import { PendingQuery, FriendQuery, deleteFriendshipAndNotifications } from "@/data/Friendship";
+import { PendingQuery, FriendQuery, deleteFriendshipAndNotifications, AcceptFriendshipAndDeleteNotification } from "@/data/Friendship";
 import { AcceptFriendship, DeleteFriendship } from "@/data/Friendship";
 
 import sharedStyles from "@/constants/sharedStyles";
@@ -73,7 +73,7 @@ const Friends = () => {
   const handleAccept = async (friendship: Friend) => {
     console.log("Accepted friend request from friendshipId:", friendship.id);
     try {
-      await AcceptFriendship(friendship.id); // Update friendship status in Firestore
+      await AcceptFriendshipAndDeleteNotification(friendship.id); // Update friendship status in Firestore
 
       // Update state to remove the accepted request from the UI
       setFriendsList([...friendsList, friendship]);
