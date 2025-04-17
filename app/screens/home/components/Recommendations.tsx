@@ -38,7 +38,7 @@ export const Recommendations = ({userId}: Props)  => {
 
     
     return (
-    <view>
+    <View>
       <TouchableOpacity
       style={style.recBox}
       onPress={() => setModalVisible(true)}
@@ -65,7 +65,7 @@ export const Recommendations = ({userId}: Props)  => {
             <Text style={styles.buttonText}>Close</Text>
         </Pressable>
         </Modal>
-    </view>
+    </View>
     );
 }
 const style = StyleSheet.create({
