@@ -1,6 +1,7 @@
 import React, {Text, Image, View, StyleSheet} from 'react-native'
 import sharedStyles from '@/constants/sharedStyles'
 import { useTheme } from '@/hooks/useTheme'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export type ImageHeaderProps =  {
     image: string; 
@@ -17,7 +18,7 @@ export function ImageHeader( {
     
 
     return (
-        // <View style={style === 'half' ? styles.half : styles.full}>
+        <SafeAreaView style={{ flex: 1 }}>
         <View>
             <Text style={styles.title}>
                 {text}
@@ -27,5 +28,6 @@ export function ImageHeader( {
                 source={image} // Directly use the passed `require()`
             />
         </View>
+        </SafeAreaView>
     )
 }

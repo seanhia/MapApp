@@ -6,7 +6,6 @@ import { User, Post } from "@/data/types";
 import { fetchUserByUID } from "@/data/UserDataService";
 import { useLocalSearchParams } from "expo-router";
 import FooterBar from "@/components/FooterBar";
-// import { fetchPostbyAuthor } from "@/data/PostDataService";
 import FriendProfile from '@/app/screens/profile_view/components/FriendProfile'
 import {MapButton} from '@/app/screens/profile_view/components/MapButton'
 
@@ -24,7 +23,7 @@ const ProfileView = () => {
  
   useEffect(() => {
     const loadUser = async () => {
-      if (!userId) return; // Ensure userId exists
+      if (!userId) return; 
       try {
         const userData = await fetchUserByUID(userId as string);
         setUser(userData);
@@ -33,7 +32,7 @@ const ProfileView = () => {
       }
     };
     loadUser();
-  }, [userId]); // Dependency to re-fetch if the userId changes
+  }, [userId]);
 
 
   

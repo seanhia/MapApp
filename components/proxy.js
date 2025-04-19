@@ -22,5 +22,5 @@ const apiProxy = createProxyMiddleware({
 app.use('/proxy', apiProxy);
 
 app.listen(port, () => {
-  console.log(Proxy server listening on port ${port});
+  console.log(`Proxy server listening on port ${port}`);
 });

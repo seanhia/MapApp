@@ -9,8 +9,11 @@ import { getAuth } from "firebase/auth";
 import { Colors } from '@/constants/Colors';
 import { useTheme } from '@/hooks/useTheme'; 
 import { Favorites } from './components/Favorites';
+import { Recommendations } from './components/Recommendations';
 import { saveStats } from '@/firestore';
 import {fetchWeather,getSeason,createSeasonalImage} from './components/weather';
+import { nearbySearch } from '@/data/MapData';
+
 
 export default function Home() {
   const auth = getAuth();
@@ -49,8 +52,16 @@ export default function Home() {
       console.error("Error fetching autocomplete:", error);
     }
   };
+
   
   useEffect(() => {
+    if (location?.coords) {
+      nearbySearch(location.coords.latitude, location.coords.longitude)
+          .then(results => {
+              // Do something with results
+              console.log('Nearby places:', results[0].id);
+          });
+    }
     if (location) {
       console.log("Real-time location:", location.coords.latitude, location.coords.longitude);
       const { latitude, longitude } = location.coords;
@@ -109,6 +120,12 @@ export default function Home() {
           />
         </TouchableOpacity>
       )}
+      <Favorites 
+        userId={userId}
+      />  
+      <Recommendations
+        userId={userId}
+      />
 
       <Favorites userId={userId} />
 

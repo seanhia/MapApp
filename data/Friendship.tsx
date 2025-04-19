@@ -46,7 +46,7 @@ export const createFriendship = async (friend: User) => {
 
         // Write the data into Firestore
         await setDoc(newFriendshipRef, data);
-        await sendFriendNotification(currentUser.id, friend.id);
+        await sendFriendNotification(currentUser.id, friend.id); // send notification 
         alert('Friend Request Sent!')
         console.log('Friendship successfully initiated!');
 
@@ -445,6 +445,7 @@ export const deleteFriendshipAndNotifications = async (id: string) => {
         // notifications for both users
         const user1NotificationRef = collection(db, "users", user1, "notifications");
         const user2NotificationRef = collection(db, "users", user2, "notifications");
+        
 
         // delete notifications created by user2 for user1
         const notificationsUser1 = await getDocs(query(user1NotificationRef, where("postUserId", "==", user2)));
@@ -454,11 +455,19 @@ export const deleteFriendshipAndNotifications = async (id: string) => {
         console.log("Post notifications by user2 to user1 deleted.");
 
         // delete notifications created by user1 for user2
-        const notificationsUser2 = await getDocs(query(user2NotificationRef, where("postUserId", "==", user1)));
+        const notificationsUser2 = await getDocs(query(user2NotificationRef, where("postUserId", "==", user1 )));
         for (const docSnap of notificationsUser2.docs) {
             await deleteDoc(docSnap.ref);
         }
         console.log("Post notifications by user1 to user2 deleted.");
+
+        // delete friendship request 
+        const friendRequestNotifications = await getDocs(query(user2NotificationRef, where("friendRequestUserId", "==", user1 )));
+        for (const docSnap of friendRequestNotifications.docs) {
+            await deleteDoc(docSnap.ref);
+        }
+        console.log("Friend Request notifications by user1 to user2 deleted.");
+
 
         // dlete the friendship document
         await deleteDoc(friendshipDocRef);
@@ -486,7 +495,7 @@ export const deletePostNotification = async (userId: string, postId: string) => 
             const notificationRef = collection(db, "users", friend.friendId, "notifications");
             const snapshot = await getDocs(query(notificationRef, where("postId", "==", postId)));
 
-           for (const docSnap of snapshot.docs) {
+            for (const docSnap of snapshot.docs) {
                 await deleteDoc(docSnap.ref);
             }
             console.log(`Deleted notifications for post ${postId}`);
@@ -494,5 +503,47 @@ export const deletePostNotification = async (userId: string, postId: string) => 
 
     } catch (error) {
         console.error("Error deleting post notifications:", error);
+    }
+};
+
+
+{/** UPDATE freind request and deletes friend request notification */ }
+
+export const AcceptFriendshipAndDeleteNotification = async (friendShipId: string,) => {
+    if (!friendShipId) {
+        throw new Error("friendship ID is required to delete post notification.");
+    }
+    const data = {
+        status: status[1], // approved
+    };
+    try {
+        // fetch friendship document 
+        const friendshipDocRef = doc(db, friendships_collection, friendShipId);
+
+        await updateDoc(friendshipDocRef, data);
+        console.log('Friendship accepted!');
+
+        const friendshipSnap = await getDoc(friendshipDocRef);
+        // confirm friendship exists 
+        if (!friendshipSnap.exists()) {
+            console.error("Friendship does not exist.");
+            return;
+        }
+        // get user ids
+        const { user1, user2 } = friendshipSnap.data();
+
+        const notificationRef = collection(db, "users", user2, "notifications"); // reference to user's notifications
+        const snapshot = await getDocs(query(notificationRef, where("friendRequestUserId", "==", user1)));
+
+        for (const docSnap of snapshot.docs) {
+            await deleteDoc(docSnap.ref);
+            console.log("Deleted:", docSnap.id);
+        }
+        
+        console.log(`Deleted friend request notification after accepting friend request`);
+
+
+    } catch (error) {
+        console.error('Error accepting friendship:', error);
     }
 };

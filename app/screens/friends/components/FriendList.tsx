@@ -5,6 +5,7 @@ import { Friend } from "@/data/types"
 import menu from "@/assets/images/favicon.png"
 import { useProfileImage } from '@/hooks/useProfileImage';
 import { Button } from 'react-native-paper'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
@@ -21,8 +22,14 @@ const FriendList = ({ friends, onViewProfile, onUnfriend }: FriendListProps) => 
     <FlatList
       data={friends}
       keyExtractor={(item) => item.id}
+      scrollEnabled={true}
+      ListHeaderComponent={
+        <Text style={
+          [styles.header, {marginTop: 90}]}>
+          Friends
+        </Text>}
       renderItem={({ item }) => (
-        <ScrollView contentContainerStyle={styles.listContainer}>
+        <View style={styles.listContainer}>
           <View style={styles.leftContainer}>
   
             <TouchableOpacity 
@@ -51,15 +58,12 @@ const FriendList = ({ friends, onViewProfile, onUnfriend }: FriendListProps) => 
               {/* <Image source={menu}></Image> */}
               {/* <Text style={styles.buttonText}>Unfriend</Text> */}
             </Button>
-
-        </ScrollView>
+          </View>
       )}
     />
   );
 };
 
 export default FriendList;
-// function useState<T>(arg0: null): [any, any] {
-//   throw new Error('Function not implemented.');
-// }
+
 

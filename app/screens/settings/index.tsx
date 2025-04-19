@@ -128,7 +128,7 @@ const UserSettings = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <ScrollView contentContainerStyle={{ backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background, flex: 1 }}>
+            <ScrollView contentContainerStyle={{ backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background }}>
                 <View>
                     <Text style={[styles.heading, { padding: 16 }]}>{t('settings')}</Text>
 

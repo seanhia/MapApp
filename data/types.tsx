@@ -83,6 +83,11 @@ export interface FavoriteLoc {
     name: string
 }
 
+export interface RecommendationLoc {
+    id: string,
+    displayName: string
+}
+
 
 /** ALL INTERFACES BELOW ARE NOT INMPLEMENTED YET */
 

@@ -4,18 +4,13 @@ import { useTheme } from '@/hooks/useTheme'
 import { Friend } from "@/data/types"
 // import AcceptFriendship from "@/assets/data/AcceptFriendship";
 
-
-
-
 interface PendingListProps {
     pending: Friend[];
     onAccept: (id: Friend) => void;
     onDeny: (id: Friend) => void;
 }
 
-/* 
-    Component for the Pending List of friend requests used in the Friends screen 
-*/const PendingList: React.FC<PendingListProps> = ({ pending, onAccept, onDeny}) => {
+const PendingList: React.FC<PendingListProps> = ({ pending, onAccept, onDeny}) => {
     const { colorScheme, styles } = useTheme();
     
     return (
@@ -23,6 +18,7 @@ interface PendingListProps {
             style={{marginBottom: 90}}
             data={pending}
             keyExtractor={(item) => item.id}
+            scrollEnabled={true}
             renderItem={({ item }) => (
                 <View style={styles.buttonContainer}>
                     <Image source={require('@/assets/images/cloud.png')}

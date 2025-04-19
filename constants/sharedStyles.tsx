@@ -36,7 +36,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     },
     /** Text */
     title: {
-      fontSize: 60,
+      fontSize: 50,
       fontWeight: "normal",
       marginBottom: 10,
       color: theme === "dark" ? Colors.dark.text : Colors.light.text,

@@ -28,6 +28,7 @@ const UserList: React.FC<UserListProps> = ({ users, visible, onViewProfile }) =>
       <FlatList
         data={users}
         keyExtractor={(item) => item.id}
+        scrollEnabled={true}
         renderItem={({ item }) => (
 
           <View style={styles.listContainer}>

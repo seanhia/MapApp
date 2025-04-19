@@ -3,6 +3,7 @@ import { getStats } from '@/firestore';
 import { fetchCurrentUser } from '@/data/UserDataService';
 import { useEffect, useState } from 'react';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import { TravelChallenges } from './components/achievements';
 
 const passport = () => {
     const [userId, setUserId] = useState<string | null>(null);
@@ -45,20 +46,11 @@ const passport = () => {
                     <Text style={style.title}> Places Visited</Text>
                     {CityCountry.map((stat, index) => (
                       <View style={style.list} key={index}>
-                        {stat.cities}, {stat.countries}
+                        <Text>{stat.cities}, {stat.countries}</Text>
                       </View>
                     ))}
                   </View>
-                  <View>
-                    <Text style={style.title}> Achievements</Text>
-                    <View>
-                      <Text style={style.list}> First City Visited!</Text>
-                      <Text style={style.list}> Visited 5 Cities </Text>
-                      <Text style={style.list}> Visited 3 Countries</Text>
-                      <Text style={style.list}> Traveled over 1000 meters </Text>
-                      <Text style={style.list}> Share a post! </Text>
-                    </View>
-                  </View>
+                  <TravelChallenges/>
                 </View>
 
           </SafeAreaView>

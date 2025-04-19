@@ -16,6 +16,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { ThemeProvider } from "@react-navigation/native";
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/components/translations/i18n';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function RootLayout() {
   const { colorScheme, styles } = useTheme();
@@ -59,7 +60,7 @@ export default function RootLayout() {
     if (currentPage) {
       const isAuthPage = publicRoutes.includes(currentPage);
 
-      if (!user && !isAuthPage) {
+      if (!user ? !isAuthPage : null) {
         console.log("Redirecting to login...");
         router.replace("/");
       }
@@ -81,65 +82,75 @@ export default function RootLayout() {
 
   return (
     // // <ThemeProvider >
-    <I18nextProvider i18n={i18n}> {/**implements translation to teh whole app */}
-      <Stack // Transition between screens where each new screen is placed on top of a stack
-        screenOptions={{
-          headerStyle: { backgroundColor: Colors.light.background },
-          headerTintColor: "#000",
-          headerTitleStyle: { fontWeight: "bold" },
-        }}
-      >
-        <Stack.Screen
-          name="index"
-          options={{ title: "", headerShown: false }}
-        />
-        <Stack.Screen
-          name="screens/login/index"
-          options={{ title: "Login", headerShown: false }}
-        />
-        <Stack.Screen
-          name="screens/sign_up/index"
-          options={{ title: "", headerShown: false }}
-        />
-        <Stack.Screen
-          name="screens/tutorial"
-          options={{ title: "", headerShown: false }}
-        />
-        <Stack.Screen
-          name="screens/forgot_password/index"
-          options={{ title: "" }}
-        />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <I18nextProvider i18n={i18n}> {/**implements translation to teh whole app */}
+        <Stack // Transition between screens where each new screen is placed on top of a stack
+          screenOptions={{
+            headerStyle: { backgroundColor: theme == 'dark' ? Colors.dark.background : Colors.light.background},
+            headerTintColor: theme == 'dark' ? Colors.dark.text : Colors.light.text,
+            headerTitleStyle: { fontWeight: "bold" },
+          }}
+        >
+          <Stack.Screen
+            name="index"
+            options={{ title: "", headerShown: false }}
+          />
+          <Stack.Screen
+            name="screens/login/index"
+            options={{ title: "Login", headerShown: false }}
+          />
+          <Stack.Screen
+            name="screens/sign_up/index"
+            options={{ title: "", headerShown: false }}
+          />
+          <Stack.Screen
+            name="screens/tutorial"
+            options={{ title: "", headerShown: false }}
+          />
+          <Stack.Screen
+            name="screens/forgot_password/index"
+            options={{ title: "", headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="screens/home/index"
-          options={{ title: "", headerShown: false }}
-        />
-        <Stack.Screen
-          name="screens/friends/index"
-          options={{ title: "", headerShown: false }}
-        />
-        <Stack.Screen
-          name="screens/user_profile/index"
-          options={{ title: "", headerShown: false }}
-        />
-        <Stack.Screen
-          name="screens/settings/index"
-          options={{ title: "" }}
-        />
-        <Stack.Screen
-          name="screens/leaderboard/index"
-          options={{ title: "", headerShown: false }}
-        />
-        <Stack.Screen
-          name="screens/email_verifying/index"
-          options={{ title: "", headerShown: false }}
-        />
-        <Stack.Screen
-          name="screens/change_password/index"
-          options={{ title: "" }}
-        />
-      </Stack>
-    </I18nextProvider>
+          <Stack.Screen
+            name="screens/home/index"
+            options={{ title: "", headerShown: false }}
+          />
+          <Stack.Screen
+            name="screens/friends/index"
+            options={{ title: "", headerShown: false }}
+          />
+          <Stack.Screen
+            name="screens/profile_view/index"
+            options={{ title: "", headerShown: true }}
+          />
+          <Stack.Screen
+            name="screens/user_profile/index"
+            options={{ title: "", headerShown: false }}
+          />
+          <Stack.Screen
+            name="screens/passport/index"
+            options={{ title: "", headerShown: true }}
+          />
+          <Stack.Screen
+            name="screens/settings/index"
+            options={{ title: "" }}
+          />
+          <Stack.Screen
+            name="screens/leaderboard/index"
+            options={{ title: "", headerShown: false }}
+          />
+          <Stack.Screen
+            name="screens/email_verifying/index"
+            options={{ title: "", headerShown: false }}
+          />
+          <Stack.Screen
+            name="screens/change_password/index"
+            options={{ title: "" }}
+          />
+        </Stack>
+      </I18nextProvider>
+    </GestureHandlerRootView>
     //   // </ThemeProvider>
   );
 }

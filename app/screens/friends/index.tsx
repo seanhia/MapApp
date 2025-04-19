@@ -14,7 +14,7 @@ import FooterBar from "@/components/FooterBar";
 import { User, Friend } from "@/data/types";
 
 import { fetchAllUsers } from "@/data/UserDataService";
-import { PendingQuery, FriendQuery, deleteFriendshipAndNotifications } from "@/data/Friendship";
+import { PendingQuery, FriendQuery, deleteFriendshipAndNotifications, AcceptFriendshipAndDeleteNotification } from "@/data/Friendship";
 import { AcceptFriendship, DeleteFriendship } from "@/data/Friendship";
 
 import sharedStyles from "@/constants/sharedStyles";
@@ -38,8 +38,6 @@ const Friends = () => {
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
   const [searchQuery, setSearchQuery] = useState("");
-  // const [isSearchActive, setIsSearchActive] = useState(false);
-  // const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     const auth = getAuth();
@@ -72,11 +70,10 @@ const Friends = () => {
   }, []); // Empty dependency
 
 
-  // Updating the database and state 
   const handleAccept = async (friendship: Friend) => {
     console.log("Accepted friend request from friendshipId:", friendship.id);
     try {
-      await AcceptFriendship(friendship.id); // Update friendship status in Firestore
+      await AcceptFriendshipAndDeleteNotification(friendship.id); // Update friendship status in Firestore
 
       // Update state to remove the accepted request from the UI
       setFriendsList([...friendsList, friendship]);
@@ -95,11 +92,8 @@ const Friends = () => {
       "Are you sure you want to deny this friend request?"
     );
     if (confirmDeny) {
-      // Handle deny logic (e.g., remove the friendship request or change the status)
-      //await DeleteFriendship(friendship.id);
       await deleteFriendshipAndNotifications(friendship.id);
       console.log("Denied friend request from friendshipId:", friendship.id);
-      // Update state
       setFriendsList((oldRequest) => {
         return oldRequest.filter((friendsList) => friendsList != friendship);
       });
@@ -118,7 +112,7 @@ const Friends = () => {
     );
     router.push({
       pathname: "/screens/profile_view",
-      params: { userId: friend.friendId }, // Pass friend_id as a parameter
+      params: { userId: friend.friendId },
     });
   };
 
@@ -144,56 +138,56 @@ const Friends = () => {
 
 
   return (
-    //<GestureHandlerRootView style={{ flex: 1 }}>  # need for mobile, but it is adding blank space right now (fix later)
     isLoading ? (
       <Loading/>) : (
-
-<View style={styles.fullContainer}>
-      <SearchBar
-        value={searchQuery} 
-        onChange={handleSearch}
-        // inputRef={inputRef} 
-        />
-      <UserList users={filteredUsers} visible={!!searchQuery} onViewProfile={handleViewProfile}/>
-     
-      {friendsList.length === 0 && pendingRequests.length === 0 ? (
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={styles.fullContainer}>
-         <Text style={[styles.text,{alignSelf: 'center'}]}>No Friends Found</Text>
-        </View>
+            <SearchBar
+              value={searchQuery} 
+              onChange={handleSearch}
+              />
+            <UserList users={filteredUsers} visible={!!searchQuery} onViewProfile={handleViewProfile}/>
+          
+            {friendsList.length === 0 && pendingRequests.length === 0 ? (
+              <View style={styles.fullContainer}>
+              <Text style={[styles.text,{alignSelf: 'center'}]}>No Friends Found</Text>
+              </View>
 
-      ) : (
+            ) : (
 
-      <ScrollView >
-        <Text style={[styles.header, {marginTop: 90}]}>Friends</Text>
-        <FriendList
-          friends={friendsList}
-          onViewProfile={handleFriendViewProfile} 
-          onUnfriend={handleDeny} 
-        />
-        
-        
-        
-        {pendingRequests.length > 0 ? (
-        <ScrollView>
-          <Divider/>
-          <Text style={styles.header}>Pending Requests</Text>
-          <PendingList
-            pending={pendingRequests}
-            onAccept={handleAccept}
-            onDeny={handleDeny}
-          />
-          </ScrollView>
-        ) : (
-          <Text></Text>
-        )}
-      </ScrollView>
-      )}
-      <SafeAreaView>
-        <FooterBar />
-      </SafeAreaView>
-    </View>
-  )
-  //</GestureHandlerRootView>
+            <>
+              <FriendList
+                friends={friendsList}
+                onViewProfile={handleFriendViewProfile} 
+                onUnfriend={handleDeny} 
+              />
+              
+              
+              
+              {pendingRequests.length > 0 ? (
+              <>
+                <Divider/>
+                <Text 
+                  style={styles.header}>
+                    Pending Requests
+                </Text>
+                <PendingList
+                  pending={pendingRequests}
+                  onAccept={handleAccept}
+                  onDeny={handleDeny}
+                />
+                </>
+              ) : (
+                <Text></Text>
+              )}
+            </>
+            )}
+            <View>
+              <FooterBar />
+            </View>
+          </View>
+        </GestureHandlerRootView>
+    )
   )
 };
 
