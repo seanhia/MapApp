@@ -6,14 +6,11 @@ import FooterBar from '@/components/FooterBar';
 import { SearchBar } from '@/components/MapSearchBar';
 import useRealTimeTracking from '../../hooks/useRealTimeTracking';
 import { getAuth } from "firebase/auth";
-import axios from 'axios';
 import { Colors } from '@/constants/Colors';
 import { useTheme } from '@/hooks/useTheme'; 
-import { CustomPin } from './components/CustomPin'
 import { Favorites } from './components/Favorites';
 import { saveStats } from '@/firestore';
-
-const WEATHER_API_KEY = "c91505cb2ca1c66df5e70feade5e8d06"; // Replace with your API key
+import {fetchWeather,getSeason,createSeasonalImage} from './components/weather';
 
 export default function Home() {
   const auth = getAuth();
@@ -26,8 +23,9 @@ export default function Home() {
       <View style={style.container}>
         <Text>User is not logged in. Please log in to continue.</Text>
       </View>
-    );null;
+    );
   }
+
   const { colorScheme, styles } = useTheme();
   const [location, error] = useRealTimeTracking(userId, 100); // Save new location once 100 meters away
   const [mapCenter, setMapCenter] = useState({ lat: 33.7838, lng: -118.1141 });
@@ -52,78 +50,69 @@ export default function Home() {
     }
   };
   
-
   useEffect(() => {
     if (location) {
       console.log("Real-time location:", location.coords.latitude, location.coords.longitude);
-      setMapCenter({ lat: location.coords.latitude, lng: location.coords.longitude });
-      fetchWeather(location.coords.latitude, location.coords.longitude);
+      const { latitude, longitude } = location.coords;
+      setMapCenter({ lat: latitude, lng: longitude });
+      fetchWeather(latitude, longitude)
+        .then(setWeather)
+        .catch(() => Alert.alert("Unable to fetch weather data."));
     }
 
     if(userId) {
       saveStats(userId);
     }
-    
+
     if (error) {
       console.error("Error with real-time tracking:", error);
       Alert.alert("Error", error.toString());
     }
   }, [location, error]);
 
-  const fetchWeather = async (latitude: number, longitude: number): Promise<void> => {
-    try {
-      const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}`
-      );
-  
-      const weatherData = response.data;
-      const iconCode = weatherData.weather[0].icon;
-      const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
-      const description = weatherData.weather[0].description;
-  
-      setWeather({ iconUrl, description, details: weatherData });
-      console.log("Weather Data:", weatherData);
-    } catch (error) {
-      console.error("Error fetching weather data:", error);
-      Alert.alert("Unable to fetch weather data.");
-    }
-  };
-
   const handlePlaceChanged = (data: any, details: any) => {
-    if (details && details.geometry) {
-      const location = details.geometry.location;
-      setMapCenter({ lat: location.lat, lng: location.lng });
-      fetchWeather(location.lat, location.lng);
+    if (details?.geometry) {
+      const { lat, lng } = details.geometry.location;
+      setMapCenter({ lat, lng });
+      fetchWeather(lat, lng)
+        .then(setWeather)
+        .catch(() => Alert.alert("Unable to fetch weather data."));
     }
   };
   colorScheme === 'dark' ? Colors.dark.background : Colors.light.background
-  
+
   return (     
-    <View style={[styles.fullContainer,
-      {flexDirection: 'row'}
-    ]}>
+    <View style={[styles.fullContainer, { flexDirection: 'row' }]}>
       <SearchBar onPlaceSelected={handlePlaceChanged} />
       <View style={style.mapContainer}>
-      <MapComponent
-  initialCenter={mapCenter}
-  weatherIcon={weather?.iconUrl}
-  mapId={darkMode}
-  userId={userId}
-/>
-</View>
+        <MapComponent
+          initialCenter={mapCenter}
+          weatherIcon={weather?.iconUrl}
+          mapId={darkMode}
+          userId={userId}
+        />
+      </View>
 
-      {/* Floating Weather Box */}
+      {/* Weather Icon */}
       {weather?.iconUrl && (
         <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={style.weatherBox}>
           <Image source={{ uri: weather.iconUrl }} style={style.weatherIcon} />
         </TouchableOpacity>
       )}
 
-      <Favorites 
-        userId={userId}
-      />  
+      {/* Seasonal Icon */}
+      {location && (
+        <TouchableOpacity style={style.seasonBox}>
+          <Image
+            source={createSeasonalImage(getSeason(location.coords.latitude))}
+            style={style.seasonIcon}
+          />
+        </TouchableOpacity>
+      )}
 
-      {/*  Weather Details  */}
+      <Favorites userId={userId} />
+
+      {/* Weather Details */}
       {isExpanded && weather?.details && (
         <View style={style.weatherPopup}>
           <Text style={style.weatherDescription}>{weather.details.weather[0]?.description}</Text>
@@ -133,8 +122,6 @@ export default function Home() {
         </View>
       )}
 
-      {/* <CustomPin/> */}
-      
       <FooterBar />
     </View>
   );
@@ -149,25 +136,32 @@ const style = StyleSheet.create({
     flex: 1,
     height: '100%',
   },
-  // weather box (light box)
   weatherBox: {
     position: "absolute",
     top: 180,
     right: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.4)", // Light effect
+    backgroundColor: "rgba(255, 255, 255, 0.4)",
     padding: 10,
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5, 
+    elevation: 5,
+  },
+  seasonBox: {
+    position: "absolute",
+    top: 260,
+    right: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.4)",
+    padding: 10,
+    borderRadius: 10,
+    elevation: 5,
   },
   weatherIcon: {
     width: 50,
     height: 50,
   },
-  // Weather details pop-up
+  seasonIcon: {
+    width: 50,
+    height: 50,
+  },
   weatherPopup: {
     position: "absolute",
     top: 80,
@@ -175,11 +169,7 @@ const style = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.95)",
     padding: 10,
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5, 
+    elevation: 5,
   },
   weatherDescription: {
     fontSize: 16,
@@ -187,9 +177,4 @@ const style = StyleSheet.create({
     textAlign: 'center',
     fontWeight: "bold",
   },
-  pinButton: {
-
-  },
 });
-
-
