@@ -418,4 +418,37 @@ const userExists = async (id: string): Promise<boolean> => {
     console.error(`Error checking user existence:`, error);
     return false;
   }
-}
+};
+
+export const updatePoints = async (userId: string, points: number) => {
+  try {
+    const userDocRef = doc(db, "users", userId); 
+
+    const userDoc = await getDoc(userDocRef); // refrence user doc 
+        if (userDoc.exists()) {
+            const currentPoints = userDoc.data().points || 0; // get current points 
+            await updateDoc(userDocRef, {
+                points: currentPoints + points, //update 
+            });
+            console.log(`User points updated: +`, {points});
+        }
+  } catch (error){
+    console.error('Error updating points:', error);
+  }
+};
+export const deletePoints = async (userId: string, points: number) => {
+  try {
+    const userDocRef = doc(db, "users", userId); 
+
+    const userDoc = await getDoc(userDocRef); // refrence user doc 
+        if (userDoc.exists()) {
+            const currentPoints = userDoc.data().points || 0; // get current points 
+            await updateDoc(userDocRef, {
+                points: currentPoints - points, //delete  
+            });
+            console.log(`User points updated: -`, {points});
+        }
+  } catch (error){
+    console.error('Error updating points:', error);
+  }
+};

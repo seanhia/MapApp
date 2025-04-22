@@ -4,6 +4,8 @@ import { addDoc, doc, collection, query, orderBy, serverTimestamp, onSnapshot, u
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { storage } from '@/firebase';
 import { deletePostNotification } from './Friendship';
+import { updatePoints, deletePoints } from './UserDataService';
+
 /**
  * Save post 
  * returns postId
@@ -43,15 +45,9 @@ export const savePost = async (
         });
         console.log(`Saved Post.`)
 
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-            const currentPoints = userDoc.data().points || 0; // get current points 
-            await updateDoc(userDocRef, {
-                points: currentPoints + 10, //update points by 10 
-            });
-            console.log(`User points updated: +10`);
-        }
+        await updatePoints(userId, 20);
 
+    
         return docRef.id;
     } catch (error) {
         console.error("Error saving post: ", error);
@@ -121,6 +117,9 @@ export const deletePost = async (userId: string, postId: string, imageUrl: strin
             const imageRef = ref(storage, imageUrl);
             await deleteObject(imageRef);
         }
+
+        await deletePoints(userId, 20 )
+
 
         console.log('Post deleted successfully');
     } catch (error) {

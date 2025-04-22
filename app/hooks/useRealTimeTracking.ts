@@ -46,7 +46,7 @@ const useRealTimeTracking = (
       setError("User not authenticated.");
       return;
     }
-    
+
     let subscription: Location.LocationSubscription | null = null; // location tracking event listener
 
     const initializeTracking = async () => {
@@ -74,7 +74,7 @@ const useRealTimeTracking = (
             timeInterval: 30000, // 30 seconds
           },
           async (position) => { //callback 
-            const {latitude, longitude} = position.coords;
+            const { latitude, longitude } = position.coords;
 
             // check for duplicates (usaully happens when location first initializes)
             if (
@@ -85,7 +85,7 @@ const useRealTimeTracking = (
               setLocation(position);
               return;
             }
-        
+
 
             const isFarEnough = savedLocationsRef.current.every((saved) => {
               const distance = haversineDistance(
@@ -99,7 +99,7 @@ const useRealTimeTracking = (
 
             if (isFarEnough) {
               await saveLocation(userId, latitude, longitude); // save location to firestore
-              updateSavedLocation({latitude, longitude}) // update cached locations
+              updateSavedLocation({ latitude, longitude }) // update cached locations
             }
             setLocation(position); // update current location
           }
