@@ -103,6 +103,7 @@ export default function Home() {
           userId={userId}
         />
       </View>
+      
 
       {/* Weather Icon */}
       {weather?.iconUrl && (
@@ -120,15 +121,10 @@ export default function Home() {
           />
         </TouchableOpacity>
       )}
-      <Favorites 
-        userId={userId}
-      />  
-      <Recommendations
-        userId={userId}
-      />
-
+      
+      <Recommendations userId={userId} />
       <Favorites userId={userId} />
-
+      
       {/* Weather Details */}
       {isExpanded && weather?.details && (
         <View style={style.weatherPopup}>
@@ -138,8 +134,10 @@ export default function Home() {
           <Text>Wind Speed: {weather.details.wind?.speed} m/s</Text>
         </View>
       )}
+      
 
       <FooterBar />
+      <Recommendations userId={userId}/>
     </View>
   );
 }

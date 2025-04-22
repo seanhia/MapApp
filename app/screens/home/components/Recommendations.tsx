@@ -29,6 +29,9 @@ export const Recommendations = ({userId}: Props)  => {
       if (location?.coords) {
             nearbySearch(location.coords.latitude, location.coords.longitude)
                 .then(results => {
+                  if (results == undefined) {
+                    return 0;
+                  }
                     // Do something with results
                     console.log(results[0].displayName)
                     setRecommend(results[0])
@@ -41,14 +44,13 @@ export const Recommendations = ({userId}: Props)  => {
     <View>
       <TouchableOpacity
       style={style.recBox}
-      onPress={() => setModalVisible(true)}
-    >
+      onPress={() => setModalVisible(true)}>
       <Image
         style={{height: 40, width: 40}}
         source={require('@/assets/images/globe.png')}
         />
     </TouchableOpacity>
-        <Modal
+    <Modal
             animationType="fade"
             transparent={true}
             visible={modalVisible}
@@ -79,7 +81,7 @@ const style = StyleSheet.create({
   },
   
   recBox: {
-    position: "absolute",
+    position: "fixed",
     top: 100,
     left: 20,
     backgroundColor: "rgba(217, 186, 13, 0.88)", // Light effect
