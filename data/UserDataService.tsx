@@ -442,13 +442,20 @@ export const deletePoints = async (userId: string, points: number) => {
 
     const userDoc = await getDoc(userDocRef); // refrence user doc 
         if (userDoc.exists()) {
-            const currentPoints = userDoc.data().points || 0; // get current points 
+            let currentPoints = userDoc.data().points || 0; // get current points 
+            currentPoints = currentPoints - points;
+            if (currentPoints < 0){
+              currentPoints = 0;
+            }
             await updateDoc(userDocRef, {
-                points: currentPoints - points, //delete  
+                points: currentPoints 
+             
             });
+            
             console.log(`User points updated: -`, {points});
         }
   } catch (error){
     console.error('Error updating points:', error);
   }
 };
+
