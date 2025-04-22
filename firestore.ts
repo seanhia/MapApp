@@ -167,3 +167,22 @@ export async function getStats(userId: string): Promise<{ cities: string; countr
   return locationSnapshot.docs.map((doc) => doc.data() as { cities: string; countries: string });
 }
 
+export async function getAchievementData(userId: string): Promise<{
+  distanceTraveled: number;
+  cities: string[];
+  countries: string[];
+}> {
+  const userDocSnap = await getDoc(doc(db, "users", userId));
+  const totalDistance = userDocSnap.data()?.totalDistance || 0;
+
+  const statsDocs = await getStats(userId);
+
+  const cities = statsDocs.map(doc => doc.cities);
+  const countries = statsDocs.map(doc => doc.countries);
+
+  return {
+    distanceTraveled: totalDistance,
+    cities,
+    countries,
+  };
+}

@@ -1,21 +1,49 @@
-import { View, Text, StyleSheet } from "react-native"
+import { View, Text, StyleSheet } from "react-native";
+import { useEffect, useState } from "react";
+import { achievementLogic } from "../../../hooks/achievementLogic";
 
+type AchievementStatus = {
+  id: string;
+  label: string;
+  unlocked: boolean;
+};
 
+export const TravelChallenges = ({
+  userData,
+}: {
+  userData: {
+    distanceTraveled: number;
+    cities: string[];
+    countries: string[];
+  };
+}) => {
+  const [achievements, setAchievements] = useState<AchievementStatus[]>([]);
 
-export const TravelChallenges = () => {
-    return (
-        <View>
-            <Text style={style.title}> Achievements</Text>
-        <View>
-          <Text style={style.yes}> First City Visited!</Text>
-          <Text style={style.yes}> Visited 5 Cities </Text>
-          <Text style={style.yes}> Visited 3 Countries</Text>
-          <Text style={style.no}> Traveled over 1000 meters </Text>
-          <Text style={style.no}> Share a post! </Text>
-        </View>
-        </View>
-    )
-}
+  useEffect(() => {
+    if (!userData) return;
+
+    const unlocked = achievementLogic.map((a) => ({
+      id: a.id,
+      label: a.label,
+      unlocked: a.check(userData),
+    }));
+
+    setAchievements(unlocked);
+  }, [userData]);
+
+  return (
+    <View>
+      <Text style={style.title}>Achievements</Text>
+      <View>
+        {achievements.map((a) => (
+          <Text key={a.id} style={a.unlocked ? style.yes : style.no}>
+            {a.label}
+          </Text>
+        ))}
+      </View>
+    </View>
+  );
+};
 
 const style = StyleSheet.create({
     container: {

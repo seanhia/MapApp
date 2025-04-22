@@ -4,25 +4,33 @@ import { fetchCurrentUser } from '@/data/UserDataService';
 import { useEffect, useState } from 'react';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { TravelChallenges } from './components/achievements';
+import { getAchievementData } from "@/firestore";
 
 const passport = () => {
     const [userId, setUserId] = useState<string | null>(null);
     const [CityCountry, setCityCountry] = useState<{cities: string; countries: string}[]>([]);
+    const [userData, setUserData] = useState<{
+      distanceTraveled: number;
+      cities: string[];
+      countries: string[];
+    } | null>(null);
 
     useEffect(() => {
-        const getUser = async () => { // get user id
-          try {
-            const user = await fetchCurrentUser(); 
-            if (user) {
-              setUserId(user.id); 
-            }
-          } catch (e) {
-            console.error("error fetching user ", e);
+      const getUser = async () => {
+        try {
+          const user = await fetchCurrentUser();
+          if (user) {
+            setUserId(user.id);
+            const data = await getAchievementData(user.id); //fetch achievement data
+            setUserData(data);
           }
-        };
+        } catch (e) {
+          console.error("error fetching user or data", e);
+        }
+      };
     
-        getUser();
-      }, []);
+      getUser();
+    }, []);
 
     useEffect(() => {
         const fetchStats = async () => { // get city/country stats
@@ -50,7 +58,7 @@ const passport = () => {
                       </View>
                     ))}
                   </View>
-                  <TravelChallenges/>
+                  {userData && <TravelChallenges userData={userData} />}
                 </View>
 
           </SafeAreaView>
