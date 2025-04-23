@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { StyleSheet, View, Alert, Text, Image, TouchableOpacity, Modal, Pressable } from 'react-native';
+import { StyleSheet, View, Alert, Text, Image, TouchableOpacity, Modal, Pressable, Dimensions } from 'react-native';
 import { RecommendationLoc , User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme'
 import { fetchUsersFavLocation, writeData, writeFavLocation } from '@/data/UserDataService'
@@ -19,14 +19,15 @@ type Props = {
     */}
 
 export const Recommendations = ({userId}: Props)  => {
+  
 
 
     const { styles } = useTheme()
     const [recommend, setRecommend] = useState<string>(''); 
     const [location, error] = useRealTimeTracking(userId, 100); // Save new locatio
-    const [placeId, setPlaceId] = useState<string>('');
+    const [placeId, setPlaceId] = useState<string>('ChIJz3m29JMx3YARId4O4ll1KqU');
     const [modalVisible, setModalVisible] = useState<boolean>(false); 
-    const [img, setImg] = useState<string>('');
+    const [placePic, setImg] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
 
     const loadPlace = async () => {
@@ -37,8 +38,12 @@ export const Recommendations = ({userId}: Props)  => {
         const recHolder = await nearbySearch(location.coords.latitude, location.coords.longitude)
         if (recHolder)
           setRecommend(recHolder[0].displayName)
+          
+        
           setPlaceId(recHolder[0].id)
+          
         }
+        console.log(placeId)
         const imgHolder = await getPictureByID(placeId)
         if (imgHolder){
           setImg(imgHolder)
@@ -106,8 +111,9 @@ export const Recommendations = ({userId}: Props)  => {
                                 )}/> */}
                     <Text style={styles.heading}> {recommend}</Text>
                     <Image
-                      style={{height: 40, width: 40}}
-                      source={{uri: img}}
+                      style={style.stretch}
+                      source={{uri: placePic}}
+                      resizeMode='contain'
                       />
                     </View>
                     <Pressable
@@ -155,5 +161,10 @@ username: {
   fontSize: 20, // Adjusted for mobile readability
   fontWeight: 'bold',
   color: '#333',
+},
+stretch: {
+  flex: 1,
+  width: 200,
+  height: 400,
 },
 });
