@@ -1,7 +1,7 @@
 import { RecommendationLoc , User } from '@/data/types'
 
 let map;
-export async function nearbySearch(lat, long) {
+export async function nearbySearch(lat:any, long:any) {
     //@ts-ignore
     const { Place, SearchNearbyRankPreference } = await google.maps.importLibrary('places') as google.maps.PlacesLibrary;
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
@@ -51,4 +51,63 @@ export async function nearbySearch(lat, long) {
     } else {
         console.log("No results");
     }
+}
+export async function getPictureByID(placeID: string) {
+    const { Place } = await google.maps.importLibrary('places') as google.maps.PlacesLibrary;
+
+    // Use a place ID to create a new Place instance.
+    const place = new Place({
+        id: placeID, // Woodland Park Zoo, Seattle WA
+    });
+
+    // Call fetchFields, passing the desired data fields.
+    await place.fetchFields({ fields: ['displayName', 'photos', 'editorialSummary'] });
+
+    // Get the various HTML elements.
+    let heading = document.getElementById('heading') as HTMLElement;
+    let summary = document.getElementById('summary') as HTMLElement;
+    let gallery = document.getElementById('gallery') as HTMLElement;
+    let expandedImageDiv = document.getElementById('expanded-image') as HTMLElement;
+    let attributionLabel;
+
+    // Show the display name and summary for the place.
+    heading.textContent = place.displayName as string;
+    summary.textContent = place.editorialSummary as string;
+    
+    // Add photos to the gallery.
+    if (place.photos) {
+        place.photos?.forEach((photo) => {
+            const img = document.createElement('img');
+            const expandedImage = document.createElement('img');
+            img.src = photo.getURI({maxHeight: 380});
+            img.addEventListener('click', (event) => {
+                event.preventDefault();
+                expandedImage.src = img.src;
+                expandedImageDiv.innerHTML = '';
+                expandedImageDiv.appendChild(expandedImage);
+                attributionLabel = createAttribution(photo.authorAttributions);
+                expandedImageDiv.appendChild(attributionLabel);
+            });
+
+            gallery.appendChild(img);
+        });
+    }
+
+    // Display the first photo.
+    const img = document.createElement('img');
+    img.src = place.photos![0].getURI();
+    expandedImageDiv.appendChild(img);
+    attributionLabel = createAttribution(place.photos![0].authorAttributions);
+    expandedImageDiv.appendChild(attributionLabel);
+
+    function createAttribution(attribution: any) {
+        attributionLabel = document.createElement("a");
+        attributionLabel.classList.add('attribution-label');
+        attributionLabel.textContent = attribution[0].displayName;
+        attributionLabel.href = attribution[0].uri;
+        attributionLabel.target = '_blank;'
+        return attributionLabel;
+    }
+    console.log(img)
+    return place.photos![0].getURI();
 }
