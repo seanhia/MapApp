@@ -5,10 +5,13 @@ import { useEffect, useState } from 'react';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { TravelChallenges } from './components/achievements';
 import { getAchievementData } from "@/firestore";
+import { useTheme } from '@/hooks/useTheme';
+import { Colors } from '@/constants/Colors'
 
 const passport = () => {
     const [userId, setUserId] = useState<string | null>(null);
     const [CityCountry, setCityCountry] = useState<{cities: string; countries: string}[]>([]);
+    const { colorScheme, styles } = useTheme();
     const [userData, setUserData] = useState<{
       distanceTraveled: number;
       cities: string[];
@@ -45,25 +48,27 @@ const passport = () => {
         fetchStats();
     },[userId])
     return (
-        <SafeAreaProvider>
-          <SafeAreaView style={style.container}>
-              <Text style={style.title}> Virtual Passport</Text>
+        <SafeAreaProvider >
+          <View style={{ flex: 1, backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background }}>
+            <SafeAreaView>
+                <Text style={style.title}> Virtual Passport</Text>
 
-                <View style={style.column}>
-                  <View>
-                    <Text style={style.title}> Places Visited</Text>
-                    {CityCountry
-                    .filter(stat => stat.cities !== 'Unknown' && stat.countries !== 'Unknown')
-                    .map((stat, index) => (
-                      <View style={style.list} key={index}>
-                        <Text>{stat.cities}, {stat.countries}</Text>
-                      </View>
-                    ))}
+                  <View style={style.column}>
+                    <View>
+                      <Text style={style.title}> Places Visited</Text>
+                      {CityCountry
+                      .filter(stat => stat.cities !== 'Unknown' && stat.countries !== 'Unknown')
+                      .map((stat, index) => (
+                        <View style={style.list} key={index}>
+                          <Text>{stat.cities}, {stat.countries}</Text>
+                        </View>
+                      ))}
+                    </View>
+                    {userData && <TravelChallenges userData={userData} />}
                   </View>
-                  {userData && <TravelChallenges userData={userData} />}
-                </View>
 
-          </SafeAreaView>
+            </SafeAreaView>
+          </View>
         </SafeAreaProvider>
       );
     };
