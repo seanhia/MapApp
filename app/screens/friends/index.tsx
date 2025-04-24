@@ -36,6 +36,10 @@ const Friends = () => {
   const [pendingRequests, setPendingRequests] = useState<Friend[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [friendRec, setFriendRec] = useState([]);
+  const [ user, setUser ] = useState<any>();
+ 
+
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -44,6 +48,7 @@ const Friends = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
+          setUser(user);
           // Query for approved friendships for the current user
           const friends = await FriendQuery();
           setFriendsList(friends);
@@ -58,6 +63,9 @@ const Friends = () => {
           setFilteredUsers(users);
 
           setIsLoading(false);
+
+          // Fetch friend recommendations
+          // const recommendations = await fetchFriendshipRecommendation();
 
         } catch (error) {
           console.error("Error fetching friends or users:", error);
@@ -127,6 +135,13 @@ const Friends = () => {
     });
   };
 
+  const handleRecommend = async (user: any) => {
+    console.log(
+      "Recommended friend for the user: ", 
+      user.email);
+  }
+  
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     setFilteredUsers(
@@ -158,8 +173,10 @@ const Friends = () => {
             <>
               <FriendList
                 friends={friendsList}
+                current_user={user}
                 onViewProfile={handleFriendViewProfile} 
                 onUnfriend={handleDeny} 
+                onRecommend={handleRecommend} 
               />
               
               
@@ -192,3 +209,4 @@ const Friends = () => {
 };
 
 export default Friends;
+

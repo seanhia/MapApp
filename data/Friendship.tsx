@@ -5,6 +5,9 @@ import { User, status, Friend, Notification } from '@/data/types';
 import convertToDate from '@/app/utils/convertToDate';
 import Notifications from '@/app/screens/notifications';
 
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { getApp } from 'firebase/app';
+import { getAuth, getIdToken } from 'firebase/auth';
 
 const friendships_collection = 'friendships'
 const friendshipsRef = collection(db, friendships_collection)
@@ -547,3 +550,33 @@ export const AcceptFriendshipAndDeleteNotification = async (friendShipId: string
         console.error('Error accepting friendship:', error);
     }
 };
+
+const functions = getFunctions(getApp());
+const recommendFriend = httpsCallable(functions, 'recommendFriend');
+
+const fetchFriendshipRecommendation = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    
+    try {
+        if (!user) {    
+            console.error("No user is logged in!");
+            return;
+        }
+        const res = await fetch(`https://recommendfriend-vf5whtgn7a-uc.a.run.app
+`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${await getIdToken(user)}`, // optional if your endpoint checks auth
+          },
+        });
+    
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    
+        const data = await res.json();
+        console.log("Friendship recommendations:", data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching friendship recommendations:", error);
+    }
+}
