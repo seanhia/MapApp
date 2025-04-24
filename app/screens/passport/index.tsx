@@ -52,7 +52,9 @@ const passport = () => {
                 <View style={style.column}>
                   <View>
                     <Text style={style.title}> Places Visited</Text>
-                    {CityCountry.map((stat, index) => (
+                    {CityCountry
+                    .filter(stat => stat.cities !== 'Unknown' && stat.countries !== 'Unknown')
+                    .map((stat, index) => (
                       <View style={style.list} key={index}>
                         <Text>{stat.cities}, {stat.countries}</Text>
                       </View>
