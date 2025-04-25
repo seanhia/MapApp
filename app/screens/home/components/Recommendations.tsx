@@ -25,7 +25,7 @@ export const Recommendations = ({userId}: Props)  => {
     const { styles } = useTheme()
     const [recommend, setRecommend] = useState<string>(''); 
     const [location, error] = useRealTimeTracking(userId, 100); // Save new locatio
-    const [placeId, setPlaceId] = useState<string>('ChIJz3m29JMx3YARId4O4ll1KqU');
+    const [placeId, setPlaceId] = useState<string>('');
     const [modalVisible, setModalVisible] = useState<boolean>(false); 
     const [placePic, setImg] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);

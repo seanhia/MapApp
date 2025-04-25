@@ -17,7 +17,7 @@ export async function nearbySearch(lat:any, long:any) {
             radius: 500, 
         },
         // optional parameters
-        includedPrimaryTypes: ['restaurant'],
+        includedPrimaryTypes: ['school', 'library', 'casino', 'aquarium','park','garden'],
         maxResultCount: 5,
         rankPreference: SearchNearbyRankPreference.POPULARITY,
         language: 'en-US',
@@ -106,6 +106,6 @@ export async function getPictureByID(placeID: string) {
         attributionLabel.target = '_blank;'
         return attributionLabel;
     }
-    console.log(img)
+    // console.log(img)
     return place.photos![0].getURI();
 }
