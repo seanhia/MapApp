@@ -137,6 +137,11 @@ export interface Location {
     phone: string,
     website: string,
     createdAt: Date,
-}
+};
 
+export interface Stats {
+    cities: string;
+    countries: string;
+
+}
 

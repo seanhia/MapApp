@@ -1,8 +1,10 @@
 //import firestore from '@react-native-firebase/firestore';
-import {getFirestore, addDoc, collection, getDocs, getDoc, setDoc, doc, deleteDoc, increment, updateDoc} from 'firebase/firestore';
+import { getFirestore, addDoc, collection, getDocs, getDoc, setDoc, doc, deleteDoc, increment, updateDoc } from 'firebase/firestore';
 import app from './firebase'
 import { query, orderBy, limit } from "firebase/firestore";
 import { haversineDistance, getCityCountry } from "./app/utils/geolocation";
+import { updatePoints } from './data/UserDataService';
+import { Stats } from './data/types';
 
 //const db = firebase.firestore();
 const db = getFirestore(app);
@@ -22,7 +24,7 @@ export const createDocument = async (collectionName: string, data: any) => {
 export const getDocuments = async (collectionName: string) => {
   try {
     const querySnapshot = await getDocs(collection(db, collectionName));
-    return querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     console.error('Error getting documents: ', error);
     throw error;
@@ -33,7 +35,7 @@ export const getDocuments = async (collectionName: string) => {
 export const updateDocument = async (collectionName: string, docId: string, data: any) => {
   try {
     const docRef = doc(db, collectionName, docId);
-    await setDoc(docRef, data, {merge: true}); // Merge updates the fields without overwriting the whole document
+    await setDoc(docRef, data, { merge: true }); // Merge updates the fields without overwriting the whole document
   } catch (error) {
     console.error('Error updating document: ', error);
     throw error;
@@ -71,18 +73,18 @@ export const saveLocation = async (
     const userDocRef = doc(db, "users", userId); // Reference to the user's document
     const locationsRef = collection(userDocRef, "locations"); // Subcollection under the user document
 
-     // Fetch last saved location to compute distance
-     const lastLocation = await getLastLocation(userId);
-     let distanceFromLast = 0;
- 
-     if (lastLocation) {
-       distanceFromLast = haversineDistance(
-         lastLocation.latitude,
-         lastLocation.longitude,
-         latitude,
-         longitude
-       );
-     }
+    // Fetch last saved location to compute distance
+    const lastLocation = await getLastLocation(userId);
+    let distanceFromLast = 0;
+
+    if (lastLocation) {
+      distanceFromLast = haversineDistance(
+        lastLocation.latitude,
+        lastLocation.longitude,
+        latitude,
+        longitude
+      );
+    }
 
     await addDoc(locationsRef, {
       latitude,
@@ -91,7 +93,7 @@ export const saveLocation = async (
       distanceFromLast,
     });
     console.log(`Saved location. Moved ${distanceFromLast} meters from the last saved location.`);
-    
+
     //update total distance traveled for user
     await updateDoc(userDocRef, {
       totalDistance: increment(distanceFromLast),
@@ -111,7 +113,7 @@ export const saveLocation = async (
  */
 export const fetchLocations = async (
   userId: string
-): Promise<{ latitude: number; longitude: number}[]> => {
+): Promise<{ latitude: number; longitude: number }[]> => {
   if (!userId) {
     throw new Error("User ID is required to fetch locations.");
   }
@@ -153,12 +155,44 @@ export async function saveStats(userId: string) {
 
   const CityCountryRef = collection(db, `users/${userId}/stats`);
   const statsDocRef = doc(CityCountryRef, `${CityCountry.city}_${CityCountry.country}`);
-  await setDoc(statsDocRef, {
-    cities: CityCountry.city,
-    countries: CityCountry.country,
-  }, {merge: true});
-  console.log(`City: ${CityCountry.city}, Country: ${CityCountry.country}`);
+
+  const locationSnapshot = await getDoc(statsDocRef);// check if city_country already exists 
+
+  if (!locationSnapshot.exists()) { //add location if it doesn't exists 
+    await setDoc(statsDocRef, {
+      cities: CityCountry.city,
+      countries: CityCountry.country,
+      points: 50 // 50 points for new city 
+    }, { merge: true });
+
+    console.log(`New location added: ${CityCountry.city}, ${CityCountry.country} - Awarded 50 points`);
+
+
+    const userDocRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userDocRef); // refrence user doc 
+
+    if (userDoc.exists()) {
+      const currentPoints = userDoc.data().points || 0; // get current points 
+      const updatePoints = currentPoints + 50;
+
+      await updateDoc(userDocRef, {
+        points: updatePoints, //update 
+      });
+
+      console.log(`User points updated: +50`);
+    } else {
+      console.error(`User document with id ${userId} does not exist.`);
+    }
+
+  } else {
+    console.log(`Location already exists: ${CityCountry.city}, ${CityCountry.country}. Points not added.`);
+  }
+
 }
+
+
+
+
 
 export async function getStats(userId: string): Promise<{ cities: string; countries: string }[]> {
   const userLocationRef = collection(db, `users/${userId}/stats`); // access stats data from user
