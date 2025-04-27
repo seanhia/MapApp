@@ -9,6 +9,8 @@ import { useTheme } from '@/hooks/useTheme';
 import FooterBar from '@/components/FooterBar';
 import { User } from '@/data/types'
 import { fetchCurrentUser } from '@/data/UserDataService';
+import graph_json from "@/constants/boilerplate_graph.json" 
+import GraphVisualizer from '@/components/GraphVisualization';
 
 
 const userProfile = () => {
@@ -42,6 +44,8 @@ const userProfile = () => {
 
         <UserPhotos
           user={currentUser} />
+
+        <GraphVisualizer graph={graph_json}/>
 
         <ProfileStatistics />
 

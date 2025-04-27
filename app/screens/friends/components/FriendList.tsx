@@ -6,6 +6,7 @@ import menu from "@/assets/images/favicon.png"
 import { useProfileImage } from '@/hooks/useProfileImage';
 import { Button } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import GraphVisualizer from '@/components/GraphVisualization';
 
 
 

@@ -16,9 +16,10 @@ import { User, Friend } from "@/data/types";
 import { fetchAllUsers } from "@/data/UserDataService";
 import { PendingQuery, FriendQuery, deleteFriendshipAndNotifications, AcceptFriendshipAndDeleteNotification } from "@/data/Friendship";
 import { AcceptFriendship, DeleteFriendship } from "@/data/Friendship";
-
 import sharedStyles from "@/constants/sharedStyles";
 import { ScrollView, GestureHandlerRootView } from "react-native-gesture-handler";
+import GraphVisualizer from "@/components/GraphVisualization";
+import graph_json from "@/constants/boilerplate_graph.json" 
 
 // /**
 //  * Friends Screen
@@ -139,6 +140,10 @@ const Friends = () => {
     console.log(
       "Recommended friend for the user: ", 
       user.email);
+    router.push({
+      pathname: "/screens/friend_rec",
+      params: { graph : graph_json }
+    })
   }
   
 
@@ -162,7 +167,7 @@ const Friends = () => {
               onChange={handleSearch}
               />
             <UserList users={filteredUsers} visible={!!searchQuery} onViewProfile={handleViewProfile}/>
-          
+            
             {friendsList.length === 0 && pendingRequests.length === 0 ? (
               <View style={styles.fullContainer}>
               <Text style={[styles.text,{alignSelf: 'center'}]}>No Friends Found</Text>
@@ -178,7 +183,6 @@ const Friends = () => {
                 onUnfriend={handleDeny} 
                 onRecommend={handleRecommend} 
               />
-              
               
               
               {pendingRequests.length > 0 ? (
@@ -198,7 +202,7 @@ const Friends = () => {
                 <Text></Text>
               )}
             </>
-            )}
+            )} 
             <View>
               <FooterBar />
             </View>

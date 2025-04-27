@@ -88,6 +88,22 @@ export interface RecommendationLoc {
     displayName: string
 }
 
+export interface GraphNode {
+    id: string;
+    label: string;
+    group: 'currentUser' | 'mutualFriend' | 'potentialFriend';
+  }
+  
+  export interface GraphEdge {
+    source: string;
+    target: string;
+  }
+  
+  export interface GraphData {
+    nodes: GraphNode[];
+    edges: GraphEdge[];
+  }
+
 
 /** ALL INTERFACES BELOW ARE NOT INMPLEMENTED YET */
 
