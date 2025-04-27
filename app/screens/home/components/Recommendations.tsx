@@ -7,6 +7,7 @@ import { nearbySearch, getPictureByID } from '@/data/MapData';
 import useRealTimeTracking from '../../../hooks/useRealTimeTracking';
 import { FlatList } from 'react-native-gesture-handler';
 
+
 type Props = {
     userId: string
 }
@@ -41,13 +42,16 @@ export const Recommendations = ({userId}: Props)  => {
           
         
           setPlaceId(recHolder[0].id)
-          
+          let imgHolder = await getPictureByID(recHolder[0].id)
+          console.log('herre', imgHolder)
+          if (imgHolder){
+            setImg(imgHolder)
+            
+          }
         }
-        console.log(placeId)
-        const imgHolder = await getPictureByID(placeId)
-        if (imgHolder){
-          setImg(imgHolder)
-        }
+        
+        //const imgHolder = await getPictureByID(recHolder[0].id)
+      
       } catch (e: any){
         console.log(e)
       }
@@ -58,32 +62,6 @@ export const Recommendations = ({userId}: Props)  => {
       setModalVisible(true)
     }
 
-    // useEffect(() => {
-    //   if (location?.coords) {
-        
-    //         nearbySearch(location.coords.latitude, location.coords.longitude)
-    //             .then(results => {
-    //               if (results == undefined) {
-    //                 return 0;
-    //               }
-    //                 // Do something with results
-    //                 console.log(results[0].displayName)
-    //                 setRecommend(results[0].displayName)
-    //                 setPlaceId(results[0].id)
-    //             });
-    //         getPictureByID(placeId).then(result => {
-    //           if (result == undefined) {
-    //             return 0;
-    //           }
-    //           setImg(result)
-    //         })
-    //       } else {
-    //         console.log("NO COORDS")
-    //       }
-
-    // }, [userId]) 
-
-    
     return (
     <View>
       <TouchableOpacity
@@ -102,17 +80,14 @@ export const Recommendations = ({userId}: Props)  => {
         >
           <View style={styles.centered}>
                     <View style={styles.modalView}>
-                      {/* <FlatList data={recommend} keyExtractor={(item) => item.id}
-                          renderItem={({ item }) => (
-                              <View style={style.row}>
-                                  <Text style={style.username}>{item.displayName + ". " + item.id}</Text>
-                        
-                              </View>
-                                )}/> */}
                     <Text style={styles.heading}> {recommend}</Text>
                     <Image
                       style={style.stretch}
-                      source={{uri: placePic}}
+                      source={loading
+                        ? require('@/assets/images/loading.gif') // optional spinner
+                        : placePic
+                        ? { uri: placePic }
+                        : require('@/assets/images/no_image_found.jpg')}
                       resizeMode='contain'
                       />
                     </View>

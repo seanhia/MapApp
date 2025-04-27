@@ -17,7 +17,7 @@ export async function nearbySearch(lat:any, long:any) {
             radius: 500, 
         },
         // optional parameters
-        includedPrimaryTypes: ['school', 'library', 'casino', 'aquarium','park','garden'],
+        includedPrimaryTypes: [ 'library', 'casino', 'aquarium','restaurant','garden'],
         maxResultCount: 5,
         rankPreference: SearchNearbyRankPreference.POPULARITY,
         language: 'en-US',
@@ -42,7 +42,6 @@ export async function nearbySearch(lat:any, long:any) {
             });
 
             bounds.extend(place.location as google.maps.LatLng);
-            console.log(place);
         });
         return places as RecommendationLoc[];
 
@@ -70,42 +69,12 @@ export async function getPictureByID(placeID: string) {
     let expandedImageDiv = document.getElementById('expanded-image') as HTMLElement;
     let attributionLabel;
 
-    // Show the display name and summary for the place.
-    // heading.textContent = place.displayName as string;
-    // summary.textContent = place.editorialSummary as string;
-    
-    // // Add photos to the gallery.
-    // if (place.photos) {
-    //     place.photos?.forEach((photo) => {
-    //         const img = document.createElement('img');
-    //         const expandedImage = document.createElement('img');
-    //         img.src = photo.getURI({maxHeight: 380});
-    //         img.addEventListener('click', (event) => {
-    //             event.preventDefault();
-    //             expandedImage.src = img.src;
-    //             expandedImageDiv.innerHTML = '';
-    //             expandedImageDiv.appendChild(expandedImage);
-    //             attributionLabel = createAttribution(photo.authorAttributions);
-    //             expandedImageDiv.appendChild(attributionLabel);
-    //         });
-
-    //         gallery.appendChild(img);
-    //     });
-    // }
 
     // Display the first photo.
     const img = document.createElement('img');
     img.src = place.photos![0].getURI();
     
 
-    function createAttribution(attribution: any) {
-        attributionLabel = document.createElement("a");
-        attributionLabel.classList.add('attribution-label');
-        attributionLabel.textContent = attribution[0].displayName;
-        attributionLabel.href = attribution[0].uri;
-        attributionLabel.target = '_blank;'
-        return attributionLabel;
-    }
     // console.log(img)
     return place.photos![0].getURI();
 }
