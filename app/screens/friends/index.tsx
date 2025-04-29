@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback} from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { View, SafeAreaView, Text, TextInput, useColorScheme, Alert, ActivityIndicator } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link, router } from "expo-router";
@@ -18,8 +18,7 @@ import { PendingQuery, FriendQuery, deleteFriendshipAndNotifications, AcceptFrie
 import { AcceptFriendship, DeleteFriendship } from "@/data/Friendship";
 import sharedStyles from "@/constants/sharedStyles";
 import { ScrollView, GestureHandlerRootView } from "react-native-gesture-handler";
-import GraphVisualizer from "@/components/GraphVisualization";
-import graph_json from "@/constants/boilerplate_graph.json" 
+import graph_json from "@/constants/boilerplate_graph.json"
 
 // /**
 //  * Friends Screen
@@ -38,8 +37,8 @@ const Friends = () => {
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [friendRec, setFriendRec] = useState([]);
-  const [ user, setUser ] = useState<any>();
- 
+  const [user, setUser] = useState<any>();
+
 
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -138,14 +137,14 @@ const Friends = () => {
 
   const handleRecommend = async (user: any) => {
     console.log(
-      "Recommended friend for the user: ", 
+      "Recommended friend for the user: ",
       user.email);
     router.push({
       pathname: "/screens/friend_rec",
-      params: { graph : graph_json }
+      params: { graph: graph_json }
     })
   }
-  
+
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -159,55 +158,55 @@ const Friends = () => {
 
   return (
     isLoading ? (
-      <Loading/>) : (
+      <Loading />) : (
       <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={styles.fullContainer}>
-            <SearchBar
-              value={searchQuery} 
-              onChange={handleSearch}
-              />
-            <UserList users={filteredUsers} visible={!!searchQuery} onViewProfile={handleViewProfile}/>
-            
-            {friendsList.length === 0 && pendingRequests.length === 0 ? (
-              <View style={styles.fullContainer}>
-              <Text style={[styles.text,{alignSelf: 'center'}]}>No Friends Found</Text>
-              </View>
+          <SearchBar
+            value={searchQuery}
+            onChange={handleSearch}
+          />
+          <UserList users={filteredUsers} visible={!!searchQuery} onViewProfile={handleViewProfile} />
 
-            ) : (
+          {friendsList.length === 0 && pendingRequests.length === 0 ? (
+            <View style={styles.fullContainer}>
+              <Text style={[styles.text, { alignSelf: 'center' }]}>No Friends Found</Text>
+            </View>
+
+          ) : (
 
             <>
               <FriendList
                 friends={friendsList}
                 current_user={user}
-                onViewProfile={handleFriendViewProfile} 
-                onUnfriend={handleDeny} 
-                onRecommend={handleRecommend} 
+                onViewProfile={handleFriendViewProfile}
+                onUnfriend={handleDeny}
+                onRecommend={handleRecommend}
               />
-              
-              
+
+
               {pendingRequests.length > 0 ? (
-              <>
-                <Divider/>
-                <Text 
-                  style={styles.header}>
+                <>
+                  <Divider />
+                  <Text
+                    style={styles.header}>
                     Pending Requests
-                </Text>
-                <PendingList
-                  pending={pendingRequests}
-                  onAccept={handleAccept}
-                  onDeny={handleDeny}
-                />
+                  </Text>
+                  <PendingList
+                    pending={pendingRequests}
+                    onAccept={handleAccept}
+                    onDeny={handleDeny}
+                  />
                 </>
               ) : (
                 <Text></Text>
               )}
             </>
-            )} 
-            <View>
-              <FooterBar />
-            </View>
+          )}
+          <View>
+            <FooterBar />
           </View>
-        </GestureHandlerRootView>
+        </View>
+      </GestureHandlerRootView>
     )
   )
 };

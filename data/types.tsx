@@ -6,13 +6,13 @@ export interface User {
     username: string;
     eMail: string;
     createdAt: Date;
-    bio?: string; 
-    phoneNumber?: string; 
-    isPrivate?: boolean; 
+    bio?: string;
+    phoneNumber?: string;
+    isPrivate?: boolean;
     isDarkMode?: boolean; // Currently based on the user device settings 
-    points?: number; 
+    points?: number;
     profilePhoto?: string;
-  };
+};
 
 
 export const userSubcollections = ['posts', 'locations', 'favorite', 'stats'];
@@ -22,7 +22,7 @@ export interface Friend {
     friendId: string,
     friendUsername: string,
     createdAt: Date,
-    status: string, 
+    status: string,
     friendProfilePhoto?: string,
 };
 
@@ -30,7 +30,7 @@ export interface Friend {
 export const status = [
     'pending',
     'approved',
-    'rejected', 
+    'rejected',
     'invalid'
 ]
 
@@ -38,12 +38,12 @@ export interface Post {
     id: string,
     location: string,
     review: string,
-    published: boolean, 
-    authorUid: string, 
+    published: boolean,
+    authorUid: string,
     image?: string,
     createdAt: Timestamp,
     rating: Rating,
-    likes?: User[], 
+    likes?: User[],
     comment?: string[]
 
 };
@@ -74,11 +74,11 @@ export interface Leaderboard {
     username: string,
     points: number,
     last_updated: Date,
-}; 
+};
 
 export interface FavoriteLoc {
-    id: string, 
-    latitude: string,  
+    id: string,
+    latitude: string,
     longitude: string,
     name: string
 }
@@ -88,21 +88,27 @@ export interface RecommendationLoc {
     displayName: string
 }
 
+
+
 export interface GraphNode {
-    id: string;
+    id: number;
     label: string;
-    group: 'currentUser' | 'mutualFriend' | 'potentialFriend';
-  }
-  
-  export interface GraphEdge {
-    source: string;
-    target: string;
-  }
-  
-  export interface GraphData {
+    group: string;
+    x?: number;
+    y?: number;
+    fx?: number | null;
+    fy?: number | null;
+}
+
+export interface GraphEdge {
+    source: number;
+    target: number;
+}
+
+export interface GraphData {
     nodes: GraphNode[];
     edges: GraphEdge[];
-  }
+}
 
 
 /** ALL INTERFACES BELOW ARE NOT INMPLEMENTED YET */
@@ -113,7 +119,7 @@ export interface PlaceDetails {
             lat: number;
             lng: number;
         };
-    };  
+    };
 };
 
 export interface Friendship {
@@ -126,7 +132,7 @@ export interface Friendship {
     createdAt: Date,
 };
 
-export interface Comment { 
+export interface Comment {
     id: string,
     postId: string,
     content: string,
@@ -135,7 +141,7 @@ export interface Comment {
     createdAt: Date,
 };
 
-export interface Like { 
+export interface Like {
     id: string,
     post_id: string,
     user_id: string,

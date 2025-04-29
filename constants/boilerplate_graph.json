@@ -3,17 +3,22 @@
         {
             "id": 1,
             "label": "Sophia",
-            "group": "currentUser"
+            "group": "invalid"
         },
         {
             "id": 2,
             "label": "Nick",
-            "group": "mutualFriend"
+            "group": "approved"
         },
         {
             "id": 3,
             "label": "Jade",
-            "group": "potentialFriend"
+            "group": "invalid"
+        }, 
+        {
+            "id": 4,
+            "label": "Sean",
+            "group": "approved"
         }
     ],
     "edges": [
@@ -24,6 +29,18 @@
         {
             "source": 2,
             "target": 3
+        },
+        {
+            "source": 4,
+            "target": 1
+        },
+        {
+            "source": 4,
+            "target": 3
+        },
+        {
+            "source": 2,
+            "target": 4
         }
     ]
 }

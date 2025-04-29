@@ -20,6 +20,7 @@ export default function SplashScreenView(): JSX.Element {
     <View style={styles.fullContainer}>
       <Animated.View style={{ opacity: fadeAnim }}>
         <ImageHeader image={Splash} text="EXPLORE" />
+        <View style={{padding:75}}></View>
         <Text style={styles.boldText}>Track and Share Your Travels</Text>
       </Animated.View>
     </View>

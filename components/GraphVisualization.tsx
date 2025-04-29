@@ -1,87 +1,111 @@
-import React from 'react';
-import { View } from 'react-native';
-import Svg, { Circle, Line, Text } from 'react-native-svg';
-import type { GraphData } from '@/data/types'; 
+// import Svg, { Circle, Rect } from 'react-native-svg';
+import graph from '@/constants/boilerplate_graph.json'
+import React, { useEffect, useRef, useState } from 'react';
+import { View, PanResponder } from 'react-native';
+import Svg, { Circle, Line, Text as SvgText } from 'react-native-svg';
+import * as d3 from 'd3-force';
+import { GraphData, GraphNode, GraphEdge } from '@/data/types';
 
-interface GraphVisualizerProps {
-  graph: any
-}
+const width = 400;
+const height = 600;
 
-const GraphVisualizer : React.FC<GraphVisualizerProps> = ({ graph })=> {
-  if (!graph) {
-    // Optionally render a loading state or empty view
-    return <View><Text>Loading graph...</Text></View>;
-  }
+const colors = {
+  approved: '#4CAF50',
+  invalid: '#F44336',
+  default: '#999'
 
-  const { nodes, edges } = graph;
+};
 
-  // arrange nodes in a grid 
-  const positionedNodes = nodes.map((node, index) => {
-    const spacingX = 120;
-    const spacingY = 120;
-    const cols = 3;
-    return {
-      ...node,
-      x: 80 + (index % cols) * spacingX,
-      y: 100 + Math.floor(index / cols) * spacingY,
+type Props = {
+  data: GraphData;
+};
+
+const ForceGraph = ({ data }: Props) => {
+  const [nodes, setNodes] = useState<GraphNode[]>([]);
+  const [edges, setEdges] = useState<GraphEdge[]>([]);
+
+  const simulationRef = useRef<d3.Simulation<GraphNode, undefined>>();
+
+  useEffect(() => {
+    const sim = d3.forceSimulation(graph.nodes)
+      .force('charge', d3.forceManyBody().strength(-100))
+      .force('collied', d3.forceCollide().radius(100))
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('link', d3.forceLink(graph.edges).id((d: any) => d.id).distance(100))
+      .on('tick', () => {
+        setNodes([...graph.nodes]);
+        setEdges([...graph.edges]);
+      });
+
+
+
+    simulationRef.current = sim;
+
+    return () => {
+      sim.stop();
     };
-  });
+  }, []);
 
-  // Helper to get coordinates for a node
-  const getNodePosition = (id) => {
-    return positionedNodes.find((n) => n.id === id) || { x: 0, y: 0 };
-  };
-  
+  const createResponder = (node: GraphNode) =>
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        node.fx = node.x;
+        node.fy = node.y;
+      },
+      onPanResponderMove: (_, gesture) => {
+        node.fx = node.x! + gesture.dx;
+        node.fy = node.y! + gesture.dy;
+        simulationRef.current?.alpha(1).restart();
+      },
+      onPanResponderRelease: () => {
+        node.fx = null;
+        node.fy = null;
+        simulationRef.current?.alpha(0.5).restart();
+      }
+    });
+
   return (
-    <View style={{ flex: 1 }}>
-      <Svg height="100%" width="100%">
-        {/* Draw edge */}
-        {edges.map((edge, index) => {
-          const source = getNodePosition(edge.source);
-          const target = getNodePosition(edge.target);
+    <View>
+      <Svg height={height} width={width}>
+        {edges.map((edge, index) => (
+          <Line
+            key={index}
+            x1={edge.source.x}
+            y1={edge.source.y}
+            x2={edge.target.x}
+            y2={edge.target.y}
+            stroke="#ccc"
+            strokeWidth="2"
+          />
+        ))}
+        {nodes.map((node, index) => {
+          const responder = createResponder(node);
+          const color = colors[node.group] || colors.default;
+
           return (
-            <Line
-              key={`edge-${index}`}
-              x1={source.x}
-              y1={source.y}
-              x2={target.x}
-              y2={target.y}
-              stroke="gray"
-              strokeWidth="2"
-            />
-          ); 
+            <React.Fragment key={index}>
+              <Circle
+                cx={node.x}
+                cy={node.y}
+                r={20}
+                fill={color}
+              />
+              <SvgText
+                x={node.x}
+                y={node.y - 30}
+                fontSize="12"
+                fill="#000"
+                textAnchor="middle"
+              >
+                {node.label}
+              </SvgText>
+            </React.Fragment>
+          );
         })}
-
-
-        {/* Draw Nodes */}
-        {positionedNodes.map((node, index) => (
-          <React.Fragment key={`node-${node.id}`}>
-            <Circle
-              cx={node.x}
-              cy={node.y}
-              r={20}
-              fill={
-                node.group === 'currentUser'
-                  ? '#4e79a7'
-                  : node.group === 'mutualFriend'
-                  ? '#f28e2b'
-                  : '#59a14f'
-              }
-            />
-          <Text 
-            x={node.x} 
-            y={node.y}
-            fontSize="12" 
-            fill="black" 
-            textAnchor="middle"
-          >
-            {node.label}
-          </Text>
-        </React.Fragment>
-      ))}
       </Svg>
     </View>
   );
 };
 
-export default GraphVisualizer;
+export default ForceGraph;
