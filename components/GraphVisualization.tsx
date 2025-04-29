@@ -1,14 +1,14 @@
 // import Svg, { Circle, Rect } from 'react-native-svg';
 import graph from '@/constants/boilerplate_graph.json'
 import React, { useEffect, useRef, useState } from 'react';
-import { View, PanResponder } from 'react-native';
+import { SafeAreaView, PanResponder, Dimensions, Text } from 'react-native';
 import Svg, { Circle, Line, Text as SvgText } from 'react-native-svg';
 import * as d3 from 'd3-force';
 import { GraphData, GraphNode, GraphEdge } from '@/data/types';
 import { Colors } from '@/constants/Colors.ts'
+import { useTheme } from '@/hooks/useTheme'
 
-const width = 700;
-const height = 600;
+const { width, height } = Dimensions.get('window')
 
 const colors = {
   approved: Colors.dark.button,
@@ -24,6 +24,7 @@ type Props = {
 };
 
 const ForceGraph = ({ data }: Props) => {
+  const { styles } = useTheme()
   const [nodes, setNodes] = useState<GraphNode[]>([]);
   const [edges, setEdges] = useState<GraphEdge[]>([]);
 
@@ -34,7 +35,7 @@ const ForceGraph = ({ data }: Props) => {
       .force('charge', d3.forceManyBody().strength(-100))
       .force('collied', d3.forceCollide().radius(100))
       .force('center', d3.forceCenter(width / 2, height / 2))
-      .force('link', d3.forceLink(graph.edges).id((d: any) => d.id).distance(100))
+      .force('link', d3.forceLink(data.edges).id((d: any) => d.id).distance(100))
       .on('tick', () => {
         setNodes([...data.nodes]);
         setEdges([...data.edges]);
@@ -69,7 +70,8 @@ const ForceGraph = ({ data }: Props) => {
     });
 
   return (
-    <View>
+    <SafeAreaView>
+      <Text style={styles.heading}>Network</Text>
       <Svg height={height} width={width}>
         {edges.map((edge, index) => (
           <Line
@@ -93,10 +95,11 @@ const ForceGraph = ({ data }: Props) => {
                 cy={node.y}
                 r={20}
                 fill={color}
+                {...responder.panHandlers}
               />
               <SvgText
                 x={node.x}
-                y={node.y - 30}
+                y={node.y! - 30}
                 fontSize="12"
                 fill="#000"
                 textAnchor="middle"
@@ -107,7 +110,7 @@ const ForceGraph = ({ data }: Props) => {
           );
         })}
       </Svg>
-    </View>
+    </SafeAreaView>
   );
 };
 

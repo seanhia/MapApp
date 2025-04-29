@@ -55,6 +55,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     },
     heading: {
       fontSize: 24,
+      padding: 20,
       fontWeight: "bold",
       marginBottom: 20,
       color: theme === "dark" ? Colors.dark.text : Colors.light.text,

@@ -135,14 +135,14 @@ const Friends = () => {
     });
   };
 
-  const handleRecommend = async (user: any) => {
+  const handleRecommend = async (graph: any) => {
     console.log(
       "Recommended friend for the user: ",
       user.email);
     router.push({
       pathname: "/screens/friend_rec",
-      params: { graph: graph_json }
-    })
+      // params: { graph: JSON.stringify(graph) },
+    });
   }
 
 
@@ -178,6 +178,7 @@ const Friends = () => {
               <FriendList
                 friends={friendsList}
                 current_user={user}
+                graph={graph_json}
                 onViewProfile={handleFriendViewProfile}
                 onUnfriend={handleDeny}
                 onRecommend={handleRecommend}
