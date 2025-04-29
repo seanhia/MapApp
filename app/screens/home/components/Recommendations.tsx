@@ -48,12 +48,14 @@ export const Recommendations = ({ userId }: Props) => {
           setImg(imgHolder)
 
         }
+        setLoading(false)
       }
 
       //const imgHolder = await getPictureByID(recHolder[0].id)
 
     } catch (e: any) {
       console.log(e)
+      setLoading(false)
     }
 
   }
@@ -113,7 +115,7 @@ const style = StyleSheet.create({
   },
 
   recBox: {
-    position: 'absolute',
+    position: 'fixed',
     top: 100,
     left: 20,
     backgroundColor: "rgba(217, 186, 13, 0.88)", // Light effect
