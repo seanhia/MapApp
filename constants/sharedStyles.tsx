@@ -511,6 +511,16 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       borderRadius: 8,
     },
 
+    blurContainer: {
+      flex: 1,
+      padding: 20,
+      margin: 16,
+      textAlign: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden',
+      borderRadius: 20,
+    }
+
 
   });
 };
