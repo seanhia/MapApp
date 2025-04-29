@@ -58,7 +58,7 @@ const userProfile = () => {
         <UserPhotos
           user={currentUser} />
 
-        <ForceGraph />
+        <ForceGraph data={graph_json} />
 
         <ProfileStatistics />
 

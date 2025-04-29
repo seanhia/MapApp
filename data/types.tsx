@@ -30,8 +30,10 @@ export interface Friend {
 export const status = [
     'pending',
     'approved',
-    'rejected',
-    'invalid'
+    'rejected', // if rejected friendship doc is deleted
+    'invalid', // unknown node
+    'recommend',
+    'you'
 ]
 
 export interface Post {

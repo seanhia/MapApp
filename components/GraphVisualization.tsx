@@ -5,14 +5,17 @@ import { View, PanResponder } from 'react-native';
 import Svg, { Circle, Line, Text as SvgText } from 'react-native-svg';
 import * as d3 from 'd3-force';
 import { GraphData, GraphNode, GraphEdge } from '@/data/types';
+import { Colors } from '@/constants/Colors.ts'
 
-const width = 400;
+const width = 700;
 const height = 600;
 
 const colors = {
-  approved: '#4CAF50',
-  invalid: '#F44336',
-  default: '#999'
+  approved: Colors.dark.button,
+  invalid: '#aaa',
+  default: '#999',
+  you: Colors.dark.tint,
+  recommend: Colors.light.button
 
 };
 
@@ -27,14 +30,14 @@ const ForceGraph = ({ data }: Props) => {
   const simulationRef = useRef<d3.Simulation<GraphNode, undefined>>();
 
   useEffect(() => {
-    const sim = d3.forceSimulation(graph.nodes)
+    const sim = d3.forceSimulation(data.nodes)
       .force('charge', d3.forceManyBody().strength(-100))
       .force('collied', d3.forceCollide().radius(100))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('link', d3.forceLink(graph.edges).id((d: any) => d.id).distance(100))
       .on('tick', () => {
-        setNodes([...graph.nodes]);
-        setEdges([...graph.edges]);
+        setNodes([...data.nodes]);
+        setEdges([...data.edges]);
       });
 
 

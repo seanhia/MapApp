@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { StyleSheet, View, Alert, Text, Image, TouchableOpacity, Modal, Pressable, Dimensions } from 'react-native';
-import { RecommendationLoc , User } from '@/data/types'
+import { RecommendationLoc, User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme'
 import { fetchUsersFavLocation, writeData, writeFavLocation } from '@/data/UserDataService'
 import { nearbySearch, getPictureByID } from '@/data/MapData';
@@ -9,7 +9,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 
 type Props = {
-    userId: string
+  userId: string
 }
 
 {/**
@@ -19,88 +19,88 @@ type Props = {
         2) Modal List to add/delete favorites 
     */}
 
-export const Recommendations = ({userId}: Props)  => {
-  
+export const Recommendations = ({ userId }: Props) => {
 
 
-    const { styles } = useTheme()
-    const [recommend, setRecommend] = useState<string>(''); 
-    const [location, error] = useRealTimeTracking(userId, 100); // Save new locatio
-    const [placeId, setPlaceId] = useState<string>('');
-    const [modalVisible, setModalVisible] = useState<boolean>(false); 
-    const [placePic, setImg] = useState<string>('');
-    const [loading, setLoading] = useState<boolean>(false);
 
-    const loadPlace = async () => {
-      setLoading(true)
+  const { styles } = useTheme()
+  const [recommend, setRecommend] = useState<string>('');
+  const [location, error] = useRealTimeTracking(userId, 100); // Save new locatio
+  const [placeId, setPlaceId] = useState<string>('');
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [placePic, setImg] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-      try {
-        if (location?.coords) {
+  const loadPlace = async () => {
+    setLoading(true)
+
+    try {
+      if (location?.coords) {
         const recHolder = await nearbySearch(location.coords.latitude, location.coords.longitude)
         if (recHolder)
           setRecommend(recHolder[0].displayName)
-          
-        
-          setPlaceId(recHolder[0].id)
-          let imgHolder = await getPictureByID(recHolder[0].id)
-          console.log('herre', imgHolder)
-          if (imgHolder){
-            setImg(imgHolder)
-            
-          }
+
+
+        setPlaceId(recHolder[0].id)
+        let imgHolder = await getPictureByID(recHolder[0].id)
+        console.log('herre', imgHolder)
+        if (imgHolder) {
+          setImg(imgHolder)
+
         }
-        
-        //const imgHolder = await getPictureByID(recHolder[0].id)
-      
-      } catch (e: any){
-        console.log(e)
       }
 
-    }
-    const handleButtonPress = () => {
-      loadPlace()
-      setModalVisible(true)
+      //const imgHolder = await getPictureByID(recHolder[0].id)
+
+    } catch (e: any) {
+      console.log(e)
     }
 
-    return (
+  }
+  const handleButtonPress = () => {
+    loadPlace()
+    setModalVisible(true)
+  }
+
+  return (
     <View>
       <TouchableOpacity
-      style={style.recBox}
-      onPress={handleButtonPress}>
-      <Image
-        style={{height: 40, width: 40}}
-        source={require('@/assets/images/globe.png')}
+        style={style.recBox}
+        onPress={handleButtonPress}>
+        <Image
+          style={{ height: 40, width: 40 }}
+          source={require('@/assets/images/globe.png')}
         />
-    </TouchableOpacity>
-    <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(!modalVisible)}
-        >
-          <View style={styles.centered}>
-                    <View style={styles.modalView}>
-                    <Text style={styles.heading}> {recommend}</Text>
-                    <Image
-                      style={style.stretch}
-                      source={loading
-                        ? require('@/assets/images/loading.gif') // optional spinner
-                        : placePic
-                        ? { uri: placePic }
-                        : require('@/assets/images/no_image_found.jpg')}
-                      resizeMode='contain'
-                      />
-                    </View>
-                    <Pressable
+      </TouchableOpacity>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(!modalVisible)}
+      >
+        <View style={styles.centered}>
+          <View style={styles.modalView}>
+            <Text style={styles.heading}> {recommend}</Text>
+            <Image
+              style={style.stretch}
+              source={loading
+                ? require('@/assets/images/loading.gif') // optional spinner
+                : placePic
+                  ? { uri: placePic }
+                  : require('@/assets/images/no_image_found.jpg')}
+              resizeMode='contain'
+            />
+          </View>
+          <Pressable
             style={styles.button}
             onPress={() => setModalVisible(!modalVisible)}>
             <Text style={styles.buttonText}>Close</Text>
-        </Pressable>
-          </View>
-          
-        </Modal>
+          </Pressable>
+        </View>
+
+      </Modal>
     </View>
-    );
+  );
 }
 const style = StyleSheet.create({
   container: {
@@ -111,9 +111,9 @@ const style = StyleSheet.create({
     flex: 1,
     height: '100%',
   },
-  
+
   recBox: {
-    position: "absolute",
+    position: 'absolute',
     top: 100,
     left: 20,
     backgroundColor: "rgba(217, 186, 13, 0.88)", // Light effect
@@ -123,7 +123,7 @@ const style = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 5, 
+    elevation: 5,
   },
   row: {
     flexDirection: 'row',
@@ -131,15 +131,15 @@ const style = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
-},
-username: {
-  fontSize: 20, // Adjusted for mobile readability
-  fontWeight: 'bold',
-  color: '#333',
-},
-stretch: {
-  flex: 1,
-  width: 200,
-  height: 400,
-},
+  },
+  username: {
+    fontSize: 20, // Adjusted for mobile readability
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  stretch: {
+    flex: 1,
+    width: 200,
+    height: 400,
+  },
 });

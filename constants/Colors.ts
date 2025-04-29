@@ -38,7 +38,7 @@ export const Colors = {
     background: '#000000',
     tint: lightBlue,
     icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
+    tabIconDefault: darkSecondary,
     tabIconSelected: tintColorDark,
     button: darkPrimary,
     placeHolder: placeHolder,
