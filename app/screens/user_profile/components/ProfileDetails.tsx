@@ -11,6 +11,7 @@ import { storage } from '@/firebase'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc } from 'firebase/firestore';
 import db from '@/firestore';
+import { router } from 'expo-router';
 
 
 interface ProfileDetailsProps {
@@ -26,14 +27,14 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
     useEffect(() => {
 
 
-         const loadCurrentUser = async () => {
-             try {
+        const loadCurrentUser = async () => {
+            try {
                 const user = await fetchCurrentUser();
                 setCurrentUser(user)
-             } catch (error) {
-             console.error('Error fetching user')
-        }
-       };
+            } catch (error) {
+                console.error('Error fetching user')
+            }
+        };
 
         const loadFriendCount = async () => {
             try {
@@ -53,9 +54,9 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
             } catch (error) {
                 console.error('Error fetching points: ', error)
             }
-        } 
+        }
         loadFriendCount();
-        loadCurrentUser(); 
+        loadCurrentUser();
         // loadPoints(); 
     }, [user]);
 
@@ -84,8 +85,10 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
 
 
                 <View style={{ width: 75, alignItems: 'center' }}>
-                    <Text style={styles.label}>Points</Text>
-                    <Text style={styles.profileDetailText}>{user?.points}</Text>
+                    <TouchableOpacity onPress={() => router.push('/screens/points')}>
+                        <Text style={styles.label}>Points</Text>
+                        <Text style={styles.profileDetailText}>{user?.points}</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
 
@@ -109,8 +112,8 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
 
             <View style={styles.fullContainer}>
                 <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>Account Created:</Text>
-                <Text style={[styles.text, { padding: 0, fontWeight: '100', marginBottom: 30  }]}>
-                    {user?.createdAt ?  new Date((user.createdAt)).toLocaleDateString("en-US") : "Loading"}
+                <Text style={[styles.text, { padding: 0, fontWeight: '100', marginBottom: 30 }]}>
+                    {user?.createdAt ? new Date((user.createdAt)).toLocaleDateString("en-US") : "Loading"}
                 </Text>
             </View>
         </View>
