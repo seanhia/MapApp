@@ -141,8 +141,9 @@ const Friends = () => {
       user.email);
     router.push({
       pathname: "/screens/friend_rec",
-      // params: { graph: JSON.stringify(graph) },
+      params: { graph: JSON.stringify(graph) },
     });
+
   }
 
 

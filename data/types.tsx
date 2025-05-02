@@ -30,8 +30,7 @@ export interface Friend {
 export const status = [
     'pending',
     'approved',
-    'rejected', // if rejected friendship doc is deleted
-    'invalid', // unknown node
+    'not_friends', // rejected or never sent request 
     'recommend',
     'you'
 ]
@@ -93,7 +92,7 @@ export interface RecommendationLoc {
 
 
 export interface GraphNode {
-    id: number;
+    id: string; // changed from number to string debug in visualizer 
     label: string;
     group: string;
     x?: number;

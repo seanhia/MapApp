@@ -12,7 +12,7 @@ const { width, height } = Dimensions.get('window')
 
 const colors = {
   approved: Colors.dark.button,
-  invalid: '#aaa',
+  not_friends: '#aaa',
   default: '#999',
   you: Colors.dark.tint,
   recommend: Colors.light.button
@@ -27,6 +27,15 @@ const ForceGraph = ({ data }: Props) => {
   const { styles } = useTheme()
   const [nodes, setNodes] = useState<GraphNode[]>([]);
   const [edges, setEdges] = useState<GraphEdge[]>([]);
+
+  console.log('data: ', data, ' - ', typeof data);
+  console.log('data.nodes: ', data.nodes, ' - ', typeof data.nodes);
+  console.log('data.edges: ', data.edges, ' - ', typeof data.edges);
+
+  if (!data || !Array.isArray(data.edges)) {
+    console.error("Invalid graph data:", data);
+    return;
+  }
 
   const simulationRef = useRef<d3.Simulation<GraphNode, undefined>>();
 

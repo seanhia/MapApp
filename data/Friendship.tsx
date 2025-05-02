@@ -1,7 +1,7 @@
 import { doc, addDoc, getDoc, collection, setDoc, getDocs, query, orderBy, where, updateDoc, deleteDoc, serverTimestamp, onSnapshot, writeBatch } from 'firebase/firestore';
 import db from '@/firestore';
 import { fetchCurrentUser, fetchUserByUID } from '@/data/UserDataService'
-import { User, status, Friend, Notification } from '@/data/types';
+import { User, status, Friend, Notification, GraphData, GraphNode, GraphEdge } from '@/data/types';
 import convertToDate from '@/app/utils/convertToDate';
 import Notifications from '@/app/screens/notifications';
 
@@ -39,7 +39,7 @@ export const createFriendship = async (friend: User) => {
         const data = {
             user1: currentUser.id, //currentUser.uid,
             user2: friend.id,
-            status: status[0], // pending, approved, rejected
+            status: status[0], // pending, approved, not_friends, recommend, you (order matters)
             username1: currentUser.username || null,
             username2: friend.username,
             createdAt: convertToDate(new Date()), // Use the current date and time
@@ -189,6 +189,42 @@ export const PendingQuery = async () => {
         return [];
     }
 };
+
+/**
+ * Queries all friendships and users documents, returns variable of type GraphData 
+ * containing the EXPLORE network data 
+ * @returns GraphData
+ */
+export const fetchExploreNetwork = async (): Promise<GraphData | null> => {
+    let graph: GraphData = { nodes: [], edges: [] };
+    try {
+        const friendsSnapshot = await getDocs(collection(db, 'friendships')); // returns JS Object of all friendships, containing docs: DocumentSnapshot[]
+        const usersSnapshot = await getDocs(collection(db, 'users'));
+
+        // iterate through all 'friendships' docs and create nodes for the graph 
+        const nodes = usersSnapshot.docs.map(doc => ({
+            id: doc.id,
+            label: doc.data().username,
+            group: 'approved', // group is not implemented yet, needs info from edges 
+        }));
+        const edges = friendsSnapshot.docs.map(doc => ({
+            source: doc.data().user1, // user1 ID 
+            target: doc.data().user2, // user2 ID 
+        }))
+        nodes as GraphNode[];
+        edges as GraphEdge[];
+
+        return graph = {
+            nodes,
+            edges
+        };
+
+    }
+    catch (error) {
+        console.error('Error fetching explore network:', error);
+        return null;
+    }
+}
 
 /**
  * Queires the approved friendship documents associated with the User and returns the sum = Friend count 
@@ -448,7 +484,7 @@ export const deleteFriendshipAndNotifications = async (id: string) => {
         // notifications for both users
         const user1NotificationRef = collection(db, "users", user1, "notifications");
         const user2NotificationRef = collection(db, "users", user2, "notifications");
-        
+
 
         // delete notifications created by user2 for user1
         const notificationsUser1 = await getDocs(query(user1NotificationRef, where("postUserId", "==", user2)));
@@ -458,14 +494,14 @@ export const deleteFriendshipAndNotifications = async (id: string) => {
         console.log("Post notifications by user2 to user1 deleted.");
 
         // delete notifications created by user1 for user2
-        const notificationsUser2 = await getDocs(query(user2NotificationRef, where("postUserId", "==", user1 )));
+        const notificationsUser2 = await getDocs(query(user2NotificationRef, where("postUserId", "==", user1)));
         for (const docSnap of notificationsUser2.docs) {
             await deleteDoc(docSnap.ref);
         }
         console.log("Post notifications by user1 to user2 deleted.");
 
         // delete friendship request 
-        const friendRequestNotifications = await getDocs(query(user2NotificationRef, where("friendRequestUserId", "==", user1 )));
+        const friendRequestNotifications = await getDocs(query(user2NotificationRef, where("friendRequestUserId", "==", user1)));
         for (const docSnap of friendRequestNotifications.docs) {
             await deleteDoc(docSnap.ref);
         }
@@ -542,7 +578,7 @@ export const AcceptFriendshipAndDeleteNotification = async (friendShipId: string
             await deleteDoc(docSnap.ref);
             console.log("Deleted:", docSnap.id);
         }
-        
+
         console.log(`Deleted friend request notification after accepting friend request`);
 
 
@@ -557,22 +593,22 @@ const recommendFriend = httpsCallable(functions, 'recommendFriend');
 const fetchFriendshipRecommendation = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
-    
+
     try {
-        if (!user) {    
+        if (!user) {
             console.error("No user is logged in!");
             return;
         }
         const res = await fetch(`https://recommendfriend-vf5whtgn7a-uc.a.run.app
 `, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${await getIdToken(user)}`, // optional if your endpoint checks auth
-          },
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${await getIdToken(user)}`, // optional if your endpoint checks auth
+            },
         });
-    
+
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    
+
         const data = await res.json();
         console.log("Friendship recommendations:", data);
         return data;
