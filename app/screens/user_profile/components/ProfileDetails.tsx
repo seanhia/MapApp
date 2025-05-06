@@ -72,15 +72,15 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
                         Alert.alert('Modal has been closed.');
                         setModalVisible(!modalVisible);
                     }}>
-                        <View style={styles.centerContainer}> 
+                    <View style={styles.centered}>
                         <View style={styles.modalView}>
-                            <TouchableOpacity onPress ={() => setModalVisible(!modalVisible)}>
-                            <Image style={styles.x}source={require('@/assets/images/X.png')}/>
+                            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                                <Image style={styles.x} source={require('@/assets/images/X.png')} />
                             </TouchableOpacity>
                             <Points />
                         </View>
-                        </View>
-                        
+                    </View>
+
                 </Modal>
                 {/* { } */}
 
