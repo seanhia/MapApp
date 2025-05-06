@@ -512,14 +512,13 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       borderRadius: 8,
     },
 
-    blurContainer: {
-      flex: 1,
-      padding: 20,
-      margin: 16,
-      textAlign: 'center',
-      justifyContent: 'center',
-      overflow: 'hidden',
-      borderRadius: 20,
+    x: {
+      height: 50,
+      width: 50,
+      padding: 5,
+      margin: 5,
+      justifyContent: 'flex-start',
+      borderRadius: 5,
     }
 
 

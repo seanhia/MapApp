@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';  //install this
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, Alert } from 'react-native';
 
 import { fetchFriendCount } from '@/data/Friendship';
 import { User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme';
 import { useProfileImage } from '@/hooks/useProfileImage';
 import { fetchCurrentUser } from '@/data/UserDataService';
-import { storage } from '@/firebase'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc } from 'firebase/firestore';
-import db from '@/firestore';
-import { router } from 'expo-router';
+
+import Points from '../../Points';
+
+
+
 
 
 interface ProfileDetailsProps {
@@ -23,6 +22,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
     const [points, setPoints] = useState<string>('-');
     const { profileImage, handleImagePicker } = useProfileImage(user);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
 
@@ -64,6 +64,24 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
     return (
         <View style={{ paddingHorizontal: 15 }}>
             <View style={styles.buttonContainer}>
+                <Modal
+                    animationType="none"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                        setModalVisible(!modalVisible);
+                    }}>
+                        <View style={styles.centerContainer}> 
+                        <View style={styles.modalView}>
+                            <TouchableOpacity onPress ={() => setModalVisible(!modalVisible)}>
+                            <Image style={styles.x}source={require('@/assets/images/X.png')}/>
+                            </TouchableOpacity>
+                            <Points />
+                        </View>
+                        </View>
+                        
+                </Modal>
                 {/* { } */}
 
                 <TouchableOpacity onPress={handleImagePicker}>
@@ -85,7 +103,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
 
 
                 <View style={{ width: 75, alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => router.push('/screens/points')}>
+                    <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                         <Text style={styles.label}>Points</Text>
                         <Text style={styles.profileDetailText}>{user?.points}</Text>
                     </TouchableOpacity>
@@ -132,5 +150,18 @@ const style = StyleSheet.create({
         fontSize: 16,
         fontWeight: '400',
         color: 'black',
+    },
+
+    blurContainer: {
+        flex: 1,
+        padding: 20,
+        margin: 16,
+        textAlign: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        borderRadius: 20,
     }
+
+
+
 });
