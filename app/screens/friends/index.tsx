@@ -132,13 +132,13 @@ const Friends = () => {
     });
   };
 
-  const handleRecommend = async (user: User) => {
+  const handleRecommend = async (userId: string) => {
     console.log(
       "Recommended friend for the user: ",
-      user.eMail);
+      userId);
     router.push({
       pathname: "/screens/friend_rec",
-      params: { userId: user.id },
+      params: { userId },
     });
 
   }

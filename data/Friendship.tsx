@@ -205,7 +205,7 @@ export const fetchExploreNetwork = async (): Promise<GraphData | null> => {
         const nodes = usersSnapshot.docs.map(doc => ({
             id: doc.id,
             label: doc.data().username,
-            group: 'approved', // group is not implemented yet, needs info from edges 
+            group: 'default', // group is not implemented yet, needs info from edges 
         }));
         const edges = friendsSnapshot.docs.map(doc => ({
             source: doc.data().user1, // user1 ID 

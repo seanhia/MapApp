@@ -1,5 +1,6 @@
 import { Timestamp, FieldValue, CollectionReference } from "firebase/firestore";
 import { ImageSourcePropType } from "react-native";
+import { Colors } from "@/constants/Colors";
 
 export interface User {
     id: string;
@@ -110,6 +111,13 @@ export interface GraphData {
     nodes: GraphNode[];
     edges: GraphEdge[];
 }
+
+export const legendItems = [
+    { label: 'you', color: Colors.light.button },
+    { label: 'approved', color: Colors.dark.tint },
+    { label: 'recommend', color: Colors.dark.button },
+    { label: 'not_friends', color: '#9E9E9E' },
+];
 
 
 /** ALL INTERFACES BELOW ARE NOT INMPLEMENTED YET */

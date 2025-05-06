@@ -4,30 +4,32 @@ import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, PanResponder, Dimensions, Text } from 'react-native';
 import Svg, { Circle, Line, Text as SvgText } from 'react-native-svg';
 import * as d3 from 'd3-force';
-import { GraphData, GraphNode, GraphEdge } from '@/data/types';
+import { GraphData, GraphNode, GraphEdge, User } from '@/data/types';
 import { Colors } from '@/constants/Colors.ts'
+import { legendItems } from '@/data/types';
 import { useTheme } from '@/hooks/useTheme'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const { width, height } = Dimensions.get('window')
 
 const colors = {
-  approved: Colors.dark.button,
-  not_friends: '#aaa',
-  default: '#999',
-  you: Colors.dark.tint,
-  recommend: Colors.light.button
+  approved: Colors.dark.tint, // light blue
+  not_friends: '#9E9E9E',    // gray
+  you: Colors.light.button,  // light yellow
+  recommend: Colors.dark.button,      // orange
+  default: '#607D8B',        // fallback color
 };
 
 type Props = {
   data: GraphData;
+  userId: string | string[];
 };
 
-const ForceGraph = ({ data }: Props) => {
+const ForceGraph = ({ data, userId }: Props) => {
   const { styles } = useTheme()
   const [nodes, setNodes] = useState<GraphNode[]>([]);
   const [edges, setEdges] = useState<GraphEdge[]>([]);
 
-  console.log('data.nodes: ', data.nodes, ' - ', typeof data.nodes);
 
   if (!data || !Array.isArray(data.edges)) {
     console.error("Invalid graph data:", data);
@@ -37,8 +39,6 @@ const ForceGraph = ({ data }: Props) => {
   const simulationRef = useRef<d3.Simulation<GraphNode, undefined>>();
 
   useEffect(() => {
-    let frame: number;
-
     console.log('data: ', data, ' - ', typeof data);
     console.log('data.nodes: ', data.nodes, ' - ', typeof data.nodes);
     console.log('data.edges: ', data.edges, ' - ', typeof data.edges);
@@ -86,8 +86,7 @@ const ForceGraph = ({ data }: Props) => {
     });
 
   return (
-    <SafeAreaView>
-      <Text style={styles.heading}>Network</Text>
+    <GestureHandlerRootView style={styles.fullContainer}>
       <Svg height={height} width={width}>
         {edges.map((edge, index) => (
           <Line
@@ -100,7 +99,49 @@ const ForceGraph = ({ data }: Props) => {
             strokeWidth="2"
           />
         ))}
+
+
+
         {nodes.map((node, index) => {
+          const firstDegree = edges.filter(
+            edge => (edge.source.id === userId || edge.target.id === userId));
+          const firstDegreeIds = new Set<string>();
+          firstDegree.forEach(edge => {
+            firstDegreeIds.add(edge.source.id);
+            firstDegreeIds.add(edge.target.id);
+          });
+
+          // Step 2: Find second-degree edges
+          const secondDegreeEdges = edges.filter(edge => {
+            return (
+              firstDegreeIds.has(edge.source.id) || firstDegreeIds.has(edge.target.id)
+            );
+          });
+
+          // Step 3: Get second-degree node IDs
+          const secondDegreeIds = new Set<string>();
+          secondDegreeEdges.forEach(edge => {
+            if (!firstDegreeIds.has(edge.source.id) && edge.source.id !== userId) {
+              secondDegreeIds.add(edge.source.id);
+            }
+            if (!firstDegreeIds.has(edge.target.id) && edge.target.id !== userId) {
+              secondDegreeIds.add(edge.target.id);
+            }
+          });
+
+          if (node.id == userId) {
+            node.group = 'you';
+          } else if (firstDegreeIds.has(node.id)) {
+            node.group = 'approved';
+          } else if (secondDegreeIds.has(node.id)) {
+            node.group = 'recommend';
+          } else {
+            node.group = 'not_friends';
+          }
+
+
+
+
           const responder = createResponder(node);
           const color = colors[node.group] || colors.default;
 
@@ -126,7 +167,7 @@ const ForceGraph = ({ data }: Props) => {
           );
         })}
       </Svg>
-    </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 

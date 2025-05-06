@@ -6,7 +6,7 @@ import menu from "@/assets/images/favicon.png"
 import { useProfileImage } from '@/hooks/useProfileImage';
 import { Button } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import GraphVisualizer from '@/components/GraphVisualization';
+import GraphVisualizer from '@/app/screens/friend_rec/components/GraphVisualization';
 
 
 
@@ -16,7 +16,7 @@ interface FriendListProps {
   current_user: User;
   onViewProfile: (id: Friend) => void;
   onUnfriend: (id: Friend) => void;
-  onRecommend: (user: User) => void;
+  onRecommend: (userId: string) => void;
 }
 
 const FriendList = ({ friends, current_user, onViewProfile, onUnfriend, onRecommend }: FriendListProps) => {
@@ -35,7 +35,7 @@ const FriendList = ({ friends, current_user, onViewProfile, onUnfriend, onRecomm
           </Text>
           <TouchableOpacity
             style={[styles.button, { marginTop: 90, marginRight: 20 }]}
-            onPress={() => onRecommend(current_user)}>
+            onPress={() => onRecommend(current_user.uid)}>
             <Text style={styles.buttonText}>Recommendations</Text>
           </TouchableOpacity>
         </View>
