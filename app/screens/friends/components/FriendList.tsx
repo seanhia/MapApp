@@ -14,13 +14,12 @@ import GraphVisualizer from '@/components/GraphVisualization';
 interface FriendListProps {
   friends: Friend[];
   current_user: User;
-  graph: GraphData;
   onViewProfile: (id: Friend) => void;
   onUnfriend: (id: Friend) => void;
-  onRecommend: (graph: GraphData) => void;
+  onRecommend: (user: User) => void;
 }
 
-const FriendList = ({ friends, graph, current_user, onViewProfile, onUnfriend, onRecommend }: FriendListProps) => {
+const FriendList = ({ friends, current_user, onViewProfile, onUnfriend, onRecommend }: FriendListProps) => {
   const { colorScheme, styles } = useTheme();
 
   return (
@@ -36,7 +35,7 @@ const FriendList = ({ friends, graph, current_user, onViewProfile, onUnfriend, o
           </Text>
           <TouchableOpacity
             style={[styles.button, { marginTop: 90, marginRight: 20 }]}
-            onPress={() => onRecommend(graph)}>
+            onPress={() => onRecommend(current_user)}>
             <Text style={styles.buttonText}>Recommendations</Text>
           </TouchableOpacity>
         </View>

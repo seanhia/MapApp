@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
-import GraphVisualizer from '@/components/GraphVisualization';
+import ForceGraph from '@/components/GraphVisualization';
 import { useLocalSearchParams } from 'expo-router';
 import graph from '@/constants/boilerplate_graph.json'
 import { GraphData } from '@/data/types';
@@ -9,11 +9,9 @@ import { fetchExploreNetwork } from '@/data/Friendship';
 import { Loading } from '@/components/Loading';
 
 const FriendRecommendationScreen = () => {
-  const { graph } = useLocalSearchParams();
+  const { user } = useLocalSearchParams(); // use user data to create a tree with user as root 
   const [graphData, setGraphData] = useState<GraphData | null>(null);
 
-
-  // let parsedGraph: GraphData | null = null;
 
   useEffect(() => {
     const fetchGraph = async () => {
@@ -22,23 +20,14 @@ const FriendRecommendationScreen = () => {
       console.log('Graph data fetched successfully:', response);
     };
     fetchGraph();
-  }, []);
+  }, [user]);
 
-
-  // try {
-  //   parsedGraph = graph ? JSON.parse(graph as string) : null;
-  // } catch (e) {
-  //   console.error('Failed to parse graph data', e);
-  // }
-
-  // console.log(`friend rec screen graph: ${graph}, ${typeof graph}`)
-  // console.log('passed_graph: ', parsedGraph, ' - ', typeof parsedGraph);
 
 
   return graphData ? (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
-        <GraphVisualizer data={graphData} />
+        <ForceGraph data={graphData} />
       </View>
     </View>
   ) : (

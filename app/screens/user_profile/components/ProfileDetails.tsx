@@ -7,7 +7,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useProfileImage } from '@/hooks/useProfileImage';
 import { fetchCurrentUser } from '@/data/UserDataService';
 
-import Points from '../../Points';
+import Points from '@/app/screens/points';
 
 
 

@@ -16,7 +16,6 @@ const colors = {
   default: '#999',
   you: Colors.dark.tint,
   recommend: Colors.light.button
-
 };
 
 type Props = {
@@ -28,9 +27,7 @@ const ForceGraph = ({ data }: Props) => {
   const [nodes, setNodes] = useState<GraphNode[]>([]);
   const [edges, setEdges] = useState<GraphEdge[]>([]);
 
-  console.log('data: ', data, ' - ', typeof data);
   console.log('data.nodes: ', data.nodes, ' - ', typeof data.nodes);
-  console.log('data.edges: ', data.edges, ' - ', typeof data.edges);
 
   if (!data || !Array.isArray(data.edges)) {
     console.error("Invalid graph data:", data);
@@ -40,22 +37,32 @@ const ForceGraph = ({ data }: Props) => {
   const simulationRef = useRef<d3.Simulation<GraphNode, undefined>>();
 
   useEffect(() => {
+    let frame: number;
+
+    console.log('data: ', data, ' - ', typeof data);
+    console.log('data.nodes: ', data.nodes, ' - ', typeof data.nodes);
+    console.log('data.edges: ', data.edges, ' - ', typeof data.edges);
     const sim = d3.forceSimulation(data.nodes)
       .force('charge', d3.forceManyBody().strength(-100))
       .force('collied', d3.forceCollide().radius(100))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('link', d3.forceLink(data.edges).id((d: any) => d.id).distance(100))
       .on('tick', () => {
+
         setNodes([...data.nodes]);
         setEdges([...data.edges]);
       });
-
-
-
     simulationRef.current = sim;
+
+    // Stop the simulation and updates after 3 seconds
+    const stopTimeout = setTimeout(() => {
+      sim.stop();
+      console.log('Simulation stopped after timeout');
+    }, 1000);
 
     return () => {
       sim.stop();
+      clearTimeout(stopTimeout);
     };
   }, []);
 

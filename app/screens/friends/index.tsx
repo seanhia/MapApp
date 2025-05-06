@@ -36,7 +36,6 @@ const Friends = () => {
   const [pendingRequests, setPendingRequests] = useState<Friend[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-  const [friendRec, setFriendRec] = useState([]);
   const [user, setUser] = useState<any>();
 
 
@@ -64,8 +63,6 @@ const Friends = () => {
 
           setIsLoading(false);
 
-          // Fetch friend recommendations
-          // const recommendations = await fetchFriendshipRecommendation();
 
         } catch (error) {
           console.error("Error fetching friends or users:", error);
@@ -135,13 +132,13 @@ const Friends = () => {
     });
   };
 
-  const handleRecommend = async (graph: any) => {
+  const handleRecommend = async (user: User) => {
     console.log(
       "Recommended friend for the user: ",
-      user.email);
+      user.eMail);
     router.push({
       pathname: "/screens/friend_rec",
-      params: { graph: JSON.stringify(graph) },
+      params: { userId: user.id },
     });
 
   }
@@ -179,7 +176,7 @@ const Friends = () => {
               <FriendList
                 friends={friendsList}
                 current_user={user}
-                graph={graph_json}
+                // graph={user}
                 onViewProfile={handleFriendViewProfile}
                 onUnfriend={handleDeny}
                 onRecommend={handleRecommend}
