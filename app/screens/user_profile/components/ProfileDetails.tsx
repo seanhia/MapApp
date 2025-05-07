@@ -6,8 +6,7 @@ import { User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme';
 import { useProfileImage } from '@/hooks/useProfileImage';
 import { fetchCurrentUser } from '@/data/UserDataService';
-
-import Points from '@/app/screens/points';
+import Points from '../../Points';
 
 
 
@@ -79,7 +78,10 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
                             </TouchableOpacity>
                             <Points />
                         </View>
+
                     </View>
+
+
 
                 </Modal>
                 {/* { } */}
