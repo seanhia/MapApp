@@ -5,8 +5,8 @@ EXPLORE is designed to help users explore locations and share experiences. It en
 ## How to Run the App
 ### 1. Clone the Repository
 ```
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/seanhia/MapApp.git
+cd MapApp
 ```
 ### 2. Install Dependencies
 ```
