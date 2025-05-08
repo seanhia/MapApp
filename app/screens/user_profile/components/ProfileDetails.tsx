@@ -76,7 +76,8 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
                             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                                 <Image style={styles.x} source={require('@/assets/images/X.png')} />
                             </TouchableOpacity>
-                            <Points />
+                            <Points 
+                            user={currentUser}/>
                         </View>
 
                     </View>

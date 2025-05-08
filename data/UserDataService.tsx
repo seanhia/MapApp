@@ -459,3 +459,25 @@ export const deletePoints = async (userId: string, points: number) => {
   }
 };
 
+export async function distanceThresholds(userId: string, totalDistance: number, threshold: number){
+  if (!userId){
+    throw new Error("User Id is required to save total distance.");
+  }
+  try {
+    const disThresholdsRef = collection(db, "users", userId, "distance_Thresholds"); //Reference to the user's threshold doc
+    const thresholdDocRef = doc(disThresholdsRef, `${threshold}`)
+    
+    const thresholdSnapShot = await getDoc(thresholdDocRef); //check if the threshold doc alreay exists 
+    await setDoc (thresholdDocRef,{
+      totalDistance: totalDistance,
+      threshold: threshold,
+      achieved: false
+    });
+    console.log (`User threshold created`)
+
+  }catch (error) {
+    console.error('Error creating threshold', error);
+}
+
+}
+

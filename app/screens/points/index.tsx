@@ -1,19 +1,39 @@
-import { View, Text, Image  } from "react-native";
+import { View, Text, Image } from "react-native";
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/hooks/useTheme';
+import { User } from '@/data/types'
+import { getTotalDistance, distanceThresholds } from '@/data/UserDataService';
 
-const Points = () => {
+interface PointsProps {
+    user: User ;
+};
+
+const Points: React.FC<PointsProps> = ({user}) => {
     const { colorScheme, styles } = useTheme();
-    const currentMeters = 1000;
-    const goalMeters = 100000;
-    const progress = currentMeters/goalMeters;
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [dis, setDist] = useState<number | null>(0);
+    const firstThreshold = 50000;
+ 
+    useEffect(() => {
+        const fetchDistance = async () => {
+            const total = await getTotalDistance(user.id) || 0;
+            setDist(total);
+            await distanceThresholds(user.id, total, firstThreshold);
+        };
+        fetchDistance();
+    }, [user.id]);
+
+    
+    const progress = dis / firstThreshold;
+
 
     return (
         <View style={styles.centered}>
             <Text style={styles.header2}>POINTS</Text>
-            <Image style={styles.spinGlobe}source={require('@/assets/images/spinglobe.gif')} />
+            <Image style={styles.spinGlobe} source={require('@/assets/images/spinglobe.gif')} />
 
             <Text style={styles.text}>
-                {currentMeters} / {goalMeters} Meters
+                {dis} / {firstThreshold} Meters
             </Text>
 
             <View style={styles.progressBar}>
