@@ -113,10 +113,10 @@ export interface GraphData {
 }
 
 export const legendItems = [
-    { label: 'you', color: Colors.light.button },
-    { label: 'approved', color: Colors.dark.tint },
-    { label: 'recommend', color: Colors.dark.button },
-    { label: 'not_friends', color: '#9E9E9E' },
+    { label: 'You', color: Colors.light.button },
+    { label: 'Friends', color: Colors.dark.tint },
+    { label: 'Recommended', color: Colors.dark.button },
+    { label: 'Other', color: '#9E9E9E' },
 ];
 
 
