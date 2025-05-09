@@ -112,6 +112,7 @@ export interface GraphData {
     edges: GraphEdge[];
 }
 
+
 export const legendItems = [
     { label: 'you', color: Colors.light.button },
     { label: 'approved', color: Colors.dark.tint },
