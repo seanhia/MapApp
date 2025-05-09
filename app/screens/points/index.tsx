@@ -21,6 +21,7 @@ const Points: React.FC<PointsProps> = ({user}) => {
         const fetchDistance = async () => {
             //get distance 
             const total = await getTotalDistance(user.id) || 0;
+            
             setDist(total);
 
             let userLevel = 1;
@@ -54,7 +55,7 @@ const Points: React.FC<PointsProps> = ({user}) => {
         };
 
         fetchDistance();
-    }, [user.id]);
+    }, [user.id, threshold]);
 
 
     const progress = dis / threshold;
