@@ -13,6 +13,7 @@ export interface User {
     isDarkMode?: boolean; // Currently based on the user device settings 
     points?: number;
     profilePhoto?: string;
+    language?: string;
 };
 
 

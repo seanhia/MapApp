@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity, Image, Modal, Pressable, ScrollView, TextInput } from 'react-native'
 import { FavoriteLoc, User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme'
-import { fetchUsersFavLocation, writeData, writeFavLocation } from '@/data/UserDataService'
+import { fetchUsersFavLocation, writeData, writeFavLocation, updatePoints, deletePoints } from '@/data/UserDataService'
 
 type Props = {
     userId: string
@@ -51,6 +51,7 @@ export const Favorites = ({userId}: Props)  => {
         try {
             await writeFavLocation(userId, data, 'add')
             setFavLocations(prev => prev ? [...prev, data] : [data]); 
+            await updatePoints(userId, 10); //
             setLocation(''); 
         } catch (error ) {
             console.error("Error adding favorite location:", error);
@@ -61,6 +62,7 @@ export const Favorites = ({userId}: Props)  => {
         try {
           await writeFavLocation(userId, locationId, 'remove');
           setFavLocations((prev) => prev ? prev.filter(loc => loc.id !== locationId) : []);
+          await deletePoints(userId, 10); //
         } catch (error) {
           console.error('Error deleting favorite location:', error);
         }

@@ -19,23 +19,25 @@ const Points: React.FC<PointsProps> = ({user}) => {
  
     useEffect(() => {
         const fetchDistance = async () => {
-            //get distance 
+            //get distance traveled 
             const total = await getTotalDistance(user.id) || 0;
             
             setDist(total);
 
+            //set first level and threshold 
             let userLevel = 1;
             let userThreshold = 50000;
 
             //fetch user progress
             const progress = await getUserProgress(user.id);
-
+            //if progress assign the level and threshold accordingly 
             if(progress){
                 userLevel = progress.currentLevel;
                 userThreshold = progress.currentThreshold;
-            } else { // if no progress found
+            } else { // if no progress found save progress to database 
                 await UserProgress(user.id, level , threshold)
-            }
+            } // if distnace travel is great than threhold update level & threshold display Confetti 
+            //update points and progress to database 
             if (total >= userThreshold) {
 
                 const newLevel = userLevel + 1;
@@ -47,7 +49,7 @@ const Points: React.FC<PointsProps> = ({user}) => {
 
                 await UserProgress(user.id, newLevel, newThreshold);
                 await updatePoints(user.id, 250);
-            } else {
+            } else {  
                 setLevel(userLevel);
                 setThreshold(userThreshold);
             }
@@ -75,8 +77,8 @@ const Points: React.FC<PointsProps> = ({user}) => {
             </View>
 
             <Text>{Math.round(progress * 100)}%</Text>
-            <Text style={[styles.text, { fontSize: 10, fontWeight: '200' }]}>*To obtain points: Upload a photo +20, Travel to a new city +50, Travel to a new country +100, Complete the distance thresholds above +250</Text>
-            {showConfetti && <ConfettiCannon count={100} origin={{ x: 0, y:0}} fadeOut />}
+            <Text style={[styles.text, { fontSize: 8, fontWeight: '200' }]}>*To obtain points: Add a favorite location +10, Upload a photo +20, Travel to a new city +50, Travel to a new country +100, Complete the distance thresholds above +250</Text>
+            {showConfetti && <ConfettiCannon count={100} origin={{ x: 0, y:0}} fadeOut />} 
         </View>
     );
 };
