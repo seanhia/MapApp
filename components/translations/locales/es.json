@@ -16,6 +16,7 @@
     "alert_settings_success": "¡La configuración se actualizó!",
     "alert_error_updating_settings": "Error al actualizar la configuración. Inténtalo de nuevo.",
 
+    "enter_current_password": "Ingrese su contraseña actual, luego ingrese su nueva contraseña",
     "new_password_not_match": "La nueva contraseña no coincide con la contraseña confirmada",
     "password_changed": "Contraseña cambiada",
     "error": "Se ha producido un error. Inténtalo de nuevo más tarde.",

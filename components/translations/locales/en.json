@@ -16,6 +16,7 @@
     "alert_settings_success": "Settings updated successfully!",
     "alert_error_updating_settings": "Error updating settings. Please try again.",
 
+    "enter_current_password": "Enter your current password, then enter your new password",
     "new_password_not_match": "New password does not match confirmed password",
     "password_changed": "Password Changed",
     "error": "An error occured. Please try again later",

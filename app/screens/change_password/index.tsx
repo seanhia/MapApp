@@ -14,6 +14,8 @@ import { useTheme } from '@/hooks/useTheme';
 import { Colors } from '@/constants/Colors'
 import { ImageHeader } from '@/components/ImageHeader';
 import {validatePassword} from "@/auth";
+import { User } from '@/data/types'
+import { fetchCurrentUser } from '@/data/UserDataService';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/components/translations/i18n';
 
@@ -31,7 +33,26 @@ const UpdatePasswordScreen = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [language, setSelectedLanguage] = useState<string>('en');
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const auth = getAuth();
+
+  useEffect(() => {
+    const loadCurrentUser = async () => {
+        try {
+            const user = await fetchCurrentUser();
+            setCurrentUser(user);
+            
+            const lang = user?.language || "en";
+            setSelectedLanguage(lang);
+            i18n.changeLanguage(lang);
+
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    };
+    loadCurrentUser();
+}, []);
   const handlePasswordChange = async () => {
     setLoading(true);
     if (newPassword !== confirmPassword) {
@@ -65,7 +86,7 @@ const UpdatePasswordScreen = () => {
 
         {/* Instructions */}
         <Text style={style.instructions}>
-          Enter your current password, then enter your new password
+        {t('enter_current_password')}
         </Text>
 
         {/* Password Input */}

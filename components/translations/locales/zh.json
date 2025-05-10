@@ -16,6 +16,7 @@
     "alert_settings_success": "设置更新成功!",
     "alert_error_updating_settings": "更新设置时出错。请重试",
 
+    "enter_current_password": "输入您当前的密码，然后输入您的新密码",
     "new_password_not_match": "新密码与确认密码不匹配",
     "password_changed": "密码已更改",
     "error": "发生错误。请稍后重试",
