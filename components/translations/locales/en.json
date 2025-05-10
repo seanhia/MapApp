@@ -31,6 +31,23 @@
 
     "deny_friendship": "Are you sure you want to deny this friend request?",
     "no_friends": "No Friends Found",
-    "pending_requests": "Pending Requests"
+    "pending_requests": "Pending Requests",
+    
+    "no_users_found": "No Users Found...",
+    "add_friend": "Add Friend",
+
+    "search_users": "Search users...",
+
+    "accept": "Accept",
+    "deny": "Deny",
+
+    "friends": "Friends",
+    "rec": "Recommendations",
+    "unfriend": "Unfriend",
+
+    "pts": "POINTS",
+    "m": "Meters",
+    "rules": "*To obtain points: Add a favorite location +10, Upload a photo +20, Travel to a new city +50, Travel to a new country +100, Complete the distance thresholds above +250"
+
 
   }

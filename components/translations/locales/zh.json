@@ -31,7 +31,26 @@
 
     "deny_friendship": "您确定要拒绝此好友请求吗？",
     "no_friends": "没有找到好友",
-    "pending_requests": "待处理的请求"
+    "pending_requests": "待处理的请求",
+
+    "no_users_found": "未找到用户...",
+    "add_friend": "添加好友",
+
+    "search_users": "搜索用户...",
+
+    "accept": "接受",
+    "deny": "否定",
+
+    "friends": "朋友们",
+    "rec": "建议",
+    "unfriend": "解除好友关系",
+
+    "pts": "积分",
+    "m": "米",
+    "rules": "*获取积分方式：添加喜爱地点+10、上传照片+20、前往新城市+50、前往新国家+100、完成以上距离门槛+250"
+
+
+
 
 
    

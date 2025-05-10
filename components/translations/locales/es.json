@@ -31,7 +31,26 @@
 
     "deny_friendship": "¿Estás seguro de que deseas rechazar esta solicitud de amistad?",
     "no_friends": "No se encontraron amigos",
-    "pending_requests": "Solicitudes pendientes"
+    "pending_requests": "Solicitudes pendientes",
+
+    "no_users_found": "No se encontraron usuarios...",
+    "add_friend": "Agregar amigo",
+
+    "search_users": "Buscar usuarias ...",
+
+    "accept": "Aceptar",
+    "deny": "Negar",
+
+    "friends": "Amigos",
+    "rec": "Recomendaciones",
+    "unfriend": "quitar amigo",
+
+    "pts": "PUNTOS",
+    "m": "Metros",
+    "rules": "*Para obtener puntos: Agregar una ubicación favorita +10, Subir una foto +20, Viajar a una nueva ciudad +50, Viajar a un nuevo país +100, Completar los umbrales de distancia anteriores +250"
+
+
+
 
 
   
