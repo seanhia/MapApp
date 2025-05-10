@@ -13,12 +13,15 @@ import FooterBar from "@/components/FooterBar";
 
 import { User, Friend } from "@/data/types";
 
-import { fetchAllUsers } from "@/data/UserDataService";
+import { fetchAllUsers, fetchCurrentUser } from "@/data/UserDataService";
 import { PendingQuery, FriendQuery, deleteFriendshipAndNotifications, AcceptFriendshipAndDeleteNotification } from "@/data/Friendship";
 import { AcceptFriendship, DeleteFriendship } from "@/data/Friendship";
 import sharedStyles from "@/constants/sharedStyles";
 import { ScrollView, GestureHandlerRootView } from "react-native-gesture-handler";
 import graph_json from "@/constants/boilerplate_graph.json"
+import { useTranslation } from 'react-i18next';
+import i18n from '@/components/translations/i18n';
+
 
 // /**
 //  * Friends Screen
@@ -37,13 +40,31 @@ const Friends = () => {
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [user, setUser] = useState<any>();
+  const { t } = useTranslation();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [language, setSelectedLanguage] = useState<string>('en');
 
 
 
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const user = await fetchCurrentUser();
+        setCurrentUser(user);
+
+        const lang = user?.language || "en";
+        setSelectedLanguage(lang);
+
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
+    loadCurrentUser();
     const auth = getAuth();
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
@@ -94,7 +115,9 @@ const Friends = () => {
 
   const handleDeny = async (friendship: Friend) => {
     const confirmDeny = window.confirm(
-      "Are you sure you want to deny this friend request?"
+
+      t('deny_friendship')
+
     );
     if (confirmDeny) {
       await deleteFriendshipAndNotifications(friendship.id);
@@ -167,7 +190,9 @@ const Friends = () => {
 
           {friendsList.length === 0 && pendingRequests.length === 0 ? (
             <View style={styles.fullContainer}>
-              <Text style={[styles.text, { alignSelf: 'center' }]}>No Friends Found</Text>
+              <Text style={[styles.text, { alignSelf: 'center' }]}>
+                {t('no_friends')}
+              </Text>
             </View>
 
           ) : (
@@ -188,7 +213,7 @@ const Friends = () => {
                   <Divider />
                   <Text
                     style={styles.header}>
-                    Pending Requests
+                    {t('pending_requests')}
                   </Text>
                   <PendingList
                     pending={pendingRequests}

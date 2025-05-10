@@ -27,5 +27,12 @@
     "notification": "Notificación",
     "ok": "De Acuerdo",
 
-    "email_instructions": "Por favor, vaya a su correo electrónico y verifique su correo electrónico."
+    "friends_userId": "ID de USUARIO del amigo:",
+
+    "deny_friendship": "¿Estás seguro de que deseas rechazar esta solicitud de amistad?",
+    "no_friends": "No se encontraron amigos",
+    "pending_requests": "Solicitudes pendientes"
+
+
+  
   }

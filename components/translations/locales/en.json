@@ -27,9 +27,10 @@
     "notification": "Notification",
     "ok": "OK",
 
-    "email_instructions": "Please go to your email inbox and verify your email",
+    "friends_userId": "Friend's USER ID:",
 
-    "valid_email": "Please enter a valid email address.",
-    "password_reset": "Password reset email sent!",
-    "email_associated": "Enter the email associated with your account and we'll send you a link to reset your password."
+    "deny_friendship": "Are you sure you want to deny this friend request?",
+    "no_friends": "No Friends Found",
+    "pending_requests": "Pending Requests"
+
   }

@@ -27,6 +27,13 @@
     "notification": "通知",
     "ok": "好的",
 
-    "email_instructions": "请前往您的电子邮件收件箱并验证您的电子邮件"
+    "friends_userId": "朋友的用户 ID：",
+
+    "deny_friendship": "您确定要拒绝此好友请求吗？",
+    "no_friends": "没有找到好友",
+    "pending_requests": "待处理的请求"
+
+
+   
   }
   
