@@ -62,7 +62,9 @@
   "virt_pas": "虚拟护照",
   "place_visit": "已访问地点",
 
-  "achieve": "成就"
+  "achieve": "成就",
 
+  "private": "此帐户为私人帐户",
 
+  "view_map": "查看{{username}}的地图"
 }
