@@ -65,9 +65,10 @@
     "cancel": "Cancelar",
 
     "global": "Global",
-    "update_rank": "Actualizar rango"
+    "update_rank": "Actualizar rango",
 
-
+   "notif": "Notificaciones",
+   "no_new_notif": "No hay notificaciones nuevas"
 
 
   

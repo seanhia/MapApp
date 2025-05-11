@@ -54,6 +54,10 @@
   "cancel": "取消",
 
   "global": "全局",
-  "update_rank": "更新排名"
+  "update_rank": "更新排名",
+
+  "notif": "通知",
+  "no_new_notif": "没有新通知"
+
 
 }

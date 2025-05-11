@@ -66,7 +66,11 @@
 
 
     "global": "Global",
-    "update_rank": "Update Rank"
+    "update_rank": "Update Rank",
+
+    "notif": "Notifications",
+    "no_new_notif": "No new notifications"
+
 
 
   }
