@@ -423,7 +423,7 @@ const userExists = async (id: string): Promise<boolean> => {
 
 export const updatePoints = async (userId: string, points: number) => {
   try {
-    const userDocRef = doc(db, "users", userId);
+    const userDocRef = doc(db, "leaderboard_entry", userId,);
 
     const userDoc = await getDoc(userDocRef); // refrence user doc 
     if (userDoc.exists()) {
@@ -437,9 +437,28 @@ export const updatePoints = async (userId: string, points: number) => {
     console.error('Error updating points:', error);
   }
 };
+export const getPoints = async (userId: string): Promise<number | null> => {
+  try {
+    const userDocRef = doc(db, "leaderboard_entry", userId);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      const points = userDoc.data().points || 0;
+      console.log(`Fetched user points:`, points);
+      return points;
+    } else {
+      console.warn(`User document does not exist for ID: ${userId}`);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching points:', error);
+    return null;
+  }
+};
+
 export const deletePoints = async (userId: string, points: number) => {
   try {
-    const userDocRef = doc(db, "users", userId);
+    const userDocRef = doc(db, "leaderboard_entry", userId);
 
     const userDoc = await getDoc(userDocRef); // refrence user doc 
     if (userDoc.exists()) {

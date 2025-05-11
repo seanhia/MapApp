@@ -5,7 +5,7 @@ import { fetchFriendCount } from '@/data/Friendship';
 import { User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme';
 import { useProfileImage } from '@/hooks/useProfileImage';
-import { fetchCurrentUser } from '@/data/UserDataService';
+import { fetchCurrentUser, getPoints } from '@/data/UserDataService';
 import Points from '../../Points';
 
 
@@ -18,7 +18,7 @@ interface ProfileDetailsProps {
 const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
     const { colorScheme, styles } = useTheme();
     const [friendCount, setFriendCount] = useState<string>('-');
-    const [points, setPoints] = useState<string>('-');
+    const [points, setPoints] = useState<number | null>(null);
     const { profileImage, handleImagePicker } = useProfileImage(user);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [modalVisible, setModalVisible] = useState(false);
@@ -48,15 +48,15 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
         };
         const loadPoints = async () => {
             try {
-                const pointTotal = '0'
-                setPoints(pointTotal)
+                const userPoints = await getPoints(user.id);
+                setPoints(userPoints);
             } catch (error) {
                 console.error('Error fetching points: ', error)
             }
         }
         loadFriendCount();
         loadCurrentUser();
-        // loadPoints(); 
+        loadPoints();
     }, [user]);
 
 
@@ -76,8 +76,8 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
                             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                                 <Image style={styles.x} source={require('@/assets/images/X.png')} />
                             </TouchableOpacity>
-                            <Points 
-                            user={currentUser}/>
+                            <Points
+                                user={currentUser} />
                         </View>
 
                     </View>
@@ -108,7 +108,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
                 <View style={{ width: 75, alignItems: 'center' }}>
                     <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                         <Text style={styles.label}>Points</Text>
-                        <Text style={styles.profileDetailText}>{user?.points}</Text>
+                        <Text style={styles.profileDetailText}>{points}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

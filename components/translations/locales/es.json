@@ -47,7 +47,11 @@
 
     "pts": "PUNTOS",
     "m": "Metros",
-    "rules": "*Para obtener puntos: Agregar una ubicación favorita +10, Subir una foto +20, Viajar a una nueva ciudad +50, Viajar a un nuevo país +100, Completar los umbrales de distancia anteriores +250"
+    "rules": "*Para obtener puntos: Agregar una ubicación favorita +10, Subir una foto +20, Viajar a una nueva ciudad +50, Viajar a un nuevo país +100, Completar los umbrales de distancia anteriores +250",
+
+    "leader": "Tabla de clasificación",
+    "home": "Hogar",
+    "profile": "Perfil"
 
 
 

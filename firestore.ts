@@ -169,7 +169,7 @@ export async function saveStats(userId: string) {
 
     console.log(`New country added: ${CityCountry.country} - Awarded 100 points`);
 
-    const userDocRef = doc(db, "users", userId);
+    const userDocRef = doc(db, "leaderboard_entry", userId);
     const userDoc = await getDoc(userDocRef); // refrence user doc 
 
     if(userDoc.exists()){
@@ -200,7 +200,7 @@ export async function saveStats(userId: string) {
     console.log(`New location added: ${CityCountry.city}, ${CityCountry.country} - Awarded 50 points`);
 
 
-    const userDocRef = doc(db, "users", userId);
+    const userDocRef = doc(db, "leaderboard_entry", userId);
     const userDoc = await getDoc(userDocRef); // refrence user doc 
 
     if (userDoc.exists()) {

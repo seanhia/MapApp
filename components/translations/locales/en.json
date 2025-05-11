@@ -47,7 +47,11 @@
 
     "pts": "POINTS",
     "m": "Meters",
-    "rules": "*To obtain points: Add a favorite location +10, Upload a photo +20, Travel to a new city +50, Travel to a new country +100, Complete the distance thresholds above +250"
+    "rules": "*To obtain points: Add a favorite location +10, Upload a photo +20, Travel to a new city +50, Travel to a new country +100, Complete the distance thresholds above +250",
+
+    "leader": "Leaderboard",
+    "home": "Home",
+    "profile": "Profile"
 
 
   }
