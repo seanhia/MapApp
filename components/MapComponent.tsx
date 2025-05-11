@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { View, Text } from "react-native";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { fetchLocations } from "@/firestore"; // Ensure this returns a Promise<Location[]>
+import { useFocusEffect } from '@react-navigation/native';
+
+
 
 const googleMapsAPIKey = "AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c";
 
@@ -46,13 +49,14 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, userI
   }, [userId]);
   
 
+
   const calculateRadiusInPixels = (zoom: number, lat: number) => {
     const metersPerPixel = (40008000 * Math.cos(lat * Math.PI / 180)) / (Math.pow(2, zoom) * 256);
     return 100 / metersPerPixel;
   };
 
   const updateCircle = useCallback(() => {
-    if (!googleMaps || !mapRef.current || !initialCenter) return;
+   if (!googleMaps || !mapRef.current || !initialCenter) return;
 
     const map = mapRef.current;
     const zoom = map.getZoom();
@@ -90,6 +94,23 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, userI
     overlayRef.current = overlay;
   }, [googleMaps, initialCenter, locations]);
 
+  useFocusEffect(
+    useCallback(() => {
+      console.log("[MapComponent] Map screen focused: reloading overlay");
+      updateCircle();
+
+
+      if (googleMaps && mapRef.current) {
+        updateCircle();
+      }
+  
+      return () => {
+        // Optional: Cleanup if needed
+      };
+    }, [googleMaps, updateCircle])
+  );
+  
+
   useEffect(() => {
     if (!googleMaps || !mapRef.current) return;
 
@@ -112,6 +133,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, userI
   };
 
   if (!isLoaded) return <Text>Loading...</Text>;
+  
 
   return (
     <View style={{ position: "absolute", width: "100%", height: "90%" }}>
