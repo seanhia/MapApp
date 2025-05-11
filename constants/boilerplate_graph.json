@@ -1,0 +1,66 @@
+{
+    "nodes": [
+        {
+            "id": 1,
+            "label": "Sophia",
+            "group": "you"
+        },
+        {
+            "id": 2,
+            "label": "Nick",
+            "group": "approved"
+        },
+        {
+            "id": 3,
+            "label": "Jade",
+            "group": "recommend"
+        }, 
+        {
+            "id": 4,
+            "label": "Sean",
+            "group": "approved"
+        },
+        {
+            "id": 5,
+            "label": "Eduardo",
+            "group": "recommend"
+        },
+        {
+            "id": 6,
+            "label": "Bianca",
+            "group": "not_friends"
+        }
+
+    ],
+    "edges": [
+        {
+            "source": 1,
+            "target": 2
+        },
+        {
+            "source": 2,
+            "target": 3
+        },
+        {
+            "source": 4,
+            "target": 1
+        },
+        {
+            "source": 4,
+            "target": 3
+        },
+        {
+            "source": 2,
+            "target": 4
+        },
+        {
+            "source": 4,
+            "target": 5
+        },
+        {
+            "source": 5,
+            "target": 6 
+        }
+
+    ]
+}

@@ -7,11 +7,11 @@ import { SearchBar } from '@/components/MapSearchBar';
 import useRealTimeTracking from '../../hooks/useRealTimeTracking';
 import { getAuth } from "firebase/auth";
 import { Colors } from '@/constants/Colors';
-import { useTheme } from '@/hooks/useTheme'; 
+import { useTheme } from '@/hooks/useTheme';
 import { Favorites } from './components/Favorites';
 import { Recommendations } from './components/Recommendations';
 import { saveStats } from '@/firestore';
-import {fetchWeather,getSeason,createSeasonalImage} from './components/weather';
+import { fetchWeather, getSeason, createSeasonalImage } from './components/weather';
 import { nearbySearch } from '@/data/MapData';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
@@ -56,14 +56,14 @@ export default function Home() {
     }
   };
 
-  
+
   useEffect(() => {
     if (location?.coords) {
       nearbySearch(location.coords.latitude, location.coords.longitude)
-          .then(results => {
-              // Do something with results
-              console.log('Nearby places:', results[0].id);
-          });
+        .then(results => {
+          // Do something with results
+          console.log('Nearby places:', results[0].id);
+        });
     }
     if (location) {
       console.log("Real-time location:", location.coords.latitude, location.coords.longitude);
@@ -74,7 +74,7 @@ export default function Home() {
         .catch(() => Alert.alert("Unable to fetch weather data."));
     }
 
-    if(userId) {
+    if (userId) {
       saveStats(userId);
     }
 
@@ -115,7 +115,7 @@ export default function Home() {
   };
   colorScheme === 'dark' ? Colors.dark.background : Colors.light.background
 
-  return (     
+  return (
     <View style={[styles.fullContainer, { flexDirection: 'row' }]}>
       <SearchBar onPlaceSelected={handlePlaceChanged} />
       <View style={style.mapContainer}>
@@ -126,7 +126,7 @@ export default function Home() {
           userId={userId}
         />
       </View>
-      
+
 
       {/* Weather Icon */}
       {weather?.iconUrl && (
@@ -144,10 +144,10 @@ export default function Home() {
           />
         </TouchableOpacity>
       )}
-      
+
       <Recommendations userId={userId} />
       <Favorites userId={userId} />
-      
+
       {/* Weather Details */}
       {isExpanded && weather?.details && (
         <View style={style.weatherPopup}>
@@ -157,10 +157,10 @@ export default function Home() {
           <Text>Wind Speed: {weather.details.wind?.speed} m/s</Text>
         </View>
       )}
-      
+
 
       <FooterBar />
-      <Recommendations userId={userId}/>
+      <Recommendations userId={userId} />
     </View>
   );
 }

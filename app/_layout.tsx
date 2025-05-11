@@ -86,7 +86,7 @@ export default function RootLayout() {
       <I18nextProvider i18n={i18n}> {/**implements translation to teh whole app */}
         <Stack // Transition between screens where each new screen is placed on top of a stack
           screenOptions={{
-            headerStyle: { backgroundColor: theme == 'dark' ? Colors.dark.background : Colors.light.background},
+            headerStyle: { backgroundColor: theme == 'dark' ? Colors.dark.background : Colors.light.background },
             headerTintColor: theme == 'dark' ? Colors.dark.text : Colors.light.text,
             headerTitleStyle: { fontWeight: "bold" },
           }}
@@ -119,6 +119,10 @@ export default function RootLayout() {
           <Stack.Screen
             name="screens/friends/index"
             options={{ title: "", headerShown: false }}
+          />
+          <Stack.Screen
+            name="screens/friend_rec/index"
+            options={{ title: "", headerShown: true }}
           />
           <Stack.Screen
             name="screens/profile_view/index"

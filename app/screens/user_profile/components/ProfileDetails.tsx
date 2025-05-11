@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';  //install this
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, Alert } from 'react-native';
 
 import { fetchFriendCount } from '@/data/Friendship';
 import { User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme';
 import { useProfileImage } from '@/hooks/useProfileImage';
 import { fetchCurrentUser } from '@/data/UserDataService';
-import { storage } from '@/firebase'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc } from 'firebase/firestore';
-import db from '@/firestore';
+import Points from '../../Points';
+
+
+
 
 
 interface ProfileDetailsProps {
@@ -22,18 +21,19 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
     const [points, setPoints] = useState<string>('-');
     const { profileImage, handleImagePicker } = useProfileImage(user);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
 
 
-         const loadCurrentUser = async () => {
-             try {
+        const loadCurrentUser = async () => {
+            try {
                 const user = await fetchCurrentUser();
                 setCurrentUser(user)
-             } catch (error) {
-             console.error('Error fetching user')
-        }
-       };
+            } catch (error) {
+                console.error('Error fetching user')
+            }
+        };
 
         const loadFriendCount = async () => {
             try {
@@ -53,9 +53,9 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
             } catch (error) {
                 console.error('Error fetching points: ', error)
             }
-        } 
+        }
         loadFriendCount();
-        loadCurrentUser(); 
+        loadCurrentUser();
         // loadPoints(); 
     }, [user]);
 
@@ -63,6 +63,28 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
     return (
         <View style={{ paddingHorizontal: 15 }}>
             <View style={styles.buttonContainer}>
+                <Modal
+                    animationType="none"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                        setModalVisible(!modalVisible);
+                    }}>
+                    <View style={styles.centered}>
+                        <View style={styles.modalView}>
+                            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                                <Image style={styles.x} source={require('@/assets/images/X.png')} />
+                            </TouchableOpacity>
+                            <Points 
+                            user={currentUser}/>
+                        </View>
+
+                    </View>
+
+
+
+                </Modal>
                 {/* { } */}
 
                 <TouchableOpacity onPress={handleImagePicker}>
@@ -84,8 +106,10 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
 
 
                 <View style={{ width: 75, alignItems: 'center' }}>
-                    <Text style={styles.label}>Points</Text>
-                    <Text style={styles.profileDetailText}>{user?.points}</Text>
+                    <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                        <Text style={styles.label}>Points</Text>
+                        <Text style={styles.profileDetailText}>{user?.points}</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
 
@@ -109,8 +133,8 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
 
             <View style={styles.fullContainer}>
                 <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>Account Created:</Text>
-                <Text style={[styles.text, { padding: 0, fontWeight: '100', marginBottom: 30  }]}>
-                    {user?.createdAt ?  new Date((user.createdAt)).toLocaleDateString("en-US") : "Loading"}
+                <Text style={[styles.text, { padding: 0, fontWeight: '100', marginBottom: 30 }]}>
+                    {user?.createdAt ? new Date((user.createdAt)).toLocaleDateString("en-US") : "Loading"}
                 </Text>
             </View>
         </View>
@@ -129,5 +153,18 @@ const style = StyleSheet.create({
         fontSize: 16,
         fontWeight: '400',
         color: 'black',
+    },
+
+    blurContainer: {
+        flex: 1,
+        padding: 20,
+        margin: 16,
+        textAlign: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        borderRadius: 20,
     }
+
+
+
 });

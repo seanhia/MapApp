@@ -1,18 +1,20 @@
 import { Timestamp, FieldValue, CollectionReference } from "firebase/firestore";
 import { ImageSourcePropType } from "react-native";
+import { Colors } from "@/constants/Colors";
 
 export interface User {
     id: string;
     username: string;
     eMail: string;
     createdAt: Date;
-    bio?: string; 
-    phoneNumber?: string; 
-    isPrivate?: boolean; 
+    bio?: string;
+    phoneNumber?: string;
+    isPrivate?: boolean;
     isDarkMode?: boolean; // Currently based on the user device settings 
-    points?: number; 
+    points?: number;
     profilePhoto?: string;
-  };
+    language?: string;
+};
 
 
 export const userSubcollections = ['posts', 'locations', 'favorite', 'stats'];
@@ -22,7 +24,7 @@ export interface Friend {
     friendId: string,
     friendUsername: string,
     createdAt: Date,
-    status: string, 
+    status: string,
     friendProfilePhoto?: string,
 };
 
@@ -30,20 +32,21 @@ export interface Friend {
 export const status = [
     'pending',
     'approved',
-    'rejected', 
-    'invalid'
+    'not_friends', // rejected or never sent request 
+    'recommend',
+    'you'
 ]
 
 export interface Post {
     id: string,
     location: string,
     review: string,
-    published: boolean, 
-    authorUid: string, 
+    published: boolean,
+    authorUid: string,
     image?: string,
     createdAt: Timestamp,
     rating: Rating,
-    likes?: User[], 
+    likes?: User[],
     comment?: string[]
 
 };
@@ -74,11 +77,11 @@ export interface Leaderboard {
     username: string,
     points: number,
     last_updated: Date,
-}; 
+};
 
 export interface FavoriteLoc {
-    id: string, 
-    latitude: string,  
+    id: string,
+    latitude: string,
     longitude: string,
     name: string
 }
@@ -89,6 +92,36 @@ export interface RecommendationLoc {
 }
 
 
+
+export interface GraphNode {
+    id: string; // changed from number to string debug in visualizer 
+    label: string;
+    group: string;
+    x?: number;
+    y?: number;
+    fx?: number | null;
+    fy?: number | null;
+}
+
+export interface GraphEdge {
+    source: number;
+    target: number;
+}
+
+export interface GraphData {
+    nodes: GraphNode[];
+    edges: GraphEdge[];
+}
+
+
+export const legendItems = [
+    { label: 'You', color: Colors.light.button },
+    { label: 'Friends', color: Colors.dark.tint },
+    { label: 'Recommended', color: Colors.dark.button },
+    { label: 'Other', color: '#9E9E9E' },
+];
+
+
 /** ALL INTERFACES BELOW ARE NOT INMPLEMENTED YET */
 
 export interface PlaceDetails {
@@ -97,7 +130,7 @@ export interface PlaceDetails {
             lat: number;
             lng: number;
         };
-    };  
+    };
 };
 
 export interface Friendship {
@@ -110,7 +143,7 @@ export interface Friendship {
     createdAt: Date,
 };
 
-export interface Comment { 
+export interface Comment {
     id: string,
     postId: string,
     content: string,
@@ -119,7 +152,7 @@ export interface Comment {
     createdAt: Date,
 };
 
-export interface Like { 
+export interface Like {
     id: string,
     post_id: string,
     user_id: string,

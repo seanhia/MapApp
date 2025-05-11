@@ -27,13 +27,18 @@ const UserSettings = () => {
     const [bio, setBio] = useState('');
     const [eMail, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
+    const [language, setSelectedLanguage] = useState<string>('en');
 
     useEffect(() => {
         const loadCurrentUser = async () => {
             try {
                 const user = await fetchCurrentUser();
                 setCurrentUser(user);
+                
+                const lang = user?.language || "en";
+                setSelectedLanguage(lang);
+                i18n.changeLanguage(lang);
+
             } catch (error) {
                 console.error('Error fetching user:', error);
             }
@@ -82,6 +87,7 @@ const UserSettings = () => {
             bio,
             eMail,
             phoneNumber,
+            language,
             'isPrivate': isPrivateAccount,
             'isDarkMode': isDarkMode,
         };
@@ -190,7 +196,7 @@ const UserSettings = () => {
                         <View style={styles.card}>
                             <Text style={styles.labels}>{t('choose_language')}</Text>
                             <Picker
-                                selectedValue={selectedLanguage}
+                                selectedValue={language}
                                 onValueChange={(itemValue: string) => {
                                     setSelectedLanguage(itemValue); //set language 
                                     i18n.changeLanguage(itemValue); //change to language 

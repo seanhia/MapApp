@@ -1,9 +1,9 @@
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc, getCountFromServer, orderBy, serverTimestamp, limit } from 'firebase/firestore';
-import db from '@/firestore'; 
-import { getAuth, deleteUser as authDeleteUser  } from 'firebase/auth';
+import db from '@/firestore';
+import { getAuth, deleteUser as authDeleteUser } from 'firebase/auth';
 import { User, userSubcollections as subcollections, Leaderboard, FavoriteLoc } from './types';
 import { Timestamp } from 'firebase/firestore';
-import {FriendQueryBasedOnUserId, fetchFriendCount} from './Friendship'
+import { FriendQueryBasedOnUserId, fetchFriendCount } from './Friendship'
 
 
 /**
@@ -11,9 +11,9 @@ import {FriendQueryBasedOnUserId, fetchFriendCount} from './Friendship'
  */
 const isUser = (data: any): data is User => {
   return (
-    typeof data === 'object' 
-    && data !== null 
-    && 'id' in data 
+    typeof data === 'object'
+    && data !== null
+    && 'id' in data
     && 'username' in data
     && 'firstName' in data
   );
@@ -24,22 +24,22 @@ const isUser = (data: any): data is User => {
 */
 const isLeaderboard = (data: any): data is Leaderboard => {
   return (
-    typeof data === 'object' 
+    typeof data === 'object'
     && data !== null
-    && 'id' in data 
+    && 'id' in data
     && 'points' in data
-    && 'ranking' in data 
+    && 'ranking' in data
   );
 };
 
 const isFavoriteLoc = (data: any): data is FavoriteLoc => {
   return (
     typeof data === 'object'
-    && data != null 
+    && data != null
     && 'id' in data
     && 'latitude' in data
     && 'longitude' in data
-    && 'name' in data 
+    && 'name' in data
   )
 }
 
@@ -66,12 +66,12 @@ export const fetchCurrentUser = async (): Promise<User | null> => {
   }
 
   const userData = userDocSnap.data();
-  const createdAt = userData.createdAt instanceof Timestamp 
-  ? userData.createdAt.toDate() //if Timestamp change to Date format 
-  : userData.createdAt;
+  const createdAt = userData.createdAt instanceof Timestamp
+    ? userData.createdAt.toDate() //if Timestamp change to Date format 
+    : userData.createdAt;
 
 
-  return { id: currentUser.uid, ...userData, createdAt: createdAt || new Date()} as User;
+  return { id: currentUser.uid, ...userData, createdAt: createdAt || new Date() } as User;
 };
 
 
@@ -100,12 +100,12 @@ export const fetchCurrentUserLeaderboard = async (): Promise<Leaderboard | null>
   }
   const userData = userDocSnap.data();
 
-  return { id: currentUser.uid, ...userData} as Leaderboard;
+  return { id: currentUser.uid, ...userData } as Leaderboard;
 };
 
 export const getTotalDistance = async (id: string) => {
   try {
-    const statsRef = collection(db, 'users', id, 'locations'); 
+    const statsRef = collection(db, 'users', id, 'locations');
     const statsSnap = await getDocs(statsRef);
     var totalDis = 0;
     statsSnap.forEach((dfromL) => {
@@ -114,14 +114,14 @@ export const getTotalDistance = async (id: string) => {
     return Math.round(totalDis)
   } catch (error) {
     console.error('getCites: ', error)
-    return null; 
+    return null;
   }
 }
 
 
 export const getCitiesSize = async (id: string) => {
   try {
-    const statsRef = collection(db, 'users', id, 'stats'); 
+    const statsRef = collection(db, 'users', id, 'stats');
     const statsSnap = await getCountFromServer(statsRef);
     const size = statsSnap.data().count;
     return size;
@@ -129,7 +129,7 @@ export const getCitiesSize = async (id: string) => {
 
   } catch (error) {
     console.error('getCites: ', error)
-    return null; 
+    return null;
   }
 }
 /**
@@ -139,7 +139,7 @@ export const getCitiesSize = async (id: string) => {
  */
 export const fetchUsersFavLocation = async (id: string): Promise<FavoriteLoc[] | null> => {
   try {
-    const favLocactionsRef = collection(db, 'users', id, 'favorite'); 
+    const favLocactionsRef = collection(db, 'users', id, 'favorite');
     const favLocationsSnap = await getDocs(favLocactionsRef)
     let favList: FavoriteLoc[] = []
     favLocationsSnap.forEach((location) => {
@@ -148,7 +148,7 @@ export const fetchUsersFavLocation = async (id: string): Promise<FavoriteLoc[] |
     return favList as FavoriteLoc[]
   } catch (error) {
     console.error('fetchUsersFavLocation: ', error)
-    return null; 
+    return null;
   }
 }
 
@@ -161,7 +161,7 @@ export const fetchUserByUID = async (id: string): Promise<User | null> => {
   try {
     const userDocRef = doc(db, 'users', id);
     const userDocSnap = await getDoc(userDocRef);
-    console.log("fetching user id: ",userDocSnap.data())
+    console.log("fetching user id: ", userDocSnap.data())
 
     if (!userDocSnap.exists()) {
       console.error(`No user found with UID: ${id}`);
@@ -170,12 +170,12 @@ export const fetchUserByUID = async (id: string): Promise<User | null> => {
 
     // Fetch the user's data
     const userData = userDocSnap.data();
-     // Convert the `createdAt` field if it's a Timestamp, else return as is
-     if (userData.createdAt instanceof Timestamp) {
+    // Convert the `createdAt` field if it's a Timestamp, else return as is
+    if (userData.createdAt instanceof Timestamp) {
       userData.createdAt = userData.createdAt.toDate();
     }
 
-    return { id, ...userData} as User;
+    return { id, ...userData } as User;
 
   } catch (error) {
     console.error('Error fetching user:', error);
@@ -192,14 +192,14 @@ export const fetchUserByUID = async (id: string): Promise<User | null> => {
 export const writeData = async (data: User | Leaderboard | FavoriteLoc): Promise<void> => {
   var collection_name = ''
   try {
-    
 
-    if (isUser(data)){
+
+    if (isUser(data)) {
       collection_name = 'users'
     } else if (isLeaderboard(data)) {
       collection_name = 'leaderboard_entry'
-    // } else if (isFavoriteLoc(data)) {
-    //   collection_name = 'favorite'
+      // } else if (isFavoriteLoc(data)) {
+      //   collection_name = 'favorite'
     } else {
       throw new Error('Invalid data type. Expected User, Leaderboard, or FavoriteLoc.');
     }
@@ -213,29 +213,29 @@ export const writeData = async (data: User | Leaderboard | FavoriteLoc): Promise
 };
 
 export const writeFavLocation = async (
-  userId: string, 
-  dataOrId: FavoriteLoc | string, 
-  action: "add" | "remove"): 
+  userId: string,
+  dataOrId: FavoriteLoc | string,
+  action: "add" | "remove"):
   Promise<void> => {
-    try {
-      const docId = typeof dataOrId === "string" ? dataOrId : dataOrId.id;
+  try {
+    const docId = typeof dataOrId === "string" ? dataOrId : dataOrId.id;
 
-      const docRef = doc(db, 'users', userId, 'favorite', docId);
-      if (action === "add") {
-        if (typeof dataOrId === "object") {
-          await setDoc(docRef, dataOrId, { merge: true });
-          console.log("Favorite location added/updated:", dataOrId);
-        } else {
-          console.error("Invalid data provided for adding a favorite location.");
-        }
-      } else if (action === "remove") {
-        await deleteDoc(docRef);
-        console.log("Favorite location removed:", docId);
+    const docRef = doc(db, 'users', userId, 'favorite', docId);
+    if (action === "add") {
+      if (typeof dataOrId === "object") {
+        await setDoc(docRef, dataOrId, { merge: true });
+        console.log("Favorite location added/updated:", dataOrId);
+      } else {
+        console.error("Invalid data provided for adding a favorite location.");
       }
-    } catch (error) {
-      console.error("Error updating favorite location:", error);
+    } else if (action === "remove") {
+      await deleteDoc(docRef);
+      console.log("Favorite location removed:", docId);
     }
+  } catch (error) {
+    console.error("Error updating favorite location:", error);
   }
+}
 
 
 /**
@@ -268,16 +268,16 @@ export const fetchAllUsers = async (): Promise<User[]> => {
     const users = usersSnapshot.docs.map(doc => {
       const data = doc.data();
 
-  
+
       return {
         id: doc.id,
         username: data.username,
         eMail: data.email,
-        createdAt: data.createdAt ? ( data.createdAt instanceof Timestamp ? data.createdAt.toDate() : data.createdAt) 
-        : new Date(),
+        createdAt: data.createdAt ? (data.createdAt instanceof Timestamp ? data.createdAt.toDate() : data.createdAt)
+          : new Date(),
       } as User;
     });
-    return users; 
+    return users;
   } catch (error) {
     console.error('Error fetching all users:', error);
     return [];
@@ -297,7 +297,7 @@ export const getTopFourUsers = async () => {
   const topPoints = await getDocs(usersSorted);
   const people = topPoints.docs.map(doc => ({ id: doc.id, ...doc.data() } as Leaderboard));
   return people
-  
+
 }
 
 export const getFriendsRank = async () => {
@@ -306,17 +306,17 @@ export const getFriendsRank = async () => {
   const friends = await FriendQueryBasedOnUserId(currentUser.uid);
   const colSize = friends.length
   const friendsList = []
-  for (var i = 0; i < colSize; i++){
+  for (var i = 0; i < colSize; i++) {
     const userDocRef = doc(db, 'leaderboard_entry', friends[i].friendId);
     console.log(friends[i].friendId)
     const pleaseWork = await getDoc(userDocRef)
     friendsList.push(pleaseWork.data())
-    }
+  }
   return friendsList as Leaderboard[];
 }
 
 
-  
+
 export async function rankUsers() {
   const collectionRef = collection(db, 'leaderboard_entry');
   const usersSorted = query(collectionRef, orderBy("points", 'desc'));
@@ -324,10 +324,11 @@ export async function rankUsers() {
   const pleaseGod = topPoints.docs.map(doc => ({ id: doc.id, ...doc.data() } as Leaderboard));
   const colSize = await getCollectionSize('leaderboard_entry');
 
-  for (var i = 0; i < colSize-1; i++){
+  for (var i = 0; i < colSize - 1; i++) {
     const userDocRef = doc(db, 'leaderboard_entry', pleaseGod[i].id);
-    await updateDoc(userDocRef, {ranking: i+1,
-                                 last_updated: serverTimestamp()
+    await updateDoc(userDocRef, {
+      ranking: i + 1,
+      last_updated: serverTimestamp()
     })
   }
 }
@@ -340,10 +341,10 @@ export async function rankUsers() {
  */
 export const deleteUser = async (uid: string) => {
   try {
-    const auth = getAuth(); 
+    const auth = getAuth();
 
-     // Delete all subcollections before deleting the user document
-     await deleteSubcollections(uid);
+    // Delete all subcollections before deleting the user document
+    await deleteSubcollections(uid);
 
     // Reference to the user's document
     const userDocRef = doc(db, 'users', uid);
@@ -368,7 +369,7 @@ export const deleteUser = async (uid: string) => {
     await Promise.all(deleteFriendships);
     console.log(`All friendships associated with user ${uid} deleted.`);
 
-     const user = auth.currentUser;
+    const user = auth.currentUser;
     if (user && user.uid === uid) {
       await authDeleteUser(user);
       console.log(`User ${uid} deleted from Firebase Authentication.`);
@@ -411,7 +412,7 @@ const userExists = async (id: string): Promise<boolean> => {
     if (!userDocSnap.exists()) {
       console.error(`No user found with UID: ${id}`);
       return false;
-    } else { 
+    } else {
       return true
     }
   } catch (error) {
@@ -422,40 +423,87 @@ const userExists = async (id: string): Promise<boolean> => {
 
 export const updatePoints = async (userId: string, points: number) => {
   try {
-    const userDocRef = doc(db, "users", userId); 
+    const userDocRef = doc(db, "users", userId);
 
     const userDoc = await getDoc(userDocRef); // refrence user doc 
-        if (userDoc.exists()) {
-            const currentPoints = userDoc.data().points || 0; // get current points 
-            await updateDoc(userDocRef, {
-                points: currentPoints + points, //update 
-            });
-            console.log(`User points updated: +`, {points});
-        }
-  } catch (error){
+    if (userDoc.exists()) {
+      const currentPoints = userDoc.data().points || 0; // get current points 
+      await updateDoc(userDocRef, {
+        points: currentPoints + points, //update 
+      });
+      console.log(`User points updated: +`, { points });
+    }
+  } catch (error) {
     console.error('Error updating points:', error);
   }
 };
 export const deletePoints = async (userId: string, points: number) => {
   try {
-    const userDocRef = doc(db, "users", userId); 
+    const userDocRef = doc(db, "users", userId);
 
     const userDoc = await getDoc(userDocRef); // refrence user doc 
-        if (userDoc.exists()) {
-            let currentPoints = userDoc.data().points || 0; // get current points 
-            currentPoints = currentPoints - points;
-            if (currentPoints < 0){
-              currentPoints = 0;
-            }
-            await updateDoc(userDocRef, {
-                points: currentPoints 
-             
-            });
-            
-            console.log(`User points updated: -`, {points});
-        }
-  } catch (error){
+    if (userDoc.exists()) {
+      let currentPoints = userDoc.data().points || 0; // get current points 
+      currentPoints = currentPoints - points;
+      if (currentPoints < 0) {
+        currentPoints = 0;
+      }
+      await updateDoc(userDocRef, {
+        points: currentPoints
+
+      });
+
+      console.log(`User points updated: -`, { points });
+    }
+  } catch (error) {
     console.error('Error updating points:', error);
   }
 };
+
+//save user progress
+export const UserProgress = async (
+  userId: string,
+  level: number,
+  threshold: number
+) => {
+  if (!userId) {
+    throw new Error("User Id is required to save progress.");
+  }
+  try {
+    const progressRef = doc(db, "users", userId, "threshold", "progress");
+    await setDoc(progressRef, {
+      currentLevel: level,
+      currentThreshold: threshold
+    }, { merge: true });
+
+  } catch (error) {
+    console.error(`Error saving progress`);
+  }
+};
+
+
+//get user progress
+export const getUserProgress = async (userId: string) => {
+  if (!userId) {
+    throw new Error("User Id is required to fetch progress.");
+  }
+  try{
+    const progressRef = doc(db, "users", userId, "threshold", "progress");
+  const progressSnap = await getDoc(progressRef);
+
+  if (progressSnap.exists()) {
+    return progressSnap.data();
+  }
+
+  return null;
+
+  } catch (error) {
+    console.error(`Error fetching progress`);
+  }
+
+
+}
+
+
+
 

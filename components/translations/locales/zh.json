@@ -16,6 +16,7 @@
     "alert_settings_success": "设置更新成功!",
     "alert_error_updating_settings": "更新设置时出错。请重试",
 
+    "enter_current_password": "输入您当前的密码，然后输入您的新密码",
     "new_password_not_match": "新密码与确认密码不匹配",
     "password_changed": "密码已更改",
     "error": "发生错误。请稍后重试",
@@ -26,6 +27,32 @@
     "notification": "通知",
     "ok": "好的",
 
-    "email_instructions": "请前往您的电子邮件收件箱并验证您的电子邮件"
+    "friends_userId": "朋友的用户 ID：",
+
+    "deny_friendship": "您确定要拒绝此好友请求吗？",
+    "no_friends": "没有找到好友",
+    "pending_requests": "待处理的请求",
+
+    "no_users_found": "未找到用户...",
+    "add_friend": "添加好友",
+
+    "search_users": "搜索用户...",
+
+    "accept": "接受",
+    "deny": "否定",
+
+    "friends": "朋友们",
+    "rec": "建议",
+    "unfriend": "解除好友关系",
+
+    "pts": "积分",
+    "m": "米",
+    "rules": "*获取积分方式：添加喜爱地点+10、上传照片+20、前往新城市+50、前往新国家+100、完成以上距离门槛+250"
+
+
+
+
+
+   
   }
   

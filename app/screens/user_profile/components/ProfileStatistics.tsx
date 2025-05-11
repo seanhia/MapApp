@@ -1,8 +1,8 @@
 import { useTheme } from '@/hooks/useTheme';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { getCitiesSize, getTotalDistance } from '@/data/UserDataService';
-import { getAuth, deleteUser as authDeleteUser  } from 'firebase/auth';
+import { getAuth, deleteUser as authDeleteUser } from 'firebase/auth';
 
 
 const ProfileStatistics = () => {
@@ -10,23 +10,23 @@ const ProfileStatistics = () => {
     const [info, setData] = useState<number | null>(0);
     const [dis, setDist] = useState<number | null>(0);
     useEffect(() => {
-            const fetchData = async () => {
-                const auth = getAuth();
-                const currentUser = auth.currentUser;
-                const citiesSize = await getCitiesSize(currentUser.uid);
-                const babyDistance = await getTotalDistance(currentUser.uid);
-                setData(citiesSize)
-                setDist(babyDistance)
-            }
-    
+        const fetchData = async () => {
+            const auth = getAuth();
+            const currentUser = auth.currentUser;
+            const citiesSize = await getCitiesSize(currentUser.uid);
+            const babyDistance = await getTotalDistance(currentUser.uid);
+            setData(citiesSize)
+            setDist(babyDistance)
+        }
 
-            fetchData();
 
-        }, []);
-    
+        fetchData();
+
+    }, []);
+
     return (
         <View style={[styles.fullContainer, { paddingBottom: 200 }]}>
-            <Text style={styles.header}>Statistics</Text>
+            <Text style={styles.heading}>Statistics</Text>
             <View style={styles.profileContainer}>
                 <Image style={style.statsImage} source={require('@/assets/images/distance.jpg')} />
                 <Image style={style.statsImage} source={require('@/assets/images/city.jpg')} />
@@ -55,6 +55,6 @@ const style = StyleSheet.create({
     statsImage: {
         height: 100, width: 100
     },
-    
+
 })
 

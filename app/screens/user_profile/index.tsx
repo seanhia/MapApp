@@ -30,6 +30,7 @@ const userProfile = () => {
     loadCurrentUser();
   }, []);
 
+
   return (
     <View style={styles.fullContainer}>
       <ScrollView >

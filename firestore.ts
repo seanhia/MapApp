@@ -156,6 +156,38 @@ export async function saveStats(userId: string) {
   const CityCountryRef = collection(db, `users/${userId}/stats`);
   const statsDocRef = doc(CityCountryRef, `${CityCountry.city}_${CityCountry.country}`);
 
+  const CountryRef = collection(db, `users/${userId}/countries`);
+  const countryDocRef = doc(CountryRef, `${CityCountry.country}`);
+
+  const countrySnapshot = await getDoc(countryDocRef); // check if the country has been visited already 
+
+  if (!countrySnapshot.exists()){ //add country if it doesn;t exits 
+    await setDoc(countryDocRef,{
+      country: CityCountry.country,
+      points:100 // 100 points for every new country 
+    });
+
+    console.log(`New country added: ${CityCountry.country} - Awarded 100 points`);
+
+    const userDocRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userDocRef); // refrence user doc 
+
+    if(userDoc.exists()){
+      const currentPoints = userDoc.data().points || 0; // get current points id user doesn't have any assign 0 
+      const updatePoints = currentPoints + 100;
+
+      await updateDoc(userDocRef, {
+        points: updatePoints, //update points 
+      });
+      console.log(`User points updated: +100`);
+    } else {
+      console.error(`User document with id ${userId} does not exist.`)
+    }
+
+  } else {
+    console.log (`Country already exists: ${CityCountry.country}. Points not added.`);
+  }
+
   const locationSnapshot = await getDoc(statsDocRef);// check if city_country already exists 
 
   if (!locationSnapshot.exists()) { //add location if it doesn't exists 

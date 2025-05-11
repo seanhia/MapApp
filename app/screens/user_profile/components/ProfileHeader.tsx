@@ -21,7 +21,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
 
     const closeModal = () => {
         setModalVisible(false);
-      };
+    };
 
 
     return (
@@ -29,7 +29,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }} >
 
-                    <Text style={styles.heading}>Profile</Text>
+                    <Text style={[styles.heading, { padding: 0 }]}>Profile</Text>
                     <View style={{ flexDirection: 'row', gap: 15 }}>
                         <TouchableOpacity onPress={() => setModalVisible(true)}>
                             <Image
@@ -47,7 +47,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
                                 style={[styles.profilePicture, {
                                     height: 30,
                                     width: 30,
-                                }]}                          
+                                }]}
                                 source={require('@/assets/images/globe.png')}
                             />
                         </TouchableOpacity>
@@ -68,17 +68,17 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
                         animationType="slide"
                         transparent={true}
                         onRequestClose={closeModal}>
-    
+
                         <View style={styles.modalOverlay}>
                             <View style={styles.notificationDrawer}>
-                                    <Notifications 
-                                    user = {user}/>
+                                <Notifications
+                                    user={user} />
                                 <TouchableOpacity style={styles.button}
                                     onPress={closeModal}>
                                     <Text style={{ color: 'white' }}>Close</Text>
                                 </TouchableOpacity>
-                    
-                                
+
+
                             </View>
                         </View>
                     </Modal>

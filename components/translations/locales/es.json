@@ -16,6 +16,7 @@
     "alert_settings_success": "¡La configuración se actualizó!",
     "alert_error_updating_settings": "Error al actualizar la configuración. Inténtalo de nuevo.",
 
+    "enter_current_password": "Ingrese su contraseña actual, luego ingrese su nueva contraseña",
     "new_password_not_match": "La nueva contraseña no coincide con la contraseña confirmada",
     "password_changed": "Contraseña cambiada",
     "error": "Se ha producido un error. Inténtalo de nuevo más tarde.",
@@ -26,5 +27,31 @@
     "notification": "Notificación",
     "ok": "De Acuerdo",
 
-    "email_instructions": "Por favor, vaya a su correo electrónico y verifique su correo electrónico."
+    "friends_userId": "ID de USUARIO del amigo:",
+
+    "deny_friendship": "¿Estás seguro de que deseas rechazar esta solicitud de amistad?",
+    "no_friends": "No se encontraron amigos",
+    "pending_requests": "Solicitudes pendientes",
+
+    "no_users_found": "No se encontraron usuarios...",
+    "add_friend": "Agregar amigo",
+
+    "search_users": "Buscar usuarias ...",
+
+    "accept": "Aceptar",
+    "deny": "Negar",
+
+    "friends": "Amigos",
+    "rec": "Recomendaciones",
+    "unfriend": "quitar amigo",
+
+    "pts": "PUNTOS",
+    "m": "Metros",
+    "rules": "*Para obtener puntos: Agregar una ubicación favorita +10, Subir una foto +20, Viajar a una nueva ciudad +50, Viajar a un nuevo país +100, Completar los umbrales de distancia anteriores +250"
+
+
+
+
+
+  
   }

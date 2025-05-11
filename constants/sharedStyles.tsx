@@ -55,6 +55,7 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
     },
     heading: {
       fontSize: 24,
+      padding: 20,
       fontWeight: "bold",
       marginBottom: 20,
       color: theme === "dark" ? Colors.dark.text : Colors.light.text,
@@ -375,7 +376,6 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       backgroundColor: theme === "dark" ? Colors.dark.background : Colors.light.background,
       borderRadius: 20,
       padding: 35,
-      alignItems: "center",
       shadowColor: theme === "dark" ? Colors.dark.tabIconDefault : Colors.light.tabIconDefault,
       shadowOffset: {
         width: 0,
@@ -511,6 +511,38 @@ const sharedStyles = (colorScheme: colorSchemeName) => {
       borderRadius: 8,
     },
 
+    x: {
+      height: 50,
+      width: 50,
+    },
+    spinGlobe: {
+      height: 150,
+      width: 150,
+      padding: 5,
+      margin: 5,
+      justifyContent: 'center',
+      borderRadius: 5,
+      alignItems: 'center',
+    },
+    progressBar: {
+      height: 12,
+      width: '75%',
+      backgroundColor: '#ccc',
+      borderRadius: 6,
+      overflow: 'hidden',
+      marginTop: 10,
+    },
+    progressFill: {
+      height: '100%',
+      backgroundColor: '#4CAF50',
+    }, 
+    header2: {
+      // backgroundColor: theme === 'dark' ? Colors.dark.tint : Colors.dark.tint,
+      fontWeight: "bold",
+      color: theme === "dark" ? Colors.dark.tint : Colors.light.tint,
+      fontSize: 30
+    },
+    
 
   });
 };
