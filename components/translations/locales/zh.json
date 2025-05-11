@@ -47,24 +47,37 @@
   "hum": "湿度：",
   "wind": "风速：",
   "close": "关闭",
-
   "fav_loc": "收藏地点",
   "no_fav": "暂无收藏地点。",
   "add_fav": "添加收藏地点",
   "cancel": "取消",
-
   "global": "全局",
   "update_rank": "更新排名",
-
   "notif": "通知",
   "no_new_notif": "没有新通知",
-
   "virt_pas": "虚拟护照",
   "place_visit": "已访问地点",
-
   "achieve": "成就",
-
   "private": "此帐户为私人帐户",
-
-  "view_map": "查看{{username}}的地图"
+  "view_map": "查看{{username}}的地图",
+  "points": "点数",
+  "acc": "帐户已创建：",
+  "select1": "从设备中选择",
+  "select2": "拍照",
+  "up_photo": "上传照片",
+  "rating": "评分：",
+  "no_photo": "没有可显示的帖子。",
+"posts": "帖子",
+"pd": "照片详情",
+"rate": "评价该地点：",
+"save": "保存",
+"delete": "删除",
+"enter_loc": "输入地点",
+"enter_review": "输入评论",
+"sub": "提交",
+"search": "搜索地点",
+"stats": "统计数据",
+"dis": "旅行距离",
+"city": "访问过的城市",
+"count": "访问过的国家/地区"
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, Modal } from 'react-native';
 import { GestureHandlerRootView, ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,6 +7,9 @@ import { useTheme } from '@/hooks/useTheme';
 import { Colors } from '@/constants/Colors'
 import Notifications from '../../notifications';
 import { User } from '@/data/types'
+import { fetchCurrentUser } from '@/data/UserDataService';
+import { useTranslation } from 'react-i18next';
+
 
 interface ProfileHeaderProps {
     user: User | null;
@@ -18,6 +21,26 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
     const router = useRouter();
 
     const [modalVisible, setModalVisible] = useState(false);
+    const { t } = useTranslation();
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [language, setSelectedLanguage] = useState<string>('en');
+
+    useEffect(() => {
+        const loadCurrentUser = async () => {
+            try {
+                const user = await fetchCurrentUser();
+                setCurrentUser(user);
+
+                const lang = user?.language || "en";
+                setSelectedLanguage(lang);
+
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+
+        loadCurrentUser();
+    }, []);
 
     const closeModal = () => {
         setModalVisible(false);
@@ -29,7 +52,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }} >
 
-                    <Text style={[styles.heading, { padding: 0 }]}>Profile</Text>
+                    <Text style={[styles.heading, { padding: 0 }]}>{t('profile')}</Text>
                     <View style={{ flexDirection: 'row', gap: 15 }}>
                         <TouchableOpacity onPress={() => setModalVisible(true)}>
                             <Image
@@ -75,7 +98,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
                                     user={user} />
                                 <TouchableOpacity style={styles.button}
                                     onPress={closeModal}>
-                                    <Text style={{ color: 'white' }}>Close</Text>
+                                    <Text style={{ color: 'white' }}>{t('close')}</Text>
                                 </TouchableOpacity>
 
 

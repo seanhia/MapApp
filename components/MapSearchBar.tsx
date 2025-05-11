@@ -1,7 +1,12 @@
-import React from 'react';
 import { StyleSheet, TextInput, View, Image } from 'react-native';
 import { GooglePlacesAutocomplete, GooglePlaceData, GooglePlaceDetail } from 'react-native-google-places-autocomplete';
 import { PlaceDetails } from '@/data/types';
+import React, { useState, useEffect } from 'react';
+import { fetchCurrentUser } from '@/data/UserDataService';
+import { User } from '@/data/types'
+import { useTranslation } from 'react-i18next';
+
+
 
 interface SearchBarProps {
   onPlaceSelected: (
@@ -10,35 +15,56 @@ interface SearchBarProps {
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
+  const { t } = useTranslation();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [language, setSelectedLanguage] = useState<string>('en');
+
+  useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const user = await fetchCurrentUser();
+        setCurrentUser(user);
+
+        const lang = user?.language || "en";
+        setSelectedLanguage(lang);
+
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
+    loadCurrentUser();
+  }, []);
+
   return (
-      <View style={styles.searchBar}>
-        <GooglePlacesAutocomplete
-          placeholder="Search for places"
-          fetchDetails={true}
-          minLength={2} // wait for at least 2 characters before searching
-          onPress={(data, details) => {
-            console.log("Selected Place:", data, details); // Debugging
-            onPlaceSelected(data, details);
-          }}
-           requestUrl={{
-            url: 'http://localhost:3000/proxy',
-            useOnPlatform: 'all',
-          }}
-          
-          query={{
-            language: 'en',
-          }}
+    <View style={styles.searchBar}>
+      <GooglePlacesAutocomplete
+        placeholder={t('search')}
+        fetchDetails={true}
+        minLength={2} // wait for at least 2 characters before searching
+        onPress={(data, details) => {
+          console.log("Selected Place:", data, details); // Debugging
+          onPlaceSelected(data, details);
+        }}
+        requestUrl={{
+          url: 'http://localhost:3000/proxy',
+          useOnPlatform: 'all',
+        }}
 
-          onFail={(error) => console.log("API Error:", error)} // Debug API errors
-          onNotFound={() => console.log("No Places Found")} // Log if no results
+        query={{
+          language: 'en',
+        }}
 
-          styles={{
-            textInput: styles.searchInput,
-            container: styles.autoCompleteContainer,
-            listView: styles.listView,
-          }}
-         
-        />
+        onFail={(error) => console.log("API Error:", error)} // Debug API errors
+        onNotFound={() => console.log("No Places Found")} // Log if no results
+
+        styles={{
+          textInput: styles.searchInput,
+          container: styles.autoCompleteContainer,
+          listView: styles.listView,
+        }}
+
+      />
 
     </View>
   );

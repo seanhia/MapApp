@@ -3,19 +3,25 @@ import { View, Text, FlatList, TouchableOpacity, Image, Alert, Modal, TextInput 
 import { useTheme } from '@/hooks/useTheme';
 import { Timestamp } from 'firebase/firestore';
 import { Rating } from 'react-native-ratings';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { updatePost } from '@/data/PostDataService';
 import { deletePost } from '@/data/PostDataService';
+
+import { fetchCurrentUser } from '@/data/UserDataService';
+
+import { useTranslation } from 'react-i18next';
+
+
 
 
 interface ProfilePostProp {
   posts: Post[];
-  user: User | null ;
+  user: User | null;
 
 
 };
 
-const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
+const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user }) => {
   const { colorScheme, styles } = useTheme();
   //to edit post info
   const [modalVisible, setModalVisible] = useState(false);
@@ -23,6 +29,28 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
   const [newLocation, setNewLocation] = useState('');
   const [newReview, setNewReview] = useState('');
   const [newRating, setNewRating] = useState(0);
+  const { t } = useTranslation();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [language, setSelectedLanguage] = useState<string>('en');
+
+  useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const user = await fetchCurrentUser();
+        setCurrentUser(user);
+
+        const lang = user?.language || "en";
+        setSelectedLanguage(lang);
+
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
+    loadCurrentUser();
+  }, []);
+
+
 
   /**
    * TESTING: COMPONENT CAN BE CHANGED TO PROVIDE POST DATA TO USER PROFILE 
@@ -61,7 +89,7 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
       if (!user || !user.id) {
         console.error("User ID is undefined. Cannot save post.");
         return;
-    }
+      }
       updatePost(user.id, selectedPost.id, newLocation, newReview, newRating);
       Alert.alert('Success', 'Post details updated.');
       closeModal();
@@ -74,7 +102,7 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
       if (!user || !user.id) {
         console.error("User ID is undefined. Cannot save post.");
         return;
-    }
+      }
       deletePost(user?.id, selectedPost.id, selectedPost.image || "");
       Alert.alert('Success', 'Post deleted.');
       closeModal();
@@ -96,7 +124,7 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
 
       {/* Post Content */}
       <Text style={styles.text}>{item.review}</Text>
-      <Text style={styles.text}>Rating:</Text>
+      <Text style={styles.text}>{t('rating')}</Text>
       <Rating style={styles.rating}
         type="star"
         ratingCount={5}
@@ -125,7 +153,7 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
   return (
     <View >
       {/* add tabs Posts | Stats | Map */}
-      <Text style={[styles.heading, {}]}>Posts</Text>
+      <Text style={[styles.heading, {}]}>{t('posts')}</Text>
 
       <FlatList
         data={posts}
@@ -134,7 +162,7 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
         numColumns={3}
         scrollEnabled={false}
         contentContainerStyle={styles.scrollContainer}
-        ListEmptyComponent={<Text style={styles.warningMessage}>No posts to display.</Text>}
+        ListEmptyComponent={<Text style={styles.warningMessage}>{t('no_photo')}</Text>}
       />
       {/* Edit or delete photo */}
       <Modal
@@ -146,7 +174,7 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
         <View style={styles.centered}>
           <View style={styles.modalView}>
             <View style={styles.centered}>
-              <Text style={styles.title}>Photo Details</Text>
+              <Text style={styles.title}>{t('pd')}</Text>
               <TextInput
                 style={styles.placeHolderInputPhoto}
                 placeholder={newLocation}
@@ -160,7 +188,7 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
                 value={newReview}
                 onChangeText={setNewReview}
               />
-              <Text style={styles.text}>Rate the location:</Text>
+              <Text style={styles.text}>{t('rate')}</Text>
               <Rating style={styles.rating}
                 type="star"
                 ratingCount={5}
@@ -171,15 +199,15 @@ const ProfilePost: React.FC<ProfilePostProp> = ({ posts, user}) => {
 
               <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={handleSave}>
-                  <Text style={styles.text}>Save</Text>
+                  <Text style={styles.text}>{t('save')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleDelete}>
-                  <Text style={styles.text}>Delete</Text>
+                  <Text style={styles.text}>{t('delete')}</Text>
                 </TouchableOpacity>
 
               </View>
               <TouchableOpacity onPress={closeModal}>
-                <Text style={styles.text}>Cancel</Text>
+                <Text style={styles.text}>{t('cancel')}</Text>
               </TouchableOpacity>
 
             </View>

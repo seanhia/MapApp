@@ -7,6 +7,8 @@ import { useTheme } from '@/hooks/useTheme';
 import { useProfileImage } from '@/hooks/useProfileImage';
 import { fetchCurrentUser, getPoints } from '@/data/UserDataService';
 import Points from '../../Points';
+import { useTranslation } from 'react-i18next';
+
 
 
 
@@ -22,6 +24,11 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
     const { profileImage, handleImagePicker } = useProfileImage(user);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [modalVisible, setModalVisible] = useState(false);
+    const { t } = useTranslation();
+
+    const [language, setSelectedLanguage] = useState<string>('en');
+
+
 
     useEffect(() => {
 
@@ -30,6 +37,11 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
             try {
                 const user = await fetchCurrentUser();
                 setCurrentUser(user)
+
+                const lang = user?.language || "en";
+                setSelectedLanguage(lang);
+
+
             } catch (error) {
                 console.error('Error fetching user')
             }
@@ -100,14 +112,14 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
 
 
                 <View style={{ width: 75, alignItems: 'center' }}>
-                    <Text style={styles.label}>Friends</Text>
+                    <Text style={styles.label}>{t('friends')}</Text>
                     <Text style={styles.profileDetailText}>{friendCount}</Text>
                 </View>
 
 
                 <View style={{ width: 75, alignItems: 'center' }}>
                     <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.label}>Points</Text>
+                        <Text style={styles.label}>{t('points')}</Text>
                         <Text style={styles.profileDetailText}>{points}</Text>
                     </TouchableOpacity>
                 </View>
@@ -132,7 +144,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
 
 
             <View style={styles.fullContainer}>
-                <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>Account Created:</Text>
+                <Text style={[styles.text, { padding: 0, fontWeight: '100' }]}>{t('acc')}</Text>
                 <Text style={[styles.text, { padding: 0, fontWeight: '100', marginBottom: 30 }]}>
                     {user?.createdAt ? new Date((user.createdAt)).toLocaleDateString("en-US") : "Loading"}
                 </Text>
