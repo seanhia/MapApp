@@ -145,9 +145,9 @@ const MapComponent: React.FC<MapComponentProps> = ({ initialCenter, mapId, userI
         onLoad={(map) => (mapRef.current = map)}
       >
         <Marker position={initialCenter} />
-        {locations.map((point, index) => (
+        {/*locations.map((point, index) => (
           <Marker key={index} position={point} />
-        ))}
+        ))*/}
       </GoogleMap>
 
       <View

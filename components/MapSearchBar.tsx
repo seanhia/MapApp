@@ -1,70 +1,59 @@
-import { StyleSheet, TextInput, View, Image } from 'react-native';
-import { GooglePlacesAutocomplete, GooglePlaceData, GooglePlaceDetail } from 'react-native-google-places-autocomplete';
-import { PlaceDetails } from '@/data/types';
 import React, { useState, useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import {GooglePlacesAutocomplete, GooglePlaceData, GooglePlaceDetail,
+} from 'react-native-google-places-autocomplete';
 import { fetchCurrentUser } from '@/data/UserDataService';
-import { User } from '@/data/types'
+import { User } from '@/data/types';
 import { useTranslation } from 'react-i18next';
-
-
 
 interface SearchBarProps {
   onPlaceSelected: (
     data: GooglePlaceData,
-    details: GooglePlaceDetail | null) => void
+    details: GooglePlaceDetail | null
+  ) => void;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
   const { t } = useTranslation();
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [language, setSelectedLanguage] = useState<string>('en');
+  const [language, setLanguage] = useState<string>('en');
 
   useEffect(() => {
-    const loadCurrentUser = async () => {
+    (async () => {
       try {
-        const user = await fetchCurrentUser();
-        setCurrentUser(user);
-
-        const lang = user?.language || "en";
-        setSelectedLanguage(lang);
-
-      } catch (error) {
-        console.error('Error fetching user:', error);
+        const user: User | null = await fetchCurrentUser();
+        setLanguage(user?.language || 'en');
+      } catch (err) {
+        console.error('Error fetching user', err);
       }
-    };
-
-    loadCurrentUser();
+    })();
   }, []);
 
   return (
     <View style={styles.searchBar}>
       <GooglePlacesAutocomplete
-        placeholder={t('search')}
-        fetchDetails={true}
-        minLength={2} // wait for at least 2 characters before searching
-        onPress={(data, details) => {
-          console.log("Selected Place:", data, details); // Debugging
-          onPlaceSelected(data, details);
-        }}
-        requestUrl={{
-          url: 'http://localhost:3000/proxy',
-          useOnPlatform: 'all',
-        }}
+  placeholder={t('search')}
+  fetchDetails
+  minLength={2}
+  onPress={(data, details) => onPlaceSelected(data, details)}
 
-        query={{
-          language: 'en',
-        }}
+  requestUrl={{
+    url: 'http://localhost:3000/proxy',
+    useOnPlatform: 'web',
+  }}
 
-        onFail={(error) => console.log("API Error:", error)} // Debug API errors
-        onNotFound={() => console.log("No Places Found")} // Log if no results
+  query={{
+    key: 'AIzaSyBA3GzhBkw9-TB7VArb6Os-3fAUSdC2o9c',
+    language,
+  }}
 
-        styles={{
-          textInput: styles.searchInput,
-          container: styles.autoCompleteContainer,
-          listView: styles.listView,
-        }}
-
-      />
+  onFail={(err) => console.log('API error:', err)}
+  onNotFound={() => console.log('No places found')}
+  styles={{
+    textInput: styles.searchInput,
+    container: styles.autoCompleteContainer,
+    listView: styles.listView,
+  }}
+/>
 
     </View>
   );
@@ -86,13 +75,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#fff',
   },
-  autoCompleteContainer: {
-    flex: 1,
-  },
+  autoCompleteContainer: { flex: 1 },
   listView: {
     position: 'absolute',
     top: 50,
     backgroundColor: 'white',
-    zIndex: 1000, // Ensures it appears above other elements
+    zIndex: 1000,
   },
 });

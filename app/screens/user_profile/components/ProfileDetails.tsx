@@ -6,7 +6,7 @@ import { User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme';
 import { useProfileImage } from '@/hooks/useProfileImage';
 import { fetchCurrentUser, getPoints } from '@/data/UserDataService';
-import Points from '../../Points';
+import Points from '../../points';
 import { useTranslation } from 'react-i18next';
 
 
