@@ -20,7 +20,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onPlaceSelected }) => {
             console.log("Selected Place:", data, details); // Debugging
             onPlaceSelected(data, details);
           }}
-          requestUrl={{
+           requestUrl={{
             url: 'http://localhost:3000/proxy',
             useOnPlatform: 'all',
           }}

@@ -13,6 +13,9 @@ import { Recommendations } from './components/Recommendations';
 import { saveStats } from '@/firestore';
 import { fetchWeather, getSeason, createSeasonalImage } from './components/weather';
 import { nearbySearch } from '@/data/MapData';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
+
 
 
 export default function Home() {
@@ -80,6 +83,26 @@ export default function Home() {
       Alert.alert("Error", error.toString());
     }
   }, [location, error]);
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log("[Home] Home screen focused: rechecking location and weather");
+  
+      if (location?.coords) {
+        const { latitude, longitude } = location.coords;
+        setMapCenter({ lat: latitude, lng: longitude });
+  
+        fetchWeather(latitude, longitude)
+          .then(setWeather)
+          .catch(() => Alert.alert("Unable to fetch weather data."));
+      }
+      
+      return () => {
+        // Optional cleanup
+      };
+    }, [location])
+  );
+  
 
   const handlePlaceChanged = (data: any, details: any) => {
     if (details?.geometry) {
