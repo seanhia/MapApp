@@ -69,7 +69,12 @@
     "update_rank": "Update Rank",
 
     "notif": "Notifications",
-    "no_new_notif": "No new notifications"
+    "no_new_notif": "No new notifications",
+
+    "virt_pas": "Virtual Passport",
+    "place_visit": "Places Visited",
+
+    "achieve": "Achievements"
 
 
 

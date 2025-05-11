@@ -57,7 +57,12 @@
   "update_rank": "更新排名",
 
   "notif": "通知",
-  "no_new_notif": "没有新通知"
+  "no_new_notif": "没有新通知",
+
+  "virt_pas": "虚拟护照",
+  "place_visit": "已访问地点",
+
+  "achieve": "成就"
 
 
 }

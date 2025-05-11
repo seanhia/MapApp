@@ -1,78 +1,101 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { getStats } from '@/firestore';
 import { fetchCurrentUser } from '@/data/UserDataService';
-import { useEffect, useState } from 'react';
-import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { TravelChallenges } from './components/achievements';
 import { getAchievementData } from "@/firestore";
 import { useTheme } from '@/hooks/useTheme';
-import { Colors } from '@/constants/Colors'
+import { Colors } from '@/constants/Colors';
+import { User } from '@/data/types'
+import { useTranslation } from 'react-i18next';
+
+
 
 const passport = () => {
-    const [userId, setUserId] = useState<string | null>(null);
-    const [CityCountry, setCityCountry] = useState<{cities: string; countries: string}[]>([]);
-    const { colorScheme, styles } = useTheme();
-    const [userData, setUserData] = useState<{
-      distanceTraveled: number;
-      cities: string[];
-      countries: string[];
-    } | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [CityCountry, setCityCountry] = useState<{ cities: string; countries: string }[]>([]);
+  const { colorScheme, styles } = useTheme();
+  const [userData, setUserData] = useState<{
+    distanceTraveled: number;
+    cities: string[];
+    countries: string[];
+  } | null>(null);
+  const { t } = useTranslation();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [language, setSelectedLanguage] = useState<string>('en');
 
-    useEffect(() => {
-      const getUser = async () => {
-        try {
-          const user = await fetchCurrentUser();
-          if (user) {
-            setUserId(user.id);
-            const data = await getAchievementData(user.id); //fetch achievement data
-            setUserData(data);
-          }
-        } catch (e) {
-          console.error("error fetching user or data", e);
-        }
-      };
-    
-      getUser();
-    }, []);
 
-    useEffect(() => {
-        const fetchStats = async () => { // get city/country stats
-            if (!userId) return;
-            try {
-                const data = await getStats(userId);
-                setCityCountry(data);
-            } catch(e){
-                console.error("error getting stats ", e);
-            }
-        };
-        fetchStats();
-    },[userId])
-    return (
-        <SafeAreaProvider >
-          <View style={{ flex: 1, backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background }}>
-            <SafeAreaView>
-                <Text style={style.title}> Virtual Passport</Text>
 
-                  <View style={style.column}>
-                    <View>
-                      <Text style={style.title}> Places Visited</Text>
-                      {CityCountry
-                      .filter(stat => stat.cities !== 'Unknown' && stat.countries !== 'Unknown')
-                      .map((stat, index) => (
-                        <View style={style.list} key={index}>
-                          <Text>{stat.cities}, {stat.countries}</Text>
-                        </View>
-                      ))}
-                    </View>
-                    {userData && <TravelChallenges userData={userData} />}
-                  </View>
+  useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const user = await fetchCurrentUser();
+        setCurrentUser(user);
 
-            </SafeAreaView>
-          </View>
-        </SafeAreaProvider>
-      );
+        const lang = user?.language || "en";
+        setSelectedLanguage(lang);
+
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
     };
-    
+
+    const getUser = async () => {
+      try {
+        const user = await fetchCurrentUser();
+        if (user) {
+          setUserId(user.id);
+          const data = await getAchievementData(user.id); //fetch achievement data
+          setUserData(data);
+        }
+      } catch (e) {
+        console.error("error fetching user or data", e);
+      }
+    };
+
+    loadCurrentUser();
+    getUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchStats = async () => { // get city/country stats
+      if (!userId) return;
+      try {
+        const data = await getStats(userId);
+        setCityCountry(data);
+      } catch (e) {
+        console.error("error getting stats ", e);
+      }
+    };
+    fetchStats();
+  }, [userId])
+  return (
+    <SafeAreaProvider >
+      <View style={{ flex: 1, backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background }}>
+        <SafeAreaView>
+          <Text style={style.title}>{t('virt_pas')}</Text>
+
+          <View style={style.column}>
+            <View>
+              <Text style={style.title}>{t('place_visit')}</Text>
+              {CityCountry
+                .filter(stat => stat.cities !== 'Unknown' && stat.countries !== 'Unknown')
+                .map((stat, index) => (
+                  <View style={style.list} key={index}>
+                    <Text>{stat.cities}, {stat.countries}</Text>
+                  </View>
+                ))}
+            </View>
+            {userData && <TravelChallenges userData={userData} />}
+          </View>
+
+        </SafeAreaView>
+      </View>
+    </SafeAreaProvider>
+  );
+};
+
 export default passport;
 
 const style = StyleSheet.create({
@@ -107,4 +130,4 @@ const style = StyleSheet.create({
     marginBottom: 10,
     gap: 20,
   }
-  })
+})

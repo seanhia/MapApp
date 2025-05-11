@@ -1,6 +1,9 @@
 import { View, Text, StyleSheet } from "react-native";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { achievementLogic } from "../../../hooks/achievementLogic";
+import { fetchCurrentUser } from '@/data/UserDataService';
+import { User } from '@/data/types'
+import { useTranslation } from 'react-i18next';
 
 type AchievementStatus = {
   id: string;
@@ -18,6 +21,11 @@ export const TravelChallenges = ({
   };
 }) => {
   const [achievements, setAchievements] = useState<AchievementStatus[]>([]);
+  const { t } = useTranslation();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [language, setSelectedLanguage] = useState<string>('en');
+
+
 
   useEffect(() => {
     if (!userData) return;
@@ -28,12 +36,26 @@ export const TravelChallenges = ({
       unlocked: a.check(userData),
     }));
 
+    const loadCurrentUser = async () => {
+      try {
+        const user = await fetchCurrentUser();
+        setCurrentUser(user);
+
+        const lang = user?.language || "en";
+        setSelectedLanguage(lang);
+
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
+    loadCurrentUser();
     setAchievements(unlocked);
   }, [userData]);
 
   return (
     <View>
-      <Text style={style.title}>Achievements</Text>
+      <Text style={style.title}>{t('achieve')}</Text>
       <View>
         {achievements.map((a) => (
           <Text key={a.id} style={a.unlocked ? style.yes : style.no}>
@@ -46,42 +68,42 @@ export const TravelChallenges = ({
 };
 
 const style = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 24,
-      backgroundColor: '#eaeaea',
-    },
-    title: {
-      marginTop: 16,
-      paddingVertical: 6,
-      borderWidth: 6,
-      borderColor: '#FFFFFF',
-      borderRadius: 15,
-      backgroundColor: '#48b3ee',
-      color: '#FFFFFF',
-      textAlign: 'center',
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    yes: {
-      marginTop: 12,
-      padding: 12,
-      borderRadius: 8,
-      color: '#FFFFFF',
-      backgroundColor: '#48b3ee',
-    },
-    no: {
-        marginTop: 12,
-        padding: 12,
-        borderRadius: 8,
-        color: '#FFFFFF',
-        backgroundColor: '#888888',
-      },
-    column: {
-      flexDirection: 'row',
-      marginTop: 20,
-      justifyContent: 'center',
-      marginBottom: 10,
-      gap: 20,
-    }
-    })
+  container: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: '#eaeaea',
+  },
+  title: {
+    marginTop: 16,
+    paddingVertical: 6,
+    borderWidth: 6,
+    borderColor: '#FFFFFF',
+    borderRadius: 15,
+    backgroundColor: '#48b3ee',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  yes: {
+    marginTop: 12,
+    padding: 12,
+    borderRadius: 8,
+    color: '#FFFFFF',
+    backgroundColor: '#48b3ee',
+  },
+  no: {
+    marginTop: 12,
+    padding: 12,
+    borderRadius: 8,
+    color: '#FFFFFF',
+    backgroundColor: '#888888',
+  },
+  column: {
+    flexDirection: 'row',
+    marginTop: 20,
+    justifyContent: 'center',
+    marginBottom: 10,
+    gap: 20,
+  }
+})
