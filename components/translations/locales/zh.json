@@ -51,7 +51,9 @@
   "fav_loc": "收藏地点",
   "no_fav": "暂无收藏地点。",
   "add_fav": "添加收藏地点",
-  "cancel": "取消"
+  "cancel": "取消",
 
+  "global": "全局",
+  "update_rank": "更新排名"
 
 }

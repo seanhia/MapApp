@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import FooterBar from '@/components/FooterBar';
 import { useTheme } from '@/hooks/useTheme';
@@ -6,39 +6,60 @@ import { Colors } from '@/constants/Colors'
 import { rankUsers, getTopFourUsers, fetchCurrentUserLeaderboard, getFriendsRank } from '@/data/UserDataService';
 import { Leaderboard } from '@/data/types';
 import UserSettings from '../settings';
+import { fetchCurrentUser } from '@/data/UserDataService';
+import { User } from '@/data/types'
+import { useTranslation } from 'react-i18next';
 
-const LeaderboardScreen =  () => {
-    
-    const {colorScheme, styles } = useTheme();
+
+const LeaderboardScreen = () => {
+
+    const { colorScheme, styles } = useTheme();
     const [info, setData] = useState<Leaderboard[] | null>(null);
     const [otherInfo, setData2] = useState<Leaderboard | null>(null);
     const [friendinfo, setFriend] = useState<Leaderboard[] | null>(null);
     const [tempData, setTemp] = useState<Leaderboard[] | null>(null);
     const [buttonName, setName] = useState('Friends')
-    const [isFriendsList, setIsFriendsList] = useState<boolean>(false); 
+    const [isFriendsList, setIsFriendsList] = useState<boolean>(false);
+    const { t } = useTranslation();
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [language, setSelectedLanguage] = useState<string>('en');
+
 
     const switchData = async () => {
-        if(!isFriendsList){
+        if (!isFriendsList) {
             setTemp(info);
             setData(friendinfo);
             setFriend(info);
-            setName('Global');
+            setName(t('global'));
             setIsFriendsList(!isFriendsList)
-        }else{
+        } else {
             setTemp(info);
             setData(friendinfo);
             setFriend(info);
-            setName('Friends');
+            setName(t('friends'));
             setIsFriendsList(!isFriendsList)
         }
     }
-    
+
     useEffect(() => {
+        const loadCurrentUser = async () => {
+            try {
+                const user = await fetchCurrentUser();
+                setCurrentUser(user);
+                
+                const lang = user?.language || "en";
+                setSelectedLanguage(lang);
+
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+
         const fetchData = async () => {
             const topUsers = await getTopFourUsers();
-            
+
             setData(topUsers);
-            
+
             const curUserRank = await fetchCurrentUserLeaderboard();
             setData2(curUserRank);
         };
@@ -49,55 +70,55 @@ const LeaderboardScreen =  () => {
             setFriend(friends)
         }
 
-
+        loadCurrentUser();
         fetchData();
         fetchFriendsData();
     }, []);
-    
+
 
 
     return (
 
-<View style={
-    [
-        styles.fullContainer, 
-        {justifyContent: 'flex-start', alignItems: 'center', paddingTop: 50}
+        <View style={
+            [
+                styles.fullContainer,
+                { justifyContent: 'flex-start', alignItems: 'center', paddingTop: 50 }
 
-    ]}>
-    <Text style={styles.heading}>Leaderboard</Text>
-    
-    <View style={style.box}>
-        <FlatList
-            data={info}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
+            ]}>
+            <Text style={styles.heading}>{t('leader')}</Text>
+
+            <View style={style.box}>
+                <FlatList
+                    data={info}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <View style={style.row}>
+                            <Text style={style.username}>{item.ranking + ". " + item.username}</Text>
+                            <Text style={style.score}>{item.points}</Text>
+                        </View>
+                    )}
+                />
+            </View>
+
+            <View style={style.box}>
                 <View style={style.row}>
-                    <Text style={style.username}>{item.ranking + ". " + item.username}</Text>
-                    <Text style={style.score}>{item.points}</Text>
+                    <Text style={style.username}>{otherInfo?.ranking}. {otherInfo?.username}</Text>
+                    <Text style={style.score}>{otherInfo?.points}</Text>
                 </View>
-            )}
-        />
-    </View>
+            </View>
 
-    <View style={style.box}>
-        <View style={style.row}>
-            <Text style={style.username}>{otherInfo?.ranking}. {otherInfo?.username}</Text>
-            <Text style={style.score}>{otherInfo?.points}</Text>
+            <FooterBar />
+
+            <View style={style.buttonContainer}>
+                <TouchableOpacity style={style.lightButton} onPress={rankUsers}>
+                    <Text style={style.buttonText}>{t('update_rank')}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[style.lightButton, style.friendsButton]} onPress={switchData}>
+                    <Text style={style.buttonText}>{buttonName}</Text>
+                </TouchableOpacity>
+            </View>
         </View>
-    </View>
-    
-    <FooterBar />
-
-    <View style={style.buttonContainer}>
-        <TouchableOpacity style={style.lightButton} onPress={rankUsers}>
-            <Text style={style.buttonText}>Update Rank</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={[style.lightButton, style.friendsButton]} onPress={switchData}>
-            <Text style={style.buttonText}>{buttonName}</Text>
-        </TouchableOpacity>
-    </View>
-</View>
     )
 }
 const style = StyleSheet.create({
@@ -143,7 +164,7 @@ const style = StyleSheet.create({
         color: '#555',
     },
     title: {
-        fontSize: 24, 
+        fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
     },

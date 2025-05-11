@@ -62,7 +62,11 @@
     "fav_loc": "Favorite Locations",
     "no_fav": "No favorite locations yet.",
     "add_fav": "Add Favorite Location",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+
+
+    "global": "Global",
+    "update_rank": "Update Rank"
 
 
   }
