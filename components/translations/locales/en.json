@@ -51,7 +51,18 @@
 
     "leader": "Leaderboard",
     "home": "Home",
-    "profile": "Profile"
+    "profile": "Profile",
+
+    "temp": "Temperature:",
+    "hum": "Humidity:",
+    "wind": "Wind Speed:",
+
+    "close": "Close",
+
+    "fav_loc": "Favorite Locations",
+    "no_fav": "No favorite locations yet.",
+    "add_fav": "Add Favorite Location",
+    "cancel": "Cancel"
 
 
   }

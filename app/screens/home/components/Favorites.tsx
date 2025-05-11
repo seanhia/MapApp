@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity, Image, Modal, Pressable, ScrollView, TextInput } from 'react-native'
 import { FavoriteLoc, User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme'
-import { fetchUsersFavLocation, writeData, writeFavLocation, updatePoints, deletePoints } from '@/data/UserDataService'
+import { fetchCurrentUser } from '@/data/UserDataService';
+import { fetchUsersFavLocation, writeData, writeFavLocation, updatePoints, deletePoints, } from '@/data/UserDataService'
+import { useTranslation } from 'react-i18next';
+
 
 type Props = {
     userId: string
@@ -15,33 +18,52 @@ type Props = {
         2) Modal List to add/delete favorites 
     */}
 
-export const Favorites = ({userId}: Props)  => {
+export const Favorites = ({ userId }: Props) => {
     const { styles } = useTheme()
-    const [favLocations, setFavLocations] = useState<FavoriteLoc[] | null>(null); 
+    const [favLocations, setFavLocations] = useState<FavoriteLoc[] | null>(null);
     const [location, setLocation] = useState<string>('');
     const [placeId, setPlaceId] = useState<string>('');
-    const [modalVisible, setModalVisible] = useState<boolean>(false); 
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const { t } = useTranslation();
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [language, setSelectedLanguage] = useState<string>('en');
+
 
     const favList = fetchUsersFavLocation(userId)
     console.log('favList: ', favList)
 
     useEffect(() => {
+        const loadCurrentUser = async () => {
+            try {
+                const user = await fetchCurrentUser();
+                setCurrentUser(user);
+                
+                const lang = user?.language || "en";
+                setSelectedLanguage(lang);
+
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+        
+        loadCurrentUser();
+
         const fetchFavorites = async () => {
             try {
-                setFavLocations(await fetchUsersFavLocation(userId)); 
+                setFavLocations(await fetchUsersFavLocation(userId));
                 console.log(`favorite locations: ${favLocations}`)
             } catch (error) {
                 console.error(error)
             }
-        }        
-        fetchFavorites(); 
-    }, [userId]) 
+        }
+        fetchFavorites();
+    }, [userId])
 
-    const handleAddFavLoc = async () => {    
+    const handleAddFavLoc = async () => {
         if (!location) {
             console.error("Location is required");
             return;
-        }   
+        }
         let data: FavoriteLoc = { // implement accepting user input
             id: Math.random().toString(36).substring(2, 15),
             name: location,
@@ -50,33 +72,33 @@ export const Favorites = ({userId}: Props)  => {
         }
         try {
             await writeFavLocation(userId, data, 'add')
-            setFavLocations(prev => prev ? [...prev, data] : [data]); 
+            setFavLocations(prev => prev ? [...prev, data] : [data]);
             await updatePoints(userId, 10); //
-            setLocation(''); 
-        } catch (error ) {
+            setLocation('');
+        } catch (error) {
             console.error("Error adding favorite location:", error);
         }
     }
 
     const handleDeleteFavLoc = async (locationId: string) => {
         try {
-          await writeFavLocation(userId, locationId, 'remove');
-          setFavLocations((prev) => prev ? prev.filter(loc => loc.id !== locationId) : []);
-          await deletePoints(userId, 10); //
+            await writeFavLocation(userId, locationId, 'remove');
+            setFavLocations((prev) => prev ? prev.filter(loc => loc.id !== locationId) : []);
+            await deletePoints(userId, 10); //
         } catch (error) {
-          console.error('Error deleting favorite location:', error);
+            console.error('Error deleting favorite location:', error);
         }
-      };
+    };
 
     return (
         <View>
             <TouchableOpacity
                 style={styles.homePageButton}
-                onPress={ () => setModalVisible(true)}
+                onPress={() => setModalVisible(true)}
             >
                 <Image
-                style={{height: 40, width: 40}}
-                source={require('@/assets/images/favLocation.png')}
+                    style={{ height: 40, width: 40 }}
+                    source={require('@/assets/images/favLocation.png')}
                 />
             </TouchableOpacity>
 
@@ -89,34 +111,34 @@ export const Favorites = ({userId}: Props)  => {
             >
                 <View style={styles.centered}>
                     <View style={styles.modalView}>
-                        <Text style={styles.heading}>Favorite Locations</Text>
+                        <Text style={styles.heading}>{t('fav_loc')}</Text>
                         <ScrollView>
-                        {Array.isArray(favLocations) && favLocations.length >= 1 ? (
-                            favLocations.map((favorite) => (
-                                <View key={favorite.id} style={styles.leftContainer}>
-                                    <Text style={styles.text}>{favorite.name}</Text>
-                                    <TouchableOpacity
-                                        style={styles.button}
-                                        onPress={() => {
-                                            handleDeleteFavLoc(favorite.id)
-                                            setFavLocations(favLocations.filter((loc) => loc.id !== favorite.id))
-                                            console.log('Trying to delete:', favorite.id);
-                                        }}
-                                    >
-                                        <Image
-                                            style={{position: 'static', height: 10, width: 10}}
-                                            source={require('@/assets/images/delete.png')}
-                                        />
-                                    </TouchableOpacity>
-                                </View>
-                            ))
-                        ) : (
-                        <Text style={styles.text}>No favorite locations yet.</Text> 
-                        )}
+                            {Array.isArray(favLocations) && favLocations.length >= 1 ? (
+                                favLocations.map((favorite) => (
+                                    <View key={favorite.id} style={styles.leftContainer}>
+                                        <Text style={styles.text}>{favorite.name}</Text>
+                                        <TouchableOpacity
+                                            style={styles.button}
+                                            onPress={() => {
+                                                handleDeleteFavLoc(favorite.id)
+                                                setFavLocations(favLocations.filter((loc) => loc.id !== favorite.id))
+                                                console.log('Trying to delete:', favorite.id);
+                                            }}
+                                        >
+                                            <Image
+                                                style={{ position: 'static', height: 10, width: 10 }}
+                                                source={require('@/assets/images/delete.png')}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                ))
+                            ) : (
+                                <Text style={styles.text}>{t('no_fav')}</Text>
+                            )}
                         </ScrollView>
-                            
-                        
-                        <View style={{justifyContent:'flex-end', flex: 1, flexDirection: 'column'}}>
+
+
+                        <View style={{ justifyContent: 'flex-end', flex: 1, flexDirection: 'column' }}>
                             {/** Add button to add a favorite location to your list */}
                             <TextInput
                                 style={styles.button}
@@ -124,21 +146,21 @@ export const Favorites = ({userId}: Props)  => {
                                 onChangeText={setLocation}
                                 autoCapitalize="none"
                                 keyboardType="default"
-                                placeholder="Add Favorite Location"
+                                placeholder={t('add_fav')}
                             />
                             <Pressable
-                                style={[styles.button, {margin: 10, borderRadius: 35}]}
+                                style={[styles.button, { margin: 10, borderRadius: 35 }]}
                                 onPress={() => {
                                     handleAddFavLoc()
                                 }}
-                                >
+                            >
                                 <Text style={styles.buttonText}>+</Text>
                             </Pressable>
 
                             <Pressable
                                 style={styles.button}
                                 onPress={() => setModalVisible(!modalVisible)}>
-                                <Text style={styles.buttonText}>Cancel</Text>
+                                <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </Pressable>
                         </View>
                     </View>

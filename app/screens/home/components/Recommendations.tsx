@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Alert, Text, Image, TouchableOpacity, Modal, Pressable, Dimensions } from 'react-native';
 import { RecommendationLoc, User } from '@/data/types'
 import { useTheme } from '@/hooks/useTheme'
@@ -6,6 +6,10 @@ import { fetchUsersFavLocation, writeData, writeFavLocation } from '@/data/UserD
 import { nearbySearch, getPictureByID } from '@/data/MapData';
 import useRealTimeTracking from '../../../hooks/useRealTimeTracking';
 import { FlatList } from 'react-native-gesture-handler';
+import { fetchCurrentUser } from '@/data/UserDataService';
+import { useTranslation } from 'react-i18next';
+
+
 
 
 type Props = {
@@ -30,6 +34,27 @@ export const Recommendations = ({ userId }: Props) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [placePic, setImg] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [language, setSelectedLanguage] = useState<string>('en');
+
+  useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const user = await fetchCurrentUser();
+        setCurrentUser(user);
+
+        const lang = user?.language || "en";
+        setSelectedLanguage(lang);
+
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
+    loadCurrentUser();
+  }, []);
+
 
   const loadPlace = async () => {
     setLoading(true)
@@ -96,7 +121,7 @@ export const Recommendations = ({ userId }: Props) => {
           <Pressable
             style={styles.button}
             onPress={() => setModalVisible(!modalVisible)}>
-            <Text style={styles.buttonText}>Close</Text>
+            <Text style={styles.buttonText}>{t('close')}</Text>
           </Pressable>
         </View>
 

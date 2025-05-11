@@ -51,7 +51,19 @@
 
     "leader": "Tabla de clasificación",
     "home": "Hogar",
-    "profile": "Perfil"
+    "profile": "Perfil",
+
+    "temp": "Temperatura:",
+    "hum": "Humedad:",
+    "wind": "Velocidad del viento:",
+
+    "close": "Cerrar",
+
+    "fav_loc": "Ubicaciones favoritas",
+    "no_fav": "Aún no hay ubicaciones favoritas",
+    "add_fav": "Añadir ubicación favorita",
+    "cancel": "Cancelar"
+
 
 
 

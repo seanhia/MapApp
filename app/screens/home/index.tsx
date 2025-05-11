@@ -15,12 +15,20 @@ import { fetchWeather, getSeason, createSeasonalImage } from './components/weath
 import { nearbySearch } from '@/data/MapData';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
+import { fetchCurrentUser } from '@/data/UserDataService';
+import { User } from '@/data/types'
+import { useTranslation } from 'react-i18next';
+
 
 
 
 export default function Home() {
   const auth = getAuth();
   const userId = auth.currentUser?.uid;
+  const { t } = useTranslation();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [language, setSelectedLanguage] = useState<string>('en');
+
 
   if (!userId) {
     console.error("User is not logged in!");
@@ -58,6 +66,21 @@ export default function Home() {
 
 
   useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+          const user = await fetchCurrentUser();
+          setCurrentUser(user);
+          
+          const lang = user?.language || "en";
+          setSelectedLanguage(lang);
+
+      } catch (error) {
+          console.error('Error fetching user:', error);
+      }
+  }
+  
+  loadCurrentUser();
+  
     if (location?.coords) {
       nearbySearch(location.coords.latitude, location.coords.longitude)
         .then(results => {
@@ -87,22 +110,22 @@ export default function Home() {
   useFocusEffect(
     useCallback(() => {
       console.log("[Home] Home screen focused: rechecking location and weather");
-  
+
       if (location?.coords) {
         const { latitude, longitude } = location.coords;
         setMapCenter({ lat: latitude, lng: longitude });
-  
+
         fetchWeather(latitude, longitude)
           .then(setWeather)
           .catch(() => Alert.alert("Unable to fetch weather data."));
       }
-      
+
       return () => {
         // Optional cleanup
       };
     }, [location])
   );
-  
+
 
   const handlePlaceChanged = (data: any, details: any) => {
     if (details?.geometry) {
@@ -152,9 +175,14 @@ export default function Home() {
       {isExpanded && weather?.details && (
         <View style={style.weatherPopup}>
           <Text style={style.weatherDescription}>{weather.details.weather[0]?.description}</Text>
-          <Text>Temperature: {weather.details.main?.temp}°C</Text>
-          <Text>Humidity: {weather.details.main?.humidity}%</Text>
-          <Text>Wind Speed: {weather.details.wind?.speed} m/s</Text>
+          <Text>
+            {t('temp')}{weather.details.main?.temp}°C</Text>
+          <Text>
+            {t('hum')}
+            {weather.details.main?.humidity}%</Text>
+          <Text>
+            {t('wind')}
+            {weather.details.wind?.speed} m/s</Text>
         </View>
       )}
 
