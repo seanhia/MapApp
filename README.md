@@ -12,7 +12,19 @@ cd MapApp
 ```
 npm install
 ```
-### 3. Start Project with Expo 
+### 3. Create .env file
+```
+Create a .env file in root of project
+If not done, you will experience invalid Firebase API key error
+Copy and paste the lines below and put into .env
+```
+EXPO_PUBLIC_API_KEY=AIzaSyCHImvQ-8khMcF0NvTbVAo4vJoTcpxSaKY
+EXPO_PUBLIC_AUTH_DOMAIN=mapapp-c59c0.firebaseapp.com
+EXPO_PUBLIC_PROJECT_ID=mapapp-c59c0
+EXPO_PUBLIC_STORAGE_BUCKET=mapapp-c59c0.firebasestorage.app
+EXPO_PUBLIC_MESSAGING_SENDER_ID=298912299170
+EXPO_PUBLIC_APP_ID=1:298912299170:ios:8fdf4e8c45d1ca6bf57ffb
+### 4. Start Project with Expo 
 ```
 npx expo start
 w
