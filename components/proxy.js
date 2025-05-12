@@ -8,10 +8,9 @@ const PORT = 3000;
 const googleProxy = createProxyMiddleware({
   target: 'https://maps.googleapis.com',
   changeOrigin: true,
-  pathRewrite: { '^/proxy': '/maps/api' },
-           
+  pathRewrite: (path) => '/maps/api' + path,       
   onProxyReq: (proxyReq, req) => {
-    console.log(`[→ Google] ${proxyReq.path}`);
+    console.log('[→ Google]', proxyReq.path);
   },
   onProxyRes: (proxyRes) => {
     // Add CORS headers so the browser accepts the response
@@ -21,9 +20,9 @@ const googleProxy = createProxyMiddleware({
   },
 });
 
-app.use(cors());               
-app.use('/proxy', googleProxy); 
+app.use(cors());
+app.use('/proxy', googleProxy);
 
-app.listen(PORT, () => {
-  console.log(`Proxy server running at http://localhost:${PORT}`);
-});
+app.listen(PORT, () =>
+  console.log(`Proxy server running at http://localhost:${PORT}`)
+);
